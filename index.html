@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Estimador de Materiales de Obra</title>
+
+<style>
+body{
+font-family: Arial;
+margin:40px;
+background:#f5f5f5;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+max-width:400px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+input,button{
+width:100%;
+padding:10px;
+margin-top:10px;
+}
+
+.resultado{
+margin-top:20px;
+font-weight:bold;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Estimador de Concreto</h2>
+
+<label>Área m²</label>
+<input id="area" type="number">
+
+<label>Espesor (cm)</label>
+<input id="espesor" type="number">
+
+<button onclick="calcular()">Calcular</button>
+
+<div class="resultado" id="resultado"></div>
+
+</div>
+
+<hr>
+
+<h2>Estimador de Bloques</h2>
+
+<label>Área de pared (m²)</label>
+<input id="pared" type="number">
+
+<button onclick="bloques()">Calcular Bloques</button>
+
+<div id="resultado_bloques"></div>
+
+<hr>
+
+<h2>Estimador de Baldosas</h2>
+
+<label>Área del piso (m²)</label>
+<input id="area_piso" type="number">
+
+<label>Tamaño baldosa (cm)</label>
+<input id="lado_baldosa" type="number">
+
+<button onclick="baldosas()">Calcular Baldosas</button>
+
+<div id="resultado_baldosas"></div>
+
+<hr>
+
+<h2>Columnas de Concreto</h2>
+
+<label>Cantidad de columnas</label>
+<input id="num_col" type="number">
+
+<label>Altura (m)</label>
+<input id="altura_col" type="number">
+
+<label>Sección (cm)</label>
+<input id="seccion_col" type="number">
+
+<button onclick="columnas()">Calcular</button>
+
+<div id="resultado_columnas"></div>
+
+<hr>
+
+<h2>Guardar Proyecto de Obra</h2>
+
+<label>Nombre del proyecto</label>
+<input id="nombre_proyecto">
+
+<label>Descripción</label>
+<input id="descripcion_proyecto">
+
+<button onclick="guardarProyecto()">Guardar</button>
+
+<h3>Proyectos guardados</h3>
+
+<ul id="lista_proyectos"></ul>
+
+
+<script>
+
+function calcular(){
+
+let area = document.getElementById("area").value;
+let espesor = document.getElementById("espesor").value;
+
+let volumen = area * (espesor/100);
+
+document.getElementById("resultado").innerHTML =
+"Volumen de concreto: " + volumen.toFixed(2) + " m³";
+
+}
+
+function bloques(){
+
+let pared = document.getElementById("pared").value;
+
+let bloques = pared * 12.5;
+
+let mortero = pared * 0.02;
+
+document.getElementById("resultado_bloques").innerHTML =
+"Bloques necesarios: " + Math.ceil(bloques) +
+"<br>Mortero aproximado: " + mortero.toFixed(2) + " m³";
+
+}
+
+function baldosas(){
+
+let area = document.getElementById("area_piso").value;
+let lado = document.getElementById("lado_baldosa").value;
+
+let area_baldosa = (lado/100) * (lado/100);
+
+let cantidad = area / area_baldosa;
+
+cantidad = cantidad * 1.1;
+
+document.getElementById("resultado_baldosas").innerHTML =
+"Baldosas necesarias (incluye 10% desperdicio): " + Math.ceil(cantidad);
+
+}
+
+function columnas(){
+
+let n = document.getElementById("num_col").value;
+let h = document.getElementById("altura_col").value;
+let s = document.getElementById("seccion_col").value;
+
+let area = (s/100)*(s/100);
+
+let volumen = area * h * n;
+
+let acero = h * n * 4;
+
+document.getElementById("resultado_columnas").innerHTML =
+"Volumen concreto: " + volumen.toFixed(2) + " m³" +
+"<br>Acero longitudinal aprox: " + acero.toFixed(1) + " m";
+
+}
+
+function guardarProyecto(){
+
+let nombre = document.getElementById("nombre_proyecto").value;
+let descripcion = document.getElementById("descripcion_proyecto").value;
+
+let proyectos = JSON.parse(localStorage.getItem("proyectos")) || [];
+
+proyectos.push({
+nombre:nombre,
+descripcion:descripcion
+});
+
+localStorage.setItem("proyectos", JSON.stringify(proyectos));
+
+mostrarProyectos();
+
+}
+
+function mostrarProyectos(){
+
+let proyectos = JSON.parse(localStorage.getItem("proyectos")) || [];
+
+let lista = document.getElementById("lista_proyectos");
+
+lista.innerHTML = "";
+
+proyectos.forEach(function(p){
+
+let item = document.createElement("li");
+
+item.innerHTML = "<b>"+p.nombre+"</b> - "+p.descripcion;
+
+lista.appendChild(item);
+
+});
+
+}
+
+window.onload = mostrarProyectos;
+
+</script>
+
+</body>
+</html>
