@@ -143,6 +143,33 @@ document.getElementById("resultado_columnas").innerHTML =
 }
 
 
+<hr>
+
+<h2>Dosificación Concreto</h2>
+
+<label>Volumen de concreto (m³)</label>
+<input id="volumen_concreto">
+
+<button onclick="dosificar()">Calcular Materiales</button>
+
+<div id="resultado_dosificacion"></div>
+function dosificar(){
+
+let volumen = document.getElementById("volumen_concreto").value;
+
+let cemento = volumen * 7;
+let arena = volumen * 0.5;
+let grava = volumen * 0.7;
+let agua = volumen * 180;
+
+document.getElementById("resultado_dosificacion").innerHTML =
+"Cemento: " + cemento.toFixed(0) + " sacos" +
+"<br>Arena: " + arena.toFixed(2) + " m³" +
+"<br>Grava: " + grava.toFixed(2) + " m³" +
+"<br>Agua: " + agua.toFixed(0) + " litros";
+
+}
+
 </script>
 
 </body>
