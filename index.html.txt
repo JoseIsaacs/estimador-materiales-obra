@@ -48,6 +48,8 @@ font-weight:bold;
 <div class="resultado" id="resultado"></div>
 
 </div>
+
+
 <hr>
 
 <h2>Estimador de Bloques</h2>
@@ -58,19 +60,7 @@ font-weight:bold;
 <button onclick="bloques()">Calcular Bloques</button>
 
 <div id="resultado_bloques"></div>
-<script>
 
-function calcular(){
-
-let area = document.getElementById("area").value;
-let espesor = document.getElementById("espesor").value;
-
-let volumen = area * (espesor/100);
-
-document.getElementById("resultado").innerHTML =
-"Concreto necesario: " + volumen.toFixed(2) + " m³";
-
-}
 function bloques(){
 
 let pared = document.getElementById("pared").value;
@@ -84,6 +74,7 @@ document.getElementById("resultado_bloques").innerHTML =
 "<br>Mortero aproximado: " + mortero.toFixed(2) + " m³";
 
 }
+
 
 <hr>
 
@@ -131,6 +122,8 @@ document.getElementById("resultado_baldosas").innerHTML =
 <button onclick="columnas()">Calcular</button>
 
 <div id="resultado_columnas"></div>
+
+
 function columnas(){
 
 let n = document.getElementById("num_col").value;
@@ -149,7 +142,17 @@ document.getElementById("resultado_columnas").innerHTML =
 
 }
 
+
 </script>
 
 </body>
 </html>
+
+
+<script>
+
+
+
+
+
+
