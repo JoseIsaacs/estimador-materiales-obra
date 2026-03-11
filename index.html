@@ -106,7 +106,7 @@ font-weight:bold;
 <button onclick="guardarProyecto()">Guardar</button>
 
 <h3>Proyectos guardados</h3>
-
+<button onclick="exportarPDF()">Exportar Proyecto a PDF</button>
 <ul id="lista_proyectos"></ul>
 
 
@@ -211,8 +211,34 @@ lista.appendChild(item);
 }
 
 window.onload = mostrarProyectos;
+function exportarPDF(){
+
+const { jsPDF } = window.jspdf;
+
+let doc = new jsPDF();
+
+let nombre = document.getElementById("nombre_proyecto").value;
+
+let concreto = document.getElementById("resultado").innerText;
+let bloques = document.getElementById("resultado_bloques").innerText;
+let baldosas = document.getElementById("resultado_baldosas").innerText;
+let columnas = document.getElementById("resultado_columnas").innerText;
+
+doc.text("Presupuesto de Materiales de Obra", 20, 20);
+
+doc.text("Proyecto: " + nombre, 20, 40);
+
+doc.text(concreto, 20, 60);
+doc.text(bloques, 20, 80);
+doc.text(baldosas, 20, 100);
+doc.text(columnas, 20, 120);
+
+doc.save("presupuesto_obra.pdf");
+
+}
 
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </body>
 </html>
