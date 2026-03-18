@@ -2,13 +2,45 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Estimador de Materiales de Obra</title>
+<title>App de Obra</title>
 
 <style>
 body{
 font-family: Arial;
-margin:40px;
-background:#f5f5f5;
+background:#f4f6f8;
+margin:0;
+}
+
+.header{
+background:#2c3e50;
+color:white;
+padding:15px;
+text-align:center;
+font-size:20px;
+}
+
+.menu{
+display:flex;
+justify-content:space-around;
+background:#34495e;
+padding:10px;
+}
+
+.menu button{
+background:white;
+border:none;
+padding:10px;
+border-radius:5px;
+cursor:pointer;
+}
+
+.contenido{
+padding:20px;
+display:none;
+}
+
+.activo{
+display:block;
 }
 
 .card{
@@ -16,6 +48,7 @@ background:white;
 padding:20px;
 border-radius:10px;
 max-width:400px;
+margin:auto;
 box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
 
@@ -25,92 +58,113 @@ padding:10px;
 margin-top:10px;
 }
 
-.resultado{
-margin-top:20px;
-font-weight:bold;
-}
 </style>
-
 </head>
 
 <body>
 
+<div class="header">App Profesional de Obra</div>
+
+<div class="menu">
+<button onclick="mostrar('concreto')">Concreto</button>
+<button onclick="mostrar('bloques')">Muros</button>
+<button onclick="mostrar('pisos')">Pisos</button>
+<button onclick="mostrar('columnas')">Columnas</button>
+</div>
+
+<!-- CONCRETO -->
+<div id="concreto" class="contenido activo">
 <div class="card">
 
-<h2>Estimador de Concreto</h2>
+<h3>Concreto</h3>
 
-<label>Área m²</label>
-<input id="area" type="number">
-
-<label>Espesor (cm)</label>
-<input id="espesor" type="number">
+<input id="area" placeholder="Área m²">
+<input id="espesor" placeholder="Espesor cm">
 
 <button onclick="calcular()">Calcular</button>
 
-<div class="resultado" id="resultado"></div>
+<div id="resultado"></div>
 
 </div>
+</div>
 
-<hr>
+<!-- BLOQUES -->
+<div id="bloques" class="contenido">
+<div class="card">
 
-<h2>Estimador de Bloques</h2>
+<h3>Muros (Bloques)</h3>
 
-<label>Área de pared (m²)</label>
-<input id="pared" type="number">
+<input id="pared" placeholder="Área m²">
 
-<button onclick="bloques()">Calcular Bloques</button>
+<button onclick="bloques()">Calcular</button>
 
 <div id="resultado_bloques"></div>
 
-<hr>
+</div>
+</div>
 
-<h2>Estimador de Baldosas</h2>
+<!-- PISOS -->
+<div id="pisos" class="contenido">
+<div class="card">
 
-<label>Área del piso (m²)</label>
-<input id="area_piso" type="number">
+<h3>Pisos (Baldosas)</h3>
 
-<label>Tamaño baldosa (cm)</label>
-<input id="lado_baldosa" type="number">
+<input id="area_piso" placeholder="Área m²">
+<input id="lado_baldosa" placeholder="Tamaño cm">
 
-<button onclick="baldosas()">Calcular Baldosas</button>
+<button onclick="baldosas()">Calcular</button>
 
 <div id="resultado_baldosas"></div>
 
-<hr>
+</div>
+</div>
 
-<h2>Columnas de Concreto</h2>
+<!-- COLUMNAS -->
+<div id="columnas" class="contenido">
+<div class="card">
 
-<label>Cantidad de columnas</label>
-<input id="num_col" type="number">
+<h3>Columnas</h3>
 
-<label>Altura (m)</label>
-<input id="altura_col" type="number">
-
-<label>Sección (cm)</label>
-<input id="seccion_col" type="number">
+<input id="num_col" placeholder="Cantidad">
+<input id="altura_col" placeholder="Altura m">
+<input id="seccion_col" placeholder="Sección cm">
 
 <button onclick="columnas()">Calcular</button>
 
 <div id="resultado_columnas"></div>
 
-<hr>
+</div>
+</div>
 
-<h2>Guardar Proyecto de Obra</h2>
+<!-- GUARDAR -->
+<div class="contenido activo">
+<div class="card">
 
-<label>Nombre del proyecto</label>
-<input id="nombre_proyecto">
+<h3>Guardar Proyecto</h3>
 
-<label>Descripción</label>
-<input id="descripcion_proyecto">
+<input id="nombre_proyecto" placeholder="Nombre del proyecto">
 
 <button onclick="guardarProyecto()">Guardar</button>
+<button onclick="exportarPDF()">Exportar PDF</button>
 
-<h3>Proyectos guardados</h3>
-<button onclick="exportarPDF()">Exportar Proyecto a PDF</button>
 <ul id="lista_proyectos"></ul>
 
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
+
+function mostrar(id){
+
+let secciones = document.querySelectorAll(".contenido");
+
+secciones.forEach(sec => sec.classList.remove("activo"));
+
+document.getElementById(id).classList.add("activo");
+
+}
 
 function calcular(){
 
@@ -120,7 +174,7 @@ let espesor = document.getElementById("espesor").value;
 let volumen = area * (espesor/100);
 
 document.getElementById("resultado").innerHTML =
-"Volumen de concreto: " + volumen.toFixed(2) + " m³";
+"Volumen: " + volumen.toFixed(2) + " m³";
 
 }
 
@@ -129,12 +183,11 @@ function bloques(){
 let pared = document.getElementById("pared").value;
 
 let bloques = pared * 12.5;
-
 let mortero = pared * 0.02;
 
 document.getElementById("resultado_bloques").innerHTML =
-"Bloques necesarios: " + Math.ceil(bloques) +
-"<br>Mortero aproximado: " + mortero.toFixed(2) + " m³";
+"Bloques: " + Math.ceil(bloques) +
+"<br>Mortero: " + mortero.toFixed(2);
 
 }
 
@@ -143,14 +196,11 @@ function baldosas(){
 let area = document.getElementById("area_piso").value;
 let lado = document.getElementById("lado_baldosa").value;
 
-let area_baldosa = (lado/100) * (lado/100);
-
-let cantidad = area / area_baldosa;
-
-cantidad = cantidad * 1.1;
+let area_baldosa = (lado/100)*(lado/100);
+let cantidad = (area / area_baldosa)*1.1;
 
 document.getElementById("resultado_baldosas").innerHTML =
-"Baldosas necesarias (incluye 10% desperdicio): " + Math.ceil(cantidad);
+"Baldosas: " + Math.ceil(cantidad);
 
 }
 
@@ -161,28 +211,28 @@ let h = document.getElementById("altura_col").value;
 let s = document.getElementById("seccion_col").value;
 
 let area = (s/100)*(s/100);
-
-let volumen = area * h * n;
-
-let acero = h * n * 4;
+let volumen = area*h*n;
 
 document.getElementById("resultado_columnas").innerHTML =
-"Volumen concreto: " + volumen.toFixed(2) + " m³" +
-"<br>Acero longitudinal aprox: " + acero.toFixed(1) + " m";
+"Concreto: " + volumen.toFixed(2) + " m³";
 
 }
 
 function guardarProyecto(){
 
 let nombre = document.getElementById("nombre_proyecto").value;
-let descripcion = document.getElementById("descripcion_proyecto").value;
+
+let datos = {
+nombre:nombre,
+concreto:document.getElementById("resultado").innerText,
+bloques:document.getElementById("resultado_bloques").innerText,
+pisos:document.getElementById("resultado_baldosas").innerText,
+columnas:document.getElementById("resultado_columnas").innerText
+};
 
 let proyectos = JSON.parse(localStorage.getItem("proyectos")) || [];
 
-proyectos.push({
-nombre:nombre,
-descripcion:descripcion
-});
+proyectos.push(datos);
 
 localStorage.setItem("proyectos", JSON.stringify(proyectos));
 
@@ -198,19 +248,18 @@ let lista = document.getElementById("lista_proyectos");
 
 lista.innerHTML = "";
 
-proyectos.forEach(function(p){
+proyectos.forEach(p => {
 
-let item = document.createElement("li");
+let li = document.createElement("li");
 
-item.innerHTML = "<b>"+p.nombre+"</b> - "+p.descripcion;
+li.innerHTML = "<b>"+p.nombre+"</b><br>"+p.concreto+"<br>"+p.bloques+"<br>"+p.pisos+"<br>"+p.columnas;
 
-lista.appendChild(item);
+lista.appendChild(li);
 
 });
 
 }
 
-window.onload = mostrarProyectos;
 function exportarPDF(){
 
 const { jsPDF } = window.jspdf;
@@ -219,26 +268,15 @@ let doc = new jsPDF();
 
 let nombre = document.getElementById("nombre_proyecto").value;
 
-let concreto = document.getElementById("resultado").innerText;
-let bloques = document.getElementById("resultado_bloques").innerText;
-let baldosas = document.getElementById("resultado_baldosas").innerText;
-let columnas = document.getElementById("resultado_columnas").innerText;
+doc.text("Proyecto: "+nombre,20,20);
 
-doc.text("Presupuesto de Materiales de Obra", 20, 20);
-
-doc.text("Proyecto: " + nombre, 20, 40);
-
-doc.text(concreto, 20, 60);
-doc.text(bloques, 20, 80);
-doc.text(baldosas, 20, 100);
-doc.text(columnas, 20, 120);
-
-doc.save("presupuesto_obra.pdf");
+doc.save("obra.pdf");
 
 }
 
+window.onload = mostrarProyectos;
+
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </body>
 </html>
