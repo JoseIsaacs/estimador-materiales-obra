@@ -1,282 +1,1189 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>App de Obra</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>StructuraPro — Estimador Estructural</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
+:root{
+  --bg:#060e1c;--surface:#0b1a2e;--card:#0f2040;--border:#1a3a60;
+  --accent:#f0a500;--accent2:#00c9ff;--text:#ddeeff;--dim:#5580a0;
+  --ok:#00e5a0;--err:#ff4d6d;--grid:rgba(0,100,200,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100vh;overflow-x:hidden}
 body{
-font-family: Arial;
-background:#f4f6f8;
-margin:0;
+  font-family:'Rajdhani',sans-serif;
+  background:var(--bg);color:var(--text);
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:48px 48px;
 }
-
-.header{
-background:#2c3e50;
-color:white;
-padding:15px;
-text-align:center;
-font-size:20px;
+/* ── HEADER ── */
+.hdr{
+  background:linear-gradient(135deg,#020912 0%,#071428 60%,#0a1e3a 100%);
+  border-bottom:1px solid var(--border);
+  padding:14px 20px;
+  display:flex;align-items:center;gap:14px;
+  position:sticky;top:0;z-index:100;
 }
-
-.menu{
-display:flex;
-justify-content:space-around;
-background:#34495e;
-padding:10px;
+.hdr-logo{
+  width:42px;height:42px;
+  background:var(--accent);
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:700;color:#000;flex-shrink:0;
 }
-
-.menu button{
-background:white;
-border:none;
-padding:10px;
-border-radius:5px;
-cursor:pointer;
+.hdr-title{flex:1}
+.hdr-title h1{font-size:20px;font-weight:700;letter-spacing:2px;color:var(--accent)}
+.hdr-title p{font-size:11px;color:var(--dim);letter-spacing:1px;font-family:'Share Tech Mono'}
+.hdr-badge{
+  font-family:'Share Tech Mono';font-size:10px;
+  background:rgba(0,201,255,0.1);border:1px solid var(--accent2);
+  color:var(--accent2);padding:4px 8px;border-radius:2px;letter-spacing:1px;
 }
-
-.contenido{
-padding:20px;
-display:none;
+/* ── TABS ── */
+.tabs{
+  display:flex;overflow-x:auto;scrollbar-width:none;
+  background:#07111f;border-bottom:1px solid var(--border);
+  padding:0 8px;gap:2px;
 }
-
-.activo{
-display:block;
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex-shrink:0;padding:12px 16px;
+  font-family:'Rajdhani';font-weight:600;font-size:13px;
+  letter-spacing:1px;color:var(--dim);background:none;border:none;
+  border-bottom:2px solid transparent;cursor:pointer;
+  transition:all .2s;white-space:nowrap;
 }
-
+.tab:hover{color:var(--text)}
+.tab.on{color:var(--accent);border-color:var(--accent)}
+/* ── CONTENT ── */
+.page{display:none;padding:20px 16px;max-width:540px;margin:0 auto}
+.page.on{display:block}
+/* ── SECTION HEADER ── */
+.sec-hdr{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:20px;
+}
+.sec-icon{
+  width:44px;height:44px;background:rgba(240,165,0,0.1);
+  border:1px solid rgba(240,165,0,0.4);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.sec-title h2{font-size:22px;font-weight:700;color:var(--accent);letter-spacing:1px}
+.sec-title p{font-size:12px;color:var(--dim);letter-spacing:.5px}
+/* ── FORMULA BOX ── */
+.formula-box{
+  background:rgba(0,201,255,0.04);
+  border:1px solid rgba(0,201,255,0.2);
+  border-left:3px solid var(--accent2);
+  border-radius:6px;padding:14px 16px;
+  margin-bottom:16px;
+}
+.formula-box label{
+  display:block;font-size:10px;letter-spacing:2px;
+  color:var(--accent2);margin-bottom:8px;font-weight:600;
+}
+.formula-box .formula{
+  font-family:'Share Tech Mono';font-size:13px;
+  color:var(--text);line-height:1.8;
+}
+.formula span{color:var(--accent);font-weight:600}
+/* ── CARD ── */
 .card{
-background:white;
-padding:20px;
-border-radius:10px;
-max-width:400px;
-margin:auto;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:20px;margin-bottom:16px;
 }
-
-input,button{
-width:100%;
-padding:10px;
-margin-top:10px;
+.card h4{
+  font-size:12px;letter-spacing:2px;color:var(--accent);
+  margin-bottom:14px;font-weight:600;
 }
-
+/* ── INPUTS ── */
+.field{margin-bottom:14px}
+.field label{
+  display:block;font-size:12px;letter-spacing:1px;
+  color:var(--dim);margin-bottom:6px;font-weight:600;
+}
+.field input,.field select{
+  width:100%;padding:11px 14px;
+  background:#071628;border:1px solid var(--border);
+  color:var(--text);border-radius:6px;
+  font-family:'Rajdhani';font-size:15px;font-weight:600;
+  outline:none;transition:border .2s;
+}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.field input.err{border-color:var(--err)}
+/* ── BTN ── */
+.btn-calc{
+  width:100%;padding:13px;
+  background:linear-gradient(135deg,#c47a00,var(--accent));
+  color:#000;font-family:'Rajdhani';font-size:16px;font-weight:700;
+  letter-spacing:2px;border:none;border-radius:8px;cursor:pointer;
+  margin-top:6px;transition:opacity .2s;
+}
+.btn-calc:hover{opacity:.88}
+.btn-pdf{
+  width:100%;padding:11px;
+  background:rgba(0,201,255,0.08);border:1px solid var(--accent2);
+  color:var(--accent2);font-family:'Rajdhani';font-size:14px;
+  font-weight:700;letter-spacing:2px;border-radius:8px;cursor:pointer;
+  margin-top:10px;transition:all .2s;
+}
+.btn-pdf:hover{background:rgba(0,201,255,0.15)}
+/* ── RESULT ── */
+.result-block{
+  background:#071628;border:1px solid var(--border);
+  border-radius:8px;padding:16px;margin-top:16px;display:none;
+}
+.result-block.show{display:block}
+.result-block h4{
+  font-size:10px;letter-spacing:2px;color:var(--ok);
+  margin-bottom:12px;font-weight:600;
+}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.res-item{
+  background:rgba(0,0,0,.3);border:1px solid var(--border);
+  border-radius:6px;padding:10px;
+}
+.res-item .val{
+  font-family:'Share Tech Mono';font-size:20px;
+  color:var(--accent);font-weight:700;
+}
+.res-item .lbl{
+  font-size:11px;color:var(--dim);letter-spacing:.5px;
+  margin-top:2px;
+}
+.res-item .unit{font-size:11px;color:var(--accent2)}
+/* ── RESUMEN ── */
+.iso-wrap{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:16px;margin-bottom:16px;
+  overflow:hidden;
+}
+.iso-wrap h4{font-size:12px;letter-spacing:2px;color:var(--accent);margin-bottom:10px;font-weight:600}
+#isoCanvas{width:100%;border-radius:6px;display:block}
+.chart-wrap{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:16px;margin-bottom:16px;
+}
+.chart-wrap h4{font-size:12px;letter-spacing:2px;color:var(--accent);margin-bottom:10px;font-weight:600}
+/* ── TABLES ── */
+.tbl-wrap{overflow-x:auto;margin-bottom:16px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+table caption{
+  font-size:11px;letter-spacing:2px;color:var(--accent2);
+  padding:10px 0;text-align:left;font-weight:600;
+}
+th{
+  background:#071628;color:var(--dim);
+  padding:10px 12px;text-align:left;
+  font-size:11px;letter-spacing:1px;
+  border-bottom:1px solid var(--border);
+}
+td{
+  padding:10px 12px;border-bottom:1px solid rgba(26,58,96,.5);
+  font-family:'Share Tech Mono';font-size:13px;
+}
+tr:last-child td{border-bottom:none}
+.td-label{font-family:'Rajdhani';font-weight:600;font-size:14px;color:var(--text)}
+.td-total{color:var(--accent);font-weight:700}
+.td-ok{color:var(--ok)}
+/* ── CONCLUSIONES ── */
+.concl{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:20px;margin-bottom:16px;
+}
+.concl h4{font-size:12px;letter-spacing:2px;color:var(--accent);margin-bottom:14px;font-weight:600}
+.concl-item{
+  display:flex;gap:12px;align-items:flex-start;
+  margin-bottom:12px;
+}
+.concl-dot{
+  width:6px;height:6px;background:var(--accent);
+  border-radius:50%;margin-top:7px;flex-shrink:0;
+}
+.concl-item p{font-size:14px;line-height:1.5;color:var(--text)}
+/* ── ANNEX ── */
+.annex{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:20px;margin-bottom:16px;
+}
+.annex h4{font-size:12px;letter-spacing:2px;color:var(--accent);margin-bottom:4px;font-weight:600}
+.annex p{font-size:12px;color:var(--dim);margin-bottom:12px}
+/* ── DIVIDER ── */
+.divider{
+  height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);
+  margin:20px 0;
+}
+/* ── BADGE ── */
+.badge{
+  display:inline-block;
+  background:rgba(0,229,160,.1);border:1px solid var(--ok);
+  color:var(--ok);font-size:10px;letter-spacing:1px;
+  padding:2px 8px;border-radius:2px;margin-left:8px;font-weight:600;
+}
+.badge.warn{
+  background:rgba(240,165,0,.1);border-color:var(--accent);color:var(--accent);
+}
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--ok);color:#000;padding:10px 20px;
+  border-radius:6px;font-weight:700;letter-spacing:1px;font-size:14px;
+  transition:transform .3s;z-index:999;pointer-events:none;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
-
 <body>
 
-<div class="header">App Profesional de Obra</div>
-
-<div class="menu">
-<button onclick="mostrar('concreto')">Concreto</button>
-<button onclick="mostrar('bloques')">Muros</button>
-<button onclick="mostrar('pisos')">Pisos</button>
-<button onclick="mostrar('columnas')">Columnas</button>
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-logo">S</div>
+  <div class="hdr-title">
+    <h1>STRUCTURAPRO</h1>
+    <p>ESTIMADOR ESTRUCTURAL · v2.0</p>
+  </div>
+  <div class="hdr-badge">ING. CIVIL</div>
 </div>
 
-<!-- CONCRETO -->
-<div id="concreto" class="contenido activo">
-<div class="card">
-
-<h3>Concreto</h3>
-
-<input id="area" placeholder="Área m²">
-<input id="espesor" placeholder="Espesor cm">
-
-<button onclick="calcular()">Calcular</button>
-
-<div id="resultado"></div>
-
-</div>
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab on" onclick="showTab('concreto',this)">🏗️ CONCRETO</button>
+  <button class="tab" onclick="showTab('muros',this)">🧱 MUROS</button>
+  <button class="tab" onclick="showTab('pisos',this)">🔷 PISOS</button>
+  <button class="tab" onclick="showTab('columnas',this)">🏛️ COLUMNAS</button>
+  <button class="tab" onclick="showTab('resumen',this)">📊 RESUMEN</button>
 </div>
 
-<!-- BLOQUES -->
-<div id="bloques" class="contenido">
-<div class="card">
+<!-- ═══════════════ CONCRETO ═══════════════ -->
+<div id="tab-concreto" class="page on">
+  <div class="sec-hdr">
+    <div class="sec-icon">🏗️</div>
+    <div class="sec-title">
+      <h2>CONCRETO ESTRUCTURAL</h2>
+      <p>LOSA · ZAPATA · VIGA</p>
+    </div>
+  </div>
 
-<h3>Muros (Bloques)</h3>
+  <div class="formula-box">
+    <label>📐 FÓRMULAS APLICADAS</label>
+    <div class="formula">
+      V = A × e/100 &nbsp;<span>[m³]</span><br>
+      Cemento = V × <span>fc_factor</span> sacos<br>
+      Arena = V × <span>fa</span> m³<br>
+      Grava = V × <span>fg</span> m³<br>
+      Agua = V × <span>fw</span> litros
+    </div>
+  </div>
 
-<input id="pared" placeholder="Área m²">
+  <div class="card">
+    <h4>PARÁMETROS DE ENTRADA</h4>
+    <div class="field">
+      <label>ÁREA (m²)</label>
+      <input id="c_area" type="number" min="0" placeholder="ej. 25.0">
+    </div>
+    <div class="field">
+      <label>ESPESOR (cm)</label>
+      <input id="c_esp" type="number" min="1" placeholder="ej. 15">
+    </div>
+    <div class="field">
+      <label>RESISTENCIA DE DISEÑO</label>
+      <select id="c_fc">
+        <option value="175">f'c = 175 kg/cm² — Uso general</option>
+        <option value="210" selected>f'c = 210 kg/cm² — Estructural típico</option>
+        <option value="245">f'c = 245 kg/cm² — Alta resistencia</option>
+        <option value="280">f'c = 280 kg/cm² — Estructuras especiales</option>
+      </select>
+    </div>
+    <button class="btn-calc" onclick="calcConcreto()">⚡ CALCULAR</button>
+  </div>
 
-<button onclick="bloques()">Calcular</button>
-
-<div id="resultado_bloques"></div>
-
+  <div id="res-concreto" class="result-block">
+    <h4>✅ RESULTADOS — CONCRETO</h4>
+    <div class="res-grid">
+      <div class="res-item">
+        <div class="val" id="cv">—</div>
+        <div class="lbl">VOLUMEN</div>
+        <div class="unit">m³</div>
+      </div>
+      <div class="res-item">
+        <div class="val" id="cc">—</div>
+        <div class="lbl">CEMENTO</div>
+        <div class="unit">sacos 50 kg</div>
+      </div>
+      <div class="res-item">
+        <div class="val" id="ca">—</div>
+        <div class="lbl">ARENA</div>
+        <div class="unit">m³</div>
+      </div>
+      <div class="res-item">
+        <div class="val" id="cg">—</div>
+        <div class="lbl">GRAVA</div>
+        <div class="unit">m³</div>
+      </div>
+      <div class="res-item">
+        <div class="val" id="cw">—</div>
+        <div class="lbl">AGUA</div>
+        <div class="unit">litros</div>
+      </div>
+      <div class="res-item">
+        <div class="val" id="cdos">—</div>
+        <div class="lbl">DOSIF.</div>
+        <div class="unit">C:A:G</div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- ═══════════════ MUROS ═══════════════ -->
+<div id="tab-muros" class="page">
+  <div class="sec-hdr">
+    <div class="sec-icon">🧱</div>
+    <div class="sec-title">
+      <h2>MUROS DE BLOQUES</h2>
+      <p>MAMPOSTERÍA · MORTERO</p>
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <label>📐 FÓRMULAS APLICADAS</label>
+    <div class="formula">
+      Bloques = A × <span>ρ</span> × 1.05 (desperdicio)<br>
+      Cemento = A × <span>0.15</span> sacos<br>
+      Arena = A × <span>0.03</span> m³<br>
+      Agua = A × <span>12</span> litros
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>PARÁMETROS DE ENTRADA</h4>
+    <div class="field">
+      <label>ÁREA DE PARED (m²)</label>
+      <input id="m_area" type="number" min="0" placeholder="ej. 40.0">
+    </div>
+    <div class="field">
+      <label>TIPO DE BLOQUE</label>
+      <select id="m_bloque">
+        <option value="8">Bloque 8 cm — Tabique ligero</option>
+        <option value="12" selected>Bloque 12 cm — Muro interior</option>
+        <option value="15">Bloque 15 cm — Muro exterior</option>
+        <option value="20">Bloque 20 cm — Muro estructural</option>
+      </select>
+    </div>
+    <button class="btn-calc" onclick="calcMuros()">⚡ CALCULAR</button>
+  </div>
+
+  <div id="res-muros" class="result-block">
+    <h4>✅ RESULTADOS — MUROS</h4>
+    <div class="res-grid">
+      <div class="res-item">
+        <div class="val" id="mb">—</div>
+        <div class="lbl">BLOQUES</div>
+        <div class="unit">unidades</div>
+      </div>
+      <div class="res-item">
+        <div class="val" id="mc">—</div>
+        <div class="lbl">CEMENTO</div>
+        <div class="unit">sacos</div>
+      </div>
+      <div class="res-item">
+        <div class="val" id="ma">—</div>
+        <div class="lbl">ARENA</div>
+        <div class="unit">m³</div>
+      </div>
+      <div class="res-item">
+        <div class="val" id="mw">—</div>
+        <div class="lbl">AGUA</div>
+        <div class="unit">litros</div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- PISOS -->
-<div id="pisos" class="contenido">
-<div class="card">
+<!-- ═══════════════ PISOS ═══════════════ -->
+<div id="tab-pisos" class="page">
+  <div class="sec-hdr">
+    <div class="sec-icon">🔷</div>
+    <div class="sec-title">
+      <h2>PISOS · BALDOSAS</h2>
+      <p>CERÁMICA · PORCELANA · MÁRMOL</p>
+    </div>
+  </div>
 
-<h3>Pisos (Baldosas)</h3>
+  <div class="formula-box">
+    <label>📐 FÓRMULAS APLICADAS</label>
+    <div class="formula">
+      A_baldosa = (lado/100)² <span>[m²]</span><br>
+      N = (A_piso / A_baldosa) × <span>1.10</span><br>
+      Pega = A × <span>4.5</span> kg<br>
+      Fragua = A × <span>0.30</span> kg
+    </div>
+  </div>
 
-<input id="area_piso" placeholder="Área m²">
-<input id="lado_baldosa" placeholder="Tamaño cm">
+  <div class="card">
+    <h4>PARÁMETROS DE ENTRADA</h4>
+    <div class="field">
+      <label>ÁREA DE PISO (m²)</label>
+      <input id="p_area" type="number" min="0" placeholder="ej. 60.0">
+    </div>
+    <div class="field">
+      <label>TAMAÑO BALDOSA (cm)</label>
+      <select id="p_lado">
+        <option value="20">20 × 20 cm</option>
+        <option value="30">30 × 30 cm</option>
+        <option value="40">40 × 40 cm</option>
+        <option value="45">45 × 45 cm</option>
+        <option value="60" selected>60 × 60 cm</option>
+        <option value="80">80 × 80 cm</option>
+        <option value="custom">Tamaño personalizado</option>
+      </select>
+    </div>
+    <div class="field" id="p_custom_wrap" style="display:none">
+      <label>LADO (cm)</label>
+      <input id="p_custom" type="number" min="5" placeholder="ej. 55">
+    </div>
+    <button class="btn-calc" onclick="calcPisos()">⚡ CALCULAR</button>
+  </div>
 
-<button onclick="baldosas()">Calcular</button>
-
-<div id="resultado_baldosas"></div>
-
+  <div id="res-pisos" class="result-block">
+    <h4>✅ RESULTADOS — PISOS</h4>
+    <div class="res-grid">
+      <div class="res-item">
+        <div class="val" id="pb">—</div>
+        <div class="lbl">BALDOSAS</div>
+        <div class="unit">unidades</div>
+      </div>
+      <div class="res-item">
+        <div class="val" id="pcajas">—</div>
+        <div class="lbl">CAJAS ≈</div>
+        <div class="unit">aprox.</div>
+      </div>
+      <div class="res-item">
+        <div class="val" id="ppega">—</div>
+        <div class="lbl">PEGA</div>
+        <div class="unit">kg</div>
+      </div>
+      <div class="res-item">
+        <div class="val" id="pfragua">—</div>
+        <div class="lbl">FRAGUA</div>
+        <div class="unit">kg</div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- ═══════════════ COLUMNAS ═══════════════ -->
+<div id="tab-columnas" class="page">
+  <div class="sec-hdr">
+    <div class="sec-icon">🏛️</div>
+    <div class="sec-title">
+      <h2>COLUMNAS ESTRUCTURALES</h2>
+      <p>CONCRETO · ACERO · ESTRIBOS</p>
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <label>📐 FÓRMULAS APLICADAS</label>
+    <div class="formula">
+      V_col = n × (s/100)² × h <span>[m³]</span><br>
+      Acero long. = n × 4 × (h+0.6) × <span>1.552</span> kg/m<br>
+      N_estrib = ⌈h/0.15⌉ por columna<br>
+      P_estrib = N_estrib × L_est × <span>0.560</span> kg/m
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>PARÁMETROS DE ENTRADA</h4>
+    <div class="field">
+      <label>CANTIDAD DE COLUMNAS</label>
+      <input id="col_n" type="number" min="1" placeholder="ej. 4">
+    </div>
+    <div class="field">
+      <label>ALTURA (m)</label>
+      <input id="col_h" type="number" min="0.1" placeholder="ej. 3.0">
+    </div>
+    <div class="field">
+      <label>SECCIÓN CUADRADA (cm)</label>
+      <input id="col_s" type="number" min="15" placeholder="ej. 30">
+    </div>
+    <div class="field">
+      <label>RESISTENCIA CONCRETO</label>
+      <select id="col_fc">
+        <option value="210" selected>f'c = 210 kg/cm²</option>
+        <option value="245">f'c = 245 kg/cm²</option>
+        <option value="280">f'c = 280 kg/cm²</option>
+      </select>
+    </div>
+    <button class="btn-calc" onclick="calcColumnas()">⚡ CALCULAR</button>
+  </div>
+
+  <div id="res-columnas" class="result-block">
+    <h4>✅ RESULTADOS — COLUMNAS</h4>
+    <div class="res-grid">
+      <div class="res-item">
+        <div class="val" id="colv">—</div>
+        <div class="lbl">CONCRETO</div>
+        <div class="unit">m³</div>
+      </div>
+      <div class="res-item">
+        <div class="val" id="colce">—</div>
+        <div class="lbl">CEMENTO</div>
+        <div class="unit">sacos</div>
+      </div>
+      <div class="res-item">
+        <div class="val" id="colac">—</div>
+        <div class="lbl">ACERO LONG.</div>
+        <div class="unit">kg  (Ø5/8")</div>
+      </div>
+      <div class="res-item">
+        <div class="val" id="colest">—</div>
+        <div class="lbl">ESTRIBOS</div>
+        <div class="unit">kg  (Ø3/8")</div>
+      </div>
+      <div class="res-item">
+        <div class="val" id="colatotal">—</div>
+        <div class="lbl">ACERO TOTAL</div>
+        <div class="unit">kg</div>
+      </div>
+      <div class="res-item">
+        <div class="val" id="colvar">—</div>
+        <div class="lbl">VARILLAS Ø5/8"</div>
+        <div class="unit">unidades</div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- COLUMNAS -->
-<div id="columnas" class="contenido">
-<div class="card">
+<!-- ═══════════════ RESUMEN ═══════════════ -->
+<div id="tab-resumen" class="page">
+  <div class="sec-hdr">
+    <div class="sec-icon">📊</div>
+    <div class="sec-title">
+      <h2>RESUMEN DEL PROYECTO</h2>
+      <p>CANTIDADES · 3D · ANÁLISIS</p>
+    </div>
+  </div>
 
-<h3>Columnas</h3>
+  <!-- 3D ISOMETRIC -->
+  <div class="iso-wrap">
+    <h4>🏗️ VISTA ISOMÉTRICA — ESTRUCTURA</h4>
+    <canvas id="isoCanvas" height="280"></canvas>
+    <p style="font-size:11px;color:var(--dim);margin-top:8px;font-family:'Share Tech Mono'">
+      ↺ Actualiza automáticamente con tus datos de columnas
+    </p>
+  </div>
 
-<input id="num_col" placeholder="Cantidad">
-<input id="altura_col" placeholder="Altura m">
-<input id="seccion_col" placeholder="Sección cm">
+  <!-- CHART -->
+  <div class="chart-wrap">
+    <h4>📈 DISTRIBUCIÓN DE MATERIALES</h4>
+    <canvas id="matChart" height="200"></canvas>
+  </div>
 
-<button onclick="columnas()">Calcular</button>
+  <!-- TABLA RESUMEN CANTIDADES -->
+  <div class="tbl-wrap">
+    <table>
+      <caption>TABLA RESUMEN — VOLÚMENES Y CANTIDADES</caption>
+      <thead>
+        <tr>
+          <th>MÓDULO</th><th>CEMENTO</th><th>ARENA</th><th>GRAVA</th>
+        </tr>
+      </thead>
+      <tbody id="tbl-body">
+        <tr>
+          <td colspan="4" class="td-label" style="color:var(--dim);text-align:center;padding:20px">
+            Calcula cada módulo para ver el resumen
+          </td>
+        </tr>
+      </tbody>
+      <tfoot id="tbl-foot" style="display:none">
+        <tr style="background:rgba(240,165,0,.06)">
+          <td class="td-label">TOTAL</td>
+          <td class="td-total" id="t-cem">—</td>
+          <td class="td-total" id="t-are">—</td>
+          <td class="td-total" id="t-gra">—</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 
-<div id="resultado_columnas"></div>
+  <!-- TABLA ACERO -->
+  <div class="tbl-wrap" id="tbl-acero-wrap" style="display:none">
+    <table>
+      <caption>ACERO DE REFUERZO — COLUMNAS</caption>
+      <thead>
+        <tr><th>ELEMENTO</th><th>CANTIDAD</th><th>PESO (kg)</th><th>DIÁMETRO</th></tr>
+      </thead>
+      <tbody id="tbl-acero-body"></tbody>
+    </table>
+  </div>
 
+  <!-- ANNEX DOSIFICACIÓN -->
+  <div class="annex">
+    <h4>📋 ANEXO — DOSIFICACIÓN DE MATERIALES (por m³)</h4>
+    <p>Tabla de referencia ACI 318 / COVENIN 1753</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>f'c (kg/cm²)</th><th>CEMENTO<br>(sacos)</th>
+            <th>ARENA<br>(m³)</th><th>GRAVA<br>(m³)</th><th>AGUA<br>(L)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-label">175</td><td>6.5</td><td>0.52</td><td>0.78</td><td>190</td></tr>
+          <tr><td class="td-label">210</td><td>7.0</td><td>0.56</td><td>0.84</td><td>185</td></tr>
+          <tr><td class="td-label">245</td><td>7.5</td><td>0.50</td><td>0.75</td><td>180</td></tr>
+          <tr><td class="td-label">280</td><td>8.0</td><td>0.48</td><td>0.72</td><td>175</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CONCLUSIONES -->
+  <div class="concl" id="concl-box">
+    <h4>🔍 CONCLUSIONES Y RECOMENDACIONES</h4>
+    <div id="concl-items">
+      <div class="concl-item">
+        <div class="concl-dot"></div>
+        <p style="color:var(--dim)">Calcula al menos un módulo para generar conclusiones automáticas.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- EXPORT -->
+  <button class="btn-pdf" onclick="exportPDF()">📄 EXPORTAR REPORTE PDF COMPLETO</button>
+  <br><br>
 </div>
-</div>
 
-<!-- GUARDAR -->
-<div class="contenido activo">
-<div class="card">
-
-<h3>Guardar Proyecto</h3>
-
-<input id="nombre_proyecto" placeholder="Nombre del proyecto">
-
-<button onclick="guardarProyecto()">Guardar</button>
-<button onclick="exportarPDF()">Exportar PDF</button>
-
-<ul id="lista_proyectos"></ul>
-
-</div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- TOAST -->
+<div class="toast" id="toast">✅ GUARDADO</div>
 
 <script>
-
-function mostrar(id){
-
-let secciones = document.querySelectorAll(".contenido");
-
-secciones.forEach(sec => sec.classList.remove("activo"));
-
-document.getElementById(id).classList.add("activo");
-
-}
-
-function calcular(){
-
-let area = document.getElementById("area").value;
-let espesor = document.getElementById("espesor").value;
-
-let volumen = area * (espesor/100);
-
-document.getElementById("resultado").innerHTML =
-"Volumen: " + volumen.toFixed(2) + " m³";
-
-}
-
-function bloques(){
-
-let pared = document.getElementById("pared").value;
-
-let bloques = pared * 12.5;
-let mortero = pared * 0.02;
-
-document.getElementById("resultado_bloques").innerHTML =
-"Bloques: " + Math.ceil(bloques) +
-"<br>Mortero: " + mortero.toFixed(2);
-
-}
-
-function baldosas(){
-
-let area = document.getElementById("area_piso").value;
-let lado = document.getElementById("lado_baldosa").value;
-
-let area_baldosa = (lado/100)*(lado/100);
-let cantidad = (area / area_baldosa)*1.1;
-
-document.getElementById("resultado_baldosas").innerHTML =
-"Baldosas: " + Math.ceil(cantidad);
-
-}
-
-function columnas(){
-
-let n = document.getElementById("num_col").value;
-let h = document.getElementById("altura_col").value;
-let s = document.getElementById("seccion_col").value;
-
-let area = (s/100)*(s/100);
-let volumen = area*h*n;
-
-document.getElementById("resultado_columnas").innerHTML =
-"Concreto: " + volumen.toFixed(2) + " m³";
-
-}
-
-function guardarProyecto(){
-
-let nombre = document.getElementById("nombre_proyecto").value;
-
-let datos = {
-nombre:nombre,
-concreto:document.getElementById("resultado").innerText,
-bloques:document.getElementById("resultado_bloques").innerText,
-pisos:document.getElementById("resultado_baldosas").innerText,
-columnas:document.getElementById("resultado_columnas").innerText
+/* ── DOSIFICACIÓN ── */
+const DOS={
+  175:{cem:6.5,are:0.52,gra:0.78,agua:190,ratio:'1 : 2.5 : 3.8'},
+  210:{cem:7.0,are:0.56,gra:0.84,agua:185,ratio:'1 : 2.0 : 3.0'},
+  245:{cem:7.5,are:0.50,gra:0.75,agua:180,ratio:'1 : 1.8 : 2.7'},
+  280:{cem:8.0,are:0.48,gra:0.72,agua:175,ratio:'1 : 1.6 : 2.4'}
 };
 
-let proyectos = JSON.parse(localStorage.getItem("proyectos")) || [];
+/* ── STATE ── */
+const S={
+  concreto:null,muros:null,pisos:null,columnas:null
+};
 
-proyectos.push(datos);
-
-localStorage.setItem("proyectos", JSON.stringify(proyectos));
-
-mostrarProyectos();
-
+/* ── TABS ── */
+function showTab(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('tab-'+id).classList.add('on');
+  btn.classList.add('on');
+  if(id==='resumen') buildResumen();
 }
 
-function mostrarProyectos(){
-
-let proyectos = JSON.parse(localStorage.getItem("proyectos")) || [];
-
-let lista = document.getElementById("lista_proyectos");
-
-lista.innerHTML = "";
-
-proyectos.forEach(p => {
-
-let li = document.createElement("li");
-
-li.innerHTML = "<b>"+p.nombre+"</b><br>"+p.concreto+"<br>"+p.bloques+"<br>"+p.pisos+"<br>"+p.columnas;
-
-lista.appendChild(li);
-
+/* ── CUSTOM PISO ── */
+document.getElementById('p_lado').addEventListener('change',function(){
+  document.getElementById('p_custom_wrap').style.display =
+    this.value==='custom'?'block':'none';
 });
 
+/* ── VALIDATE ── */
+function val(id){
+  const el=document.getElementById(id);
+  const v=parseFloat(el.value);
+  if(isNaN(v)||v<=0){el.classList.add('err');return null;}
+  el.classList.remove('err');return v;
 }
 
-function exportarPDF(){
-
-const { jsPDF } = window.jspdf;
-
-let doc = new jsPDF();
-
-let nombre = document.getElementById("nombre_proyecto").value;
-
-doc.text("Proyecto: "+nombre,20,20);
-
-doc.save("obra.pdf");
-
+/* ── CONCRETO ── */
+function calcConcreto(){
+  const area=val('c_area'), esp=val('c_esp');
+  if(!area||!esp) return;
+  const fc=parseInt(document.getElementById('c_fc').value);
+  const d=DOS[fc];
+  const vol=area*(esp/100);
+  S.concreto={
+    modulo:'CONCRETO',area,esp,fc,vol,
+    cem:+(vol*d.cem).toFixed(1),
+    are:+(vol*d.are).toFixed(2),
+    gra:+(vol*d.gra).toFixed(2),
+    agua:+(vol*d.agua).toFixed(0),
+    ratio:d.ratio
+  };
+  document.getElementById('cv').textContent=vol.toFixed(2);
+  document.getElementById('cc').textContent=S.concreto.cem;
+  document.getElementById('ca').textContent=S.concreto.are;
+  document.getElementById('cg').textContent=S.concreto.gra;
+  document.getElementById('cw').textContent=S.concreto.agua;
+  document.getElementById('cdos').textContent=d.ratio;
+  document.getElementById('res-concreto').classList.add('show');
+  toast('CONCRETO CALCULADO');
 }
 
-window.onload = mostrarProyectos;
+/* ── MUROS ── */
+function calcMuros(){
+  const area=val('m_area');
+  if(!area) return;
+  const tipo=parseInt(document.getElementById('m_bloque').value);
+  const densidad={8:16.5,12:12.5,15:12.5,20:12.5}[tipo];
+  const bloques=Math.ceil(area*densidad*1.05);
+  const cem=+(area*0.15).toFixed(1);
+  const are=+(area*0.03).toFixed(2);
+  const agua=Math.ceil(area*12);
+  S.muros={modulo:'MUROS',area,tipo,bloques,cem,are,agua};
+  document.getElementById('mb').textContent=bloques;
+  document.getElementById('mc').textContent=cem;
+  document.getElementById('ma').textContent=are;
+  document.getElementById('mw').textContent=agua;
+  document.getElementById('res-muros').classList.add('show');
+  toast('MUROS CALCULADO');
+}
 
+/* ── PISOS ── */
+function calcPisos(){
+  const area=val('p_area');
+  if(!area) return;
+  let lado;
+  const sel=document.getElementById('p_lado').value;
+  if(sel==='custom'){lado=val('p_custom');if(!lado)return;}
+  else lado=parseFloat(sel);
+  const ab=(lado/100)*(lado/100);
+  const n=Math.ceil((area/ab)*1.10);
+  const cajas=Math.ceil(n/((1/(ab))*1.2));
+  const pega=+(area*4.5).toFixed(1);
+  const fragua=+(area*0.30).toFixed(1);
+  S.pisos={modulo:'PISOS',area,lado,n,cajas,pega,fragua};
+  document.getElementById('pb').textContent=n;
+  document.getElementById('pcajas').textContent=cajas;
+  document.getElementById('ppega').textContent=pega+' kg';
+  document.getElementById('pfragua').textContent=fragua+' kg';
+  document.getElementById('res-pisos').classList.add('show');
+  toast('PISOS CALCULADO');
+}
+
+/* ── COLUMNAS ── */
+function calcColumnas(){
+  const n=val('col_n'),h=val('col_h'),s=val('col_s');
+  if(!n||!h||!s) return;
+  const fc=parseInt(document.getElementById('col_fc').value);
+  const d=DOS[fc];
+  const sec=s/100;
+  const vol=+(n*sec*sec*h).toFixed(3);
+  const cem=+(vol*d.cem).toFixed(1);
+  // Acero long Ø5/8" = 1.552 kg/m
+  const varillasTotal=n*4;
+  const longVar=h+0.6;
+  const aceroLong=+(varillasTotal*longVar*1.552).toFixed(1);
+  // Estribos Ø3/8" = 0.560 kg/m @ 0.15m
+  const nEst=Math.ceil(h/0.15)*n;
+  const lEst=4*(sec)+0.24;
+  const aceroEst=+(nEst*lEst*0.560).toFixed(1);
+  const aceroTotal=+(aceroLong+aceroEst).toFixed(1);
+  S.columnas={modulo:'COLUMNAS',n,h,s,fc,vol,cem,aceroLong,aceroEst,aceroTotal,varillasTotal,nEst};
+  document.getElementById('colv').textContent=vol;
+  document.getElementById('colce').textContent=cem;
+  document.getElementById('colac').textContent=aceroLong;
+  document.getElementById('colest').textContent=aceroEst;
+  document.getElementById('colatotal').textContent=aceroTotal;
+  document.getElementById('colvar').textContent=varillasTotal;
+  document.getElementById('res-columnas').classList.add('show');
+  toast('COLUMNAS CALCULADO');
+  drawISO();
+}
+
+/* ── RESUMEN ── */
+function buildResumen(){
+  buildTable();
+  buildConclusiones();
+  drawISO();
+  buildChart();
+}
+
+function buildTable(){
+  const items=[S.concreto,S.muros,S.columnas].filter(Boolean);
+  const body=document.getElementById('tbl-body');
+  const foot=document.getElementById('tbl-foot');
+  if(!items.length){
+    body.innerHTML='<tr><td colspan="4" class="td-label" style="color:var(--dim);text-align:center;padding:20px">Calcula módulos para ver resumen</td></tr>';
+    foot.style.display='none';return;
+  }
+  let tc=0,ta=0,tg=0;
+  body.innerHTML='';
+  items.forEach(it=>{
+    const c=it.cem||0,a=it.are||0,g=it.gra||0;
+    tc+=c;ta+=a;tg+=g;
+    body.innerHTML+=`<tr>
+      <td class="td-label">${it.modulo}</td>
+      <td class="td-ok">${c} sac</td>
+      <td>${a} m³</td>
+      <td>${g?g+' m³':'—'}</td>
+    </tr>`;
+  });
+  document.getElementById('t-cem').textContent=tc.toFixed(1)+' sac';
+  document.getElementById('t-are').textContent=ta.toFixed(2)+' m³';
+  document.getElementById('t-gra').textContent=tg.toFixed(2)+' m³';
+  foot.style.display='';
+
+  // Acero table
+  if(S.columnas){
+    const aw=document.getElementById('tbl-acero-wrap');
+    const ab=document.getElementById('tbl-acero-body');
+    aw.style.display='';
+    ab.innerHTML=`
+      <tr><td class="td-label">Acero Long. Ø5/8"</td><td>${S.columnas.varillasTotal} var.</td>
+          <td class="td-ok">${S.columnas.aceroLong} kg</td><td>Ø5/8" (15.9mm)</td></tr>
+      <tr><td class="td-label">Estribos Ø3/8"</td><td>${S.columnas.nEst} estrib.</td>
+          <td class="td-ok">${S.columnas.aceroEst} kg</td><td>Ø3/8" (9.5mm)</td></tr>
+      <tr style="background:rgba(240,165,0,.06)">
+          <td class="td-label">TOTAL ACERO</td><td>—</td>
+          <td class="td-total">${S.columnas.aceroTotal} kg</td><td>—</td></tr>`;
+  }
+}
+
+function buildConclusiones(){
+  const box=document.getElementById('concl-items');
+  const items=[];
+  if(S.concreto){
+    const v=S.concreto.vol;
+    items.push(`Volumen de concreto estructural: <b>${v.toFixed(2)} m³</b> con resistencia f'c=${S.concreto.fc} kg/cm². Se requieren <b>${S.concreto.cem} sacos</b> de cemento tipo Portland.`);
+    if(S.concreto.fc<210) items.push('⚠️ f\'c = 175 kg/cm² es mínimo para uso estructural. Considere f\'c ≥ 210 para elementos sometidos a carga.');
+  }
+  if(S.muros){
+    items.push(`Mampostería de bloques ${S.muros.tipo} cm: se requieren <b>${S.muros.bloques} bloques</b> incluyendo 5% de desperdicio. Mortero de junta dosificación 1:3.`);
+  }
+  if(S.columnas){
+    const ratio=S.columnas.aceroTotal/(S.columnas.vol*7850);
+    items.push(`Cuantía de acero estimada: <b>${(ratio*100).toFixed(2)}%</b>. Rango ACI: 1% – 8%.`);
+    if(S.columnas.s<25) items.push('⚠️ Sección < 25 cm puede ser insuficiente bajo cargas sísmicas. Verificar con diseño estructural formal.');
+    if(S.columnas.h/S.columnas.s*100>20) items.push('⚠️ Relación esbeltez > 20. Revisar efectos de segundo orden (P-Δ) según ACI 318.');
+    items.push(`Separación de estribos: 15 cm en toda la altura. Verifique zona de confinamiento en extremos (d/4 ó 15 cm el menor).`);
+  }
+  items.push('📌 Todos los cálculos son estimaciones de cantidades. Se recomienda incrementar un 10–15% para compras por desperdicio y mermas en obra.');
+  items.push('📌 Este reporte no reemplaza el diseño estructural formal firmado por ingeniero colegiado.');
+
+  box.innerHTML=items.map(i=>`
+    <div class="concl-item">
+      <div class="concl-dot"></div>
+      <p>${i}</p>
+    </div>`).join('');
+}
+
+/* ── ISO 3D CANVAS ── */
+let isoAngle=0, isoAnim=null;
+
+function drawISO(){
+  const canvas=document.getElementById('isoCanvas');
+  canvas.width=canvas.offsetWidth||320;
+  canvas.height=280;
+  const ctx=canvas.getContext('2d');
+
+  const n=S.columnas?.n||4;
+  const h=S.columnas?.h||3;
+  const s=(S.columnas?.s||30)/100;
+  const cols=Math.ceil(Math.sqrt(n));
+  const rows=Math.ceil(n/cols);
+  const span=3.5;
+
+  if(isoAnim) cancelAnimationFrame(isoAnim);
+  function frame(){
+    isoAngle+=0.008;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    drawScene(ctx,canvas.width,canvas.height,isoAngle,cols,rows,span,h,s);
+    isoAnim=requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+function iso(x,y,z,angle,scale,ox,oy){
+  const a=angle;
+  const sx=(x*Math.cos(a)-y*Math.sin(a))*scale;
+  const sy=((x*Math.sin(a)+y*Math.cos(a))*0.5-z)*scale;
+  return{x:ox+sx,y:oy+sy};
+}
+
+function drawBox(ctx,x,y,z,w,d,h,angle,scale,ox,oy,colors){
+  const pts=[
+    iso(x,y,z,angle,scale,ox,oy),
+    iso(x+w,y,z,angle,scale,ox,oy),
+    iso(x+w,y+d,z,angle,scale,ox,oy),
+    iso(x,y+d,z,angle,scale,ox,oy),
+    iso(x,y,z+h,angle,scale,ox,oy),
+    iso(x+w,y,z+h,angle,scale,ox,oy),
+    iso(x+w,y+d,z+h,angle,scale,ox,oy),
+    iso(x,y+d,z+h,angle,scale,ox,oy)
+  ];
+  // Top
+  ctx.beginPath();
+  [4,5,6,7].forEach((i,j)=>j?ctx.lineTo(pts[i].x,pts[i].y):ctx.moveTo(pts[i].x,pts[i].y));
+  ctx.closePath();ctx.fillStyle=colors[0];ctx.fill();
+  ctx.strokeStyle=colors[3];ctx.lineWidth=.5;ctx.stroke();
+  // Right
+  ctx.beginPath();
+  [1,2,6,5].forEach((i,j)=>j?ctx.lineTo(pts[i].x,pts[i].y):ctx.moveTo(pts[i].x,pts[i].y));
+  ctx.closePath();ctx.fillStyle=colors[1];ctx.fill();ctx.stroke();
+  // Left
+  ctx.beginPath();
+  [0,1,5,4].forEach((i,j)=>j?ctx.lineTo(pts[i].x,pts[i].y):ctx.moveTo(pts[i].x,pts[i].y));
+  ctx.closePath();ctx.fillStyle=colors[2];ctx.fill();ctx.stroke();
+}
+
+function drawScene(ctx,W,H,angle,cols,rows,span,colH,colS){
+  const scale=34;
+  const ox=W/2, oy=H*0.75;
+
+  // Ground grid
+  ctx.strokeStyle='rgba(0,100,200,0.18)';
+  ctx.lineWidth=0.5;
+  const gsize=cols*span+span;
+  for(let i=-1;i<=cols+1;i++){
+    const a=iso(-span*0.5+i*span,-span*0.5,0,angle,scale,ox,oy);
+    const b=iso(-span*0.5+i*span,rows*span+span*0.5,0,angle,scale,ox,oy);
+    ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+  }
+  for(let j=-1;j<=rows+1;j++){
+    const a=iso(-span*0.5,j*span-span*0.5,0,angle,scale,ox,oy);
+    const b=iso(cols*span+span*0.5,j*span-span*0.5,0,angle,scale,ox,oy);
+    ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+  }
+
+  let drawn=0;
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      if(drawn>=cols*rows) break;
+      const bx=c*span-colS/2, by=r*span-colS/2;
+      // ZAPATA
+      const zap=colS*2;
+      drawBox(ctx,bx-zap*.5,by-zap*.5,-0.5,colS+zap,colS+zap,0.4,angle,scale,ox,oy,
+        ['#3a2800','#1e1400','#2a1c00','#5a3c00']);
+      // PEDESTAL
+      drawBox(ctx,bx-colS*.3,by-colS*.3,-0.1,colS*1.6,colS*1.6,0.25,angle,scale,ox,oy,
+        ['#4a3800','#2a2000','#3a2c00','#6a5000']);
+      // COLUMNA
+      drawBox(ctx,bx,by,0,colS,colS,colH,angle,scale,ox,oy,
+        ['rgba(240,165,0,0.7)','rgba(180,110,0,0.85)','rgba(160,90,0,0.9)','rgba(100,60,0,0.5)']);
+      // VIGA en X
+      if(c<cols-1){
+        const vw=span-colS, vy=by+colS*.3, vthick=0.2, vdepth=colS*.6;
+        drawBox(ctx,bx+colS,vy,colH-0.3,vw,vdepth,vthick+0.1,angle,scale,ox,oy,
+          ['rgba(0,180,255,0.5)','rgba(0,120,200,0.6)','rgba(0,100,180,0.7)','rgba(0,80,150,0.3)']);
+      }
+      // VIGA en Y
+      if(r<rows-1){
+        const vh=span-colS, vx=bx+colS*.3, vthick=0.2, vdepth=colS*.6;
+        drawBox(ctx,vx,by+colS,0,vdepth,vh,colH-(colH-0.3+vthick),angle,scale,ox,oy,
+          ['rgba(0,180,255,0.5)','rgba(0,120,200,0.6)','rgba(0,100,180,0.7)','rgba(0,80,150,0.3)']);
+      }
+      drawn++;
+    }
+  }
+
+  // Legend
+  ctx.font='10px Share Tech Mono';
+  ctx.fillStyle='rgba(240,165,0,0.8)';
+  ctx.fillText('■ COLUMNA',10,H-50);
+  ctx.fillStyle='rgba(0,180,255,0.8)';
+  ctx.fillText('■ VIGA',10,H-36);
+  ctx.fillStyle='rgba(90,60,0,0.9)';
+  ctx.fillText('■ CIMENTACIÓN',10,H-22);
+  ctx.fillStyle='var(--dim)';
+  ctx.fillText(`n=${cols*rows} col · h=${colH}m · s=${(colS*100).toFixed(0)}cm`,10,H-8);
+}
+
+/* ── CHART ── */
+let chartInst=null;
+function buildChart(){
+  const labels=[], cems=[], ares=[], gras=[];
+  [S.concreto,S.muros,S.columnas].filter(Boolean).forEach(it=>{
+    labels.push(it.modulo);
+    cems.push(it.cem||0);
+    ares.push((it.are||0)*1000);
+    gras.push((it.gra||0)*1000);
+  });
+  if(!labels.length) return;
+  if(chartInst) chartInst.destroy();
+  const ctx=document.getElementById('matChart').getContext('2d');
+  chartInst=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        {label:'Cemento (sacos)',data:cems,backgroundColor:'rgba(240,165,0,0.7)',borderColor:'#f0a500',borderWidth:1},
+        {label:'Arena (×10⁻³ m³)',data:ares,backgroundColor:'rgba(0,201,255,0.4)',borderColor:'#00c9ff',borderWidth:1},
+        {label:'Grava (×10⁻³ m³)',data:gras,backgroundColor:'rgba(0,229,160,0.4)',borderColor:'#00e5a0',borderWidth:1}
+      ]
+    },
+    options:{
+      responsive:true,
+      plugins:{legend:{labels:{color:'#7a95b0',font:{family:'Rajdhani',size:11}}}},
+      scales:{
+        x:{ticks:{color:'#7a95b0',font:{family:'Rajdhani'}},grid:{color:'rgba(26,58,96,0.4)'}},
+        y:{ticks:{color:'#7a95b0',font:{family:'Share Tech Mono',size:10}},grid:{color:'rgba(26,58,96,0.4)'}}
+      }
+    }
+  });
+}
+
+/* ── EXPORT PDF ── */
+function exportPDF(){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF();
+  const gd='#f0a500',bl='#0a1e3a';
+
+  // Header
+  doc.setFillColor(10,30,58);
+  doc.rect(0,0,210,30,'F');
+  doc.setTextColor(240,165,0);
+  doc.setFontSize(18);doc.setFont('helvetica','bold');
+  doc.text('STRUCTURAPRO',14,12);
+  doc.setFontSize(9);doc.setFont('helvetica','normal');
+  doc.setTextColor(150,180,210);
+  doc.text('ESTIMADOR ESTRUCTURAL DE MATERIALES DE CONSTRUCCIÓN',14,19);
+  doc.text(`Generado: ${new Date().toLocaleString('es')}`,14,25);
+
+  let y=38;
+
+  function section(title){
+    doc.setFillColor(20,50,90);
+    doc.rect(10,y-5,190,8,'F');
+    doc.setTextColor(240,165,0);
+    doc.setFontSize(10);doc.setFont('helvetica','bold');
+    doc.text(title,14,y);
+    y+=10;
+    doc.setTextColor(30,30,30);
+  }
+
+  // CONCRETO
+  if(S.concreto){
+    section('CONCRETO ESTRUCTURAL');
+    doc.autoTable({
+      startY:y,
+      head:[['PARÁMETRO','VALOR','UNIDAD']],
+      body:[
+        ['Área',S.concreto.area,'m²'],
+        ['Espesor',S.concreto.esp,'cm'],
+        ['f\'c',S.concreto.fc,'kg/cm²'],
+        ['Volumen',S.concreto.vol.toFixed(2),'m³'],
+        ['Cemento',S.concreto.cem,'sacos 50kg'],
+        ['Arena',S.concreto.are,'m³'],
+        ['Grava',S.concreto.gra,'m³'],
+        ['Agua',S.concreto.agua,'litros'],
+        ['Dosificación',S.concreto.ratio,'C:A:G'],
+      ],
+      styles:{font:'courier',fontSize:9,textColor:[20,30,50]},
+      headStyles:{fillColor:[10,30,58],textColor:[240,165,0],fontStyle:'bold'},
+      alternateRowStyles:{fillColor:[240,245,255]},
+      margin:{left:10,right:10}
+    });
+    y=doc.lastAutoTable.finalY+10;
+  }
+
+  // MUROS
+  if(S.muros){
+    section('MUROS DE BLOQUES');
+    doc.autoTable({
+      startY:y,
+      head:[['PARÁMETRO','VALOR','UNIDAD']],
+      body:[
+        ['Área',S.muros.area,'m²'],
+        ['Tipo bloque',S.muros.tipo,'cm'],
+        ['Bloques (c/5% desp.)',S.muros.bloques,'unidades'],
+        ['Cemento',S.muros.cem,'sacos'],
+        ['Arena',S.muros.are,'m³'],
+        ['Agua',S.muros.agua,'litros'],
+      ],
+      styles:{font:'courier',fontSize:9},headStyles:{fillColor:[10,30,58],textColor:[240,165,0]},
+      alternateRowStyles:{fillColor:[240,245,255]},margin:{left:10,right:10}
+    });
+    y=doc.lastAutoTable.finalY+10;
+  }
+
+  // COLUMNAS
+  if(S.columnas){
+    section('COLUMNAS ESTRUCTURALES');
+    doc.autoTable({
+      startY:y,
+      head:[['PARÁMETRO','VALOR','UNIDAD']],
+      body:[
+        ['N° columnas',S.columnas.n,''],
+        ['Altura',S.columnas.h,'m'],
+        ['Sección',S.columnas.s,'cm'],
+        ['Volumen concreto',S.columnas.vol,'m³'],
+        ['Cemento',S.columnas.cem,'sacos'],
+        ['Acero long. Ø5/8"',S.columnas.aceroLong,'kg'],
+        ['Estribos Ø3/8"',S.columnas.aceroEst,'kg'],
+        ['ACERO TOTAL',S.columnas.aceroTotal,'kg'],
+      ],
+      styles:{font:'courier',fontSize:9},headStyles:{fillColor:[10,30,58],textColor:[240,165,0]},
+      alternateRowStyles:{fillColor:[240,245,255]},margin:{left:10,right:10}
+    });
+    y=doc.lastAutoTable.finalY+10;
+  }
+
+  // Dosificacion Anexo
+  if(y>240) doc.addPage();
+  section('ANEXO — DOSIFICACIÓN DE REFERENCIA ACI 318');
+  doc.autoTable({
+    startY:y,
+    head:[["f'c (kg/cm²)",'Cemento (sacos/m³)','Arena (m³/m³)','Grava (m³/m³)','Agua (L/m³)']],
+    body:[[175,6.5,0.52,0.78,190],[210,7.0,0.56,0.84,185],[245,7.5,0.50,0.75,180],[280,8.0,0.48,0.72,175]],
+    styles:{font:'courier',fontSize:9},headStyles:{fillColor:[10,30,58],textColor:[240,165,0]},
+    alternateRowStyles:{fillColor:[240,245,255]},margin:{left:10,right:10}
+  });
+  y=doc.lastAutoTable.finalY+12;
+
+  // Conclusiones
+  doc.setFillColor(20,50,90);doc.rect(10,y-4,190,7,'F');
+  doc.setTextColor(240,165,0);doc.setFontSize(10);doc.setFont('helvetica','bold');
+  doc.text('CONCLUSIONES Y RECOMENDACIONES',14,y);
+  y+=8;
+  doc.setTextColor(30,30,50);doc.setFontSize(8.5);doc.setFont('helvetica','normal');
+  const notas=[
+    '• Todos los cálculos corresponden a estimaciones de cantidades de obra. Incluir 10–15% adicional por desperdicio.',
+    '• Los valores de acero son orientativos. El diseño estructural debe ser firmado por ingeniero estructural colegiado.',
+    '• Dosificación según ACI 318 / COVENIN 1753. Verificar normativa local vigente.',
+    '• Se recomienda ensayo de resistencia a la compresión (cilindros) durante la ejecución de obra.',
+    '• Este reporte es generado por StructuraPro y no sustituye planos estructurales aprobados.'
+  ];
+  notas.forEach(n=>{doc.text(n,12,y,{maxWidth:186});y+=6});
+
+  // Footer
+  const pages=doc.internal.getNumberOfPages();
+  for(let i=1;i<=pages;i++){
+    doc.setPage(i);
+    doc.setFillColor(10,30,58);doc.rect(0,285,210,12,'F');
+    doc.setTextColor(100,130,160);doc.setFontSize(7);
+    doc.text('STRUCTURAPRO · Estimador Estructural · Uso profesional orientativo',14,292);
+    doc.text(`Página ${i}/${pages}`,196,292,{align:'right'});
+  }
+
+  doc.save('StructuraPro_Reporte.pdf');
+  toast('PDF EXPORTADO');
+}
+
+/* ── TOAST ── */
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent='✅ '+msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ── INIT ── */
+window.addEventListener('load',()=>{
+  drawISO();
+  // Responsive canvas
+  window.addEventListener('resize',()=>{if(S.columnas||true) drawISO();});
+});
 </script>
-
 </body>
 </html>
