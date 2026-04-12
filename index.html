@@ -2,1356 +2,1473 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>StructuraPro — Estimador Estructural</title>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>StructuraPro v3.2</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
 :root{
-  --bg:#060e1c;--surface:#0b1a2e;--card:#0f2040;--border:#1a3a60;
-  --accent:#f0a500;--accent2:#00c9ff;--text:#ddeeff;--dim:#5580a0;
-  --ok:#00e5a0;--err:#ff4d6d;--steel:#c0c8d8;--grid:rgba(0,100,200,0.08);
+  --bg:#060e1c;--card:#0f2040;--bdr:#1a3a60;
+  --ac:#f0a500;--ac2:#00c9ff;--tx:#ddeeff;--dim:#5580a0;
+  --ok:#00e5a0;--er:#ff4d6d;--st:#c0c8d8;--vg:#a78bfa;--am:#34d399;
+  --gr:rgba(0,100,200,0.07);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100vh;overflow-x:hidden}
-body{
-  font-family:'Rajdhani',sans-serif;
-  background:var(--bg);color:var(--text);
-  background-image:
-    linear-gradient(var(--grid) 1px,transparent 1px),
-    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-  background-size:48px 48px;
-}
-.hdr{
-  background:linear-gradient(135deg,#020912,#071428 60%,#0a1e3a);
-  border-bottom:1px solid var(--border);
-  padding:14px 20px;display:flex;align-items:center;gap:14px;
-  position:sticky;top:0;z-index:100;
-}
-.hdr-logo{
-  width:42px;height:42px;background:var(--accent);
+body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--tx);
+  background-image:linear-gradient(var(--gr) 1px,transparent 1px),linear-gradient(90deg,var(--gr) 1px,transparent 1px);
+  background-size:48px 48px}
+/* HDR */
+.hdr{background:linear-gradient(135deg,#020912,#071428 60%,#0a1e3a);border-bottom:1px solid var(--bdr);
+  padding:12px 16px;display:flex;align-items:center;gap:11px;position:sticky;top:0;z-index:100}
+.logo{width:40px;height:40px;background:var(--ac);
   clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;font-weight:700;color:#000;flex-shrink:0;
-}
-.hdr-title{flex:1}
-.hdr-title h1{font-size:20px;font-weight:700;letter-spacing:2px;color:var(--accent)}
-.hdr-title p{font-size:11px;color:var(--dim);letter-spacing:1px;font-family:'Share Tech Mono'}
-.hdr-badge{
-  font-family:'Share Tech Mono';font-size:10px;
-  background:rgba(0,201,255,0.1);border:1px solid var(--accent2);
-  color:var(--accent2);padding:4px 8px;border-radius:2px;letter-spacing:1px;
-}
-.tabs{
-  display:flex;overflow-x:auto;scrollbar-width:none;
-  background:#07111f;border-bottom:1px solid var(--border);
-  padding:0 8px;gap:2px;
-}
+  display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#000;flex-shrink:0}
+.hdr h1{font-size:18px;font-weight:700;letter-spacing:2px;color:var(--ac)}
+.hdr p{font-size:10px;color:var(--dim);letter-spacing:1px;font-family:'Share Tech Mono'}
+.hbg{margin-left:auto;font-family:'Share Tech Mono';font-size:10px;background:rgba(0,201,255,.1);
+  border:1px solid var(--ac2);color:var(--ac2);padding:3px 7px;border-radius:2px;white-space:nowrap}
+/* TABS */
+.tabs{display:flex;overflow-x:auto;scrollbar-width:none;background:#07111f;border-bottom:1px solid var(--bdr);padding:0 3px}
 .tabs::-webkit-scrollbar{display:none}
-.tab{
-  flex-shrink:0;padding:12px 14px;
-  font-family:'Rajdhani';font-weight:600;font-size:12px;
-  letter-spacing:1px;color:var(--dim);background:none;border:none;
-  border-bottom:2px solid transparent;cursor:pointer;
-  transition:all .2s;white-space:nowrap;
-}
-.tab:hover{color:var(--text)}
-.tab.on{color:var(--accent);border-color:var(--accent)}
-.tab.steel-tab.on{color:var(--steel);border-color:var(--steel)}
-.page{display:none;padding:20px 16px;max-width:560px;margin:0 auto}
-.page.on{display:block}
-.sec-hdr{display:flex;align-items:center;gap:12px;margin-bottom:20px}
-.sec-icon{
-  width:44px;height:44px;background:rgba(240,165,0,0.1);
-  border:1px solid rgba(240,165,0,0.4);border-radius:6px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:20px;flex-shrink:0;
-}
-.sec-icon.steel-icon{
-  background:rgba(192,200,216,0.08);border-color:rgba(192,200,216,0.3);
-}
-.sec-title h2{font-size:22px;font-weight:700;color:var(--accent);letter-spacing:1px}
-.sec-title h2.steel{color:var(--steel)}
-.sec-title p{font-size:12px;color:var(--dim);letter-spacing:.5px}
-.formula-box{
-  background:rgba(0,201,255,0.04);border:1px solid rgba(0,201,255,0.2);
-  border-left:3px solid var(--accent2);border-radius:6px;
-  padding:14px 16px;margin-bottom:16px;
-}
-.formula-box.steel-formula{
-  background:rgba(192,200,216,0.04);border-color:rgba(192,200,216,0.2);
-  border-left-color:var(--steel);
-}
-.formula-box label{
-  display:block;font-size:10px;letter-spacing:2px;
-  color:var(--accent2);margin-bottom:8px;font-weight:600;
-}
-.formula-box.steel-formula label{color:var(--steel)}
-.formula-box .formula{font-family:'Share Tech Mono';font-size:12px;color:var(--text);line-height:1.9}
-.formula span{color:var(--accent);font-weight:600}
-.formula span.s{color:var(--steel)}
-.card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:10px;padding:20px;margin-bottom:16px;
-}
-.card h4{font-size:12px;letter-spacing:2px;color:var(--accent);margin-bottom:14px;font-weight:600}
-.card h4.steel{color:var(--steel)}
-.field{margin-bottom:14px}
-.field label{display:block;font-size:12px;letter-spacing:1px;color:var(--dim);margin-bottom:6px;font-weight:600}
-.field input,.field select{
-  width:100%;padding:11px 14px;
-  background:#071628;border:1px solid var(--border);
-  color:var(--text);border-radius:6px;
-  font-family:'Rajdhani';font-size:15px;font-weight:600;
-  outline:none;transition:border .2s;
-}
-.field input:focus,.field select:focus{border-color:var(--accent)}
-.field input.err{border-color:var(--err)}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.field-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.btn-calc{
-  width:100%;padding:13px;
-  background:linear-gradient(135deg,#c47a00,var(--accent));
-  color:#000;font-family:'Rajdhani';font-size:16px;font-weight:700;
-  letter-spacing:2px;border:none;border-radius:8px;cursor:pointer;
-  margin-top:6px;transition:opacity .2s;
-}
-.btn-calc:hover{opacity:.88}
-.btn-steel{
-  width:100%;padding:13px;
-  background:linear-gradient(135deg,#3a4455,#5a6880);
-  color:#fff;font-family:'Rajdhani';font-size:15px;font-weight:700;
-  letter-spacing:2px;border:none;border-radius:8px;cursor:pointer;
-  margin-top:6px;transition:opacity .2s;
-}
-.btn-steel:hover{opacity:.88}
-.btn-add{
-  width:100%;padding:9px;
-  background:rgba(0,229,160,0.08);border:1px dashed var(--ok);
-  color:var(--ok);font-family:'Rajdhani';font-size:13px;
-  font-weight:700;letter-spacing:1px;border-radius:6px;cursor:pointer;
-  margin-top:8px;transition:all .2s;
-}
-.btn-add:hover{background:rgba(0,229,160,0.15)}
-.btn-del{
-  padding:8px 12px;background:rgba(255,77,109,0.1);
-  border:1px solid rgba(255,77,109,0.3);color:var(--err);
-  border-radius:5px;cursor:pointer;font-size:14px;font-weight:700;
-  font-family:'Rajdhani';transition:all .2s;flex-shrink:0;
-}
-.btn-del:hover{background:rgba(255,77,109,0.2)}
-.btn-pdf{
-  width:100%;padding:11px;
-  background:rgba(0,201,255,0.08);border:1px solid var(--accent2);
-  color:var(--accent2);font-family:'Rajdhani';font-size:14px;
-  font-weight:700;letter-spacing:2px;border-radius:8px;cursor:pointer;
-  margin-top:10px;transition:all .2s;
-}
-.btn-pdf:hover{background:rgba(0,201,255,0.15)}
-.result-block{
-  background:#071628;border:1px solid var(--border);
-  border-radius:8px;padding:16px;margin-top:16px;display:none;
-}
-.result-block.show{display:block}
-.result-block h4{font-size:10px;letter-spacing:2px;color:var(--ok);margin-bottom:12px;font-weight:600}
-.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.res-item{
-  background:rgba(0,0,0,.3);border:1px solid var(--border);
-  border-radius:6px;padding:10px;
-}
-.res-item .val{font-family:'Share Tech Mono';font-size:20px;color:var(--accent);font-weight:700}
-.res-item .val.steel{color:var(--steel)}
-.res-item .lbl{font-size:11px;color:var(--dim);letter-spacing:.5px;margin-top:2px}
-.res-item .unit{font-size:11px;color:var(--accent2)}
-/* ── STEEL ZONES ── */
-.zone-list{margin-bottom:8px}
-.zone-row{
-  display:flex;gap:8px;align-items:center;
-  margin-bottom:8px;
-}
-.zone-row input{
-  flex:1;padding:9px 10px;
-  background:#071628;border:1px solid var(--border);
-  color:var(--text);border-radius:5px;
-  font-family:'Share Tech Mono';font-size:13px;
-  outline:none;transition:border .2s;
-}
-.zone-row input:focus{border-color:var(--steel)}
-.zone-label{font-size:11px;color:var(--dim);white-space:nowrap;font-family:'Share Tech Mono'}
-/* ── PLANILLA ── */
-.planilla{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:10px;padding:20px;margin-bottom:16px;
-  display:none;
-}
-.planilla.show{display:block}
-.planilla h4{font-size:12px;letter-spacing:2px;color:var(--steel);margin-bottom:14px;font-weight:600}
-.tbl-wrap{overflow-x:auto;margin-bottom:16px}
-table{width:100%;border-collapse:collapse;font-size:13px}
-table caption{font-size:11px;letter-spacing:2px;color:var(--accent2);padding:10px 0;text-align:left;font-weight:600}
-th{
-  background:#071628;color:var(--dim);
-  padding:9px 10px;text-align:left;
-  font-size:10px;letter-spacing:1px;
-  border-bottom:1px solid var(--border);
-}
-td{padding:9px 10px;border-bottom:1px solid rgba(26,58,96,.5);font-family:'Share Tech Mono';font-size:12px}
+.tab{flex-shrink:0;padding:10px 9px;font-family:'Rajdhani';font-weight:600;font-size:10px;letter-spacing:.7px;
+  color:var(--dim);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+.tab:hover{color:var(--tx)}.tab.on{color:var(--ac);border-color:var(--ac)}
+.tab.tv.on{color:var(--vg);border-color:var(--vg)}.tab.ta.on{color:var(--am);border-color:var(--am)}
+.tab.ts.on{color:var(--st);border-color:var(--st)}
+/* PAGE */
+.pg{display:none;padding:15px 13px;max-width:560px;margin:0 auto}.pg.on{display:block}
+/* SEC HDR */
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:15px}
+.si{width:40px;height:40px;background:rgba(240,165,0,.1);border:1px solid rgba(240,165,0,.4);
+  border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.si.sv{background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.4)}
+.si.sa{background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.4)}
+.si.ss{background:rgba(192,200,216,.07);border-color:rgba(192,200,216,.3)}
+.sh h2{font-size:19px;font-weight:700;color:var(--ac);letter-spacing:1px}
+.sh h2.sv{color:var(--vg)}.sh h2.sa{color:var(--am)}.sh h2.ss{color:var(--st)}
+.sh p{font-size:11px;color:var(--dim)}
+/* FORMULA */
+.fb{background:rgba(0,201,255,.04);border:1px solid rgba(0,201,255,.2);border-left:3px solid var(--ac2);
+  border-radius:6px;padding:11px 13px;margin-bottom:12px}
+.fb.fv{background:rgba(167,139,250,.04);border-color:rgba(167,139,250,.2);border-left-color:var(--vg)}
+.fb.fa{background:rgba(52,211,153,.04);border-color:rgba(52,211,153,.2);border-left-color:var(--am)}
+.fb.fs{background:rgba(192,200,216,.04);border-color:rgba(192,200,216,.2);border-left-color:var(--st)}
+.fb lbl{display:block;font-size:9px;letter-spacing:2px;color:var(--ac2);margin-bottom:5px;font-weight:600}
+.fb.fv lbl{color:var(--vg)}.fb.fa lbl{color:var(--am)}.fb.fs lbl{color:var(--st)}
+.f{font-family:'Share Tech Mono';font-size:11px;color:var(--tx);line-height:1.85}
+.f .a{color:var(--ac)}.f .v{color:var(--vg)}.f .g{color:var(--am)}.f .s{color:var(--st)}
+/* CARD */
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:9px;padding:15px;margin-bottom:12px}
+.card h4{font-size:10px;letter-spacing:2px;color:var(--ac);margin-bottom:11px;font-weight:600}
+.card h4.hv{color:var(--vg)}.card h4.ha{color:var(--am)}.card h4.hs{color:var(--st)}
+/* FIELD */
+.fi{margin-bottom:10px}
+.fi label{display:block;font-size:11px;letter-spacing:.7px;color:var(--dim);margin-bottom:4px;font-weight:600}
+.fi input,.fi select{width:100%;padding:9px 11px;background:#071628;border:1px solid var(--bdr);
+  color:var(--tx);border-radius:5px;font-family:'Rajdhani';font-size:14px;font-weight:600;outline:none;transition:border .2s}
+.fi input:focus,.fi select:focus{border-color:var(--ac)}.fi input.er{border-color:var(--er)}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+/* BTN */
+.btn{width:100%;padding:11px;font-family:'Rajdhani';font-size:14px;font-weight:700;
+  letter-spacing:2px;border:none;border-radius:7px;cursor:pointer;margin-top:5px;transition:opacity .2s}
+.btn:hover{opacity:.87}
+.by{background:linear-gradient(135deg,#c47a00,var(--ac));color:#000}
+.bv{background:linear-gradient(135deg,#6d28d9,var(--vg));color:#fff}
+.bg{background:linear-gradient(135deg,#059669,var(--am));color:#000}
+.bs{background:linear-gradient(135deg,#3a4455,#5a6880);color:#fff}
+.badd{width:100%;padding:7px;background:rgba(0,229,160,.07);border:1px dashed var(--ok);
+  color:var(--ok);font-family:'Rajdhani';font-size:11px;font-weight:700;border-radius:5px;cursor:pointer;margin-top:6px}
+.bdel{padding:6px 9px;background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.3);
+  color:var(--er);border-radius:4px;cursor:pointer;font-size:12px;font-family:'Rajdhani'}
+.bpdf{width:100%;padding:9px;background:rgba(0,201,255,.07);border:1px solid var(--ac2);
+  color:var(--ac2);font-family:'Rajdhani';font-size:12px;font-weight:700;letter-spacing:2px;
+  border-radius:7px;cursor:pointer;margin-top:7px;transition:all .2s}
+.bpdf:hover{background:rgba(0,201,255,.14)}
+/* RESULT */
+.rb{background:#071628;border:1px solid var(--bdr);border-radius:7px;padding:13px;margin-top:12px;display:none}
+.rb.show{display:block}
+.rb h4{font-size:9px;letter-spacing:2px;color:var(--ok);margin-bottom:9px;font-weight:600}
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.ri{background:rgba(0,0,0,.3);border:1px solid var(--bdr);border-radius:5px;padding:8px}
+.ri .v{font-family:'Share Tech Mono';font-size:17px;color:var(--ac);font-weight:700}
+.ri .v.sv{color:var(--vg)}.ri .v.sa{color:var(--am)}.ri .v.ss{color:var(--st)}
+.ri .l{font-size:10px;color:var(--dim);margin-top:1px}.ri .u{font-size:9px;color:var(--ac2)}
+.ri.full{grid-column:span 2}.ri.full .v{font-size:22px}
+/* STABS */
+.stabs{display:flex;gap:5px;margin-bottom:13px;flex-wrap:wrap}
+.stab{flex:1;min-width:70px;padding:7px 5px;text-align:center;background:rgba(0,0,0,.3);
+  border:1px solid var(--bdr);color:var(--dim);font-family:'Rajdhani';font-size:10px;
+  font-weight:700;border-radius:5px;cursor:pointer;transition:all .2s}
+.stab.on{background:rgba(240,165,0,.07);border-color:var(--ac);color:var(--ac)}
+.stab.ss.on{background:rgba(192,200,216,.07);border-color:var(--st);color:var(--st)}
+.sp{display:none}.sp.on{display:block}
+/* ZONE ROW */
+.zr{display:flex;gap:5px;align-items:center;margin-bottom:7px}
+.zr input{flex:1;padding:7px 8px;background:#071628;border:1px solid var(--bdr);
+  color:var(--tx);border-radius:4px;font-family:'Share Tech Mono';font-size:12px;outline:none}
+.zr input:focus{border-color:var(--st)}
+.zl{font-size:10px;color:var(--dim);white-space:nowrap;font-family:'Share Tech Mono'}
+/* WARN */
+.wb{background:rgba(240,165,0,.06);border:1px solid rgba(240,165,0,.3);border-radius:5px;
+  padding:9px 11px;margin-top:9px;font-size:11px;color:var(--ac);line-height:1.6}
+.wb.ok{background:rgba(0,229,160,.05);border-color:rgba(0,229,160,.25);color:var(--ok)}
+.wb.inf{background:rgba(0,201,255,.05);border-color:rgba(0,201,255,.25);color:var(--ac2)}
+/* TABLE */
+.tw{overflow-x:auto;margin-bottom:13px}
+table{width:100%;border-collapse:collapse;font-size:11px}
+table caption{font-size:9px;letter-spacing:2px;color:var(--ac2);padding:7px 0;text-align:left;font-weight:600}
+th{background:#071628;color:var(--dim);padding:7px 8px;text-align:left;font-size:9px;border-bottom:1px solid var(--bdr)}
+td{padding:7px 8px;border-bottom:1px solid rgba(26,58,96,.4);font-family:'Share Tech Mono';font-size:11px}
 tr:last-child td{border-bottom:none}
-.td-label{font-family:'Rajdhani';font-weight:600;font-size:14px;color:var(--text)}
-.td-total{color:var(--accent);font-weight:700}
-.td-ok{color:var(--ok)}
-.td-steel{color:var(--steel)}
-/* ── SUBTABS ── */
-.subtabs{display:flex;gap:6px;margin-bottom:16px}
-.subtab{
-  flex:1;padding:9px;text-align:center;
-  background:rgba(0,0,0,.3);border:1px solid var(--border);
-  color:var(--dim);font-family:'Rajdhani';font-size:12px;
-  font-weight:700;letter-spacing:1px;border-radius:6px;cursor:pointer;
-  transition:all .2s;
-}
-.subtab.on{background:rgba(192,200,216,0.1);border-color:var(--steel);color:var(--steel)}
-.subpage{display:none}
-.subpage.on{display:block}
-/* ── ISO / CHART ── */
-.iso-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px}
-.iso-wrap h4{font-size:12px;letter-spacing:2px;color:var(--accent);margin-bottom:10px;font-weight:600}
-#isoCanvas{width:100%;border-radius:6px;display:block}
-.chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px}
-.chart-wrap h4{font-size:12px;letter-spacing:2px;color:var(--accent);margin-bottom:10px;font-weight:600}
-.concl{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
-.concl h4{font-size:12px;letter-spacing:2px;color:var(--accent);margin-bottom:14px;font-weight:600}
-.concl-item{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
-.concl-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;margin-top:7px;flex-shrink:0}
-.concl-item p{font-size:14px;line-height:1.5;color:var(--text)}
-.annex{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
-.annex h4{font-size:12px;letter-spacing:2px;color:var(--accent);margin-bottom:4px;font-weight:600}
-.annex p{font-size:12px;color:var(--dim);margin-bottom:12px}
-.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:20px 0}
-.info-chip{
-  display:inline-flex;align-items:center;gap:6px;
-  background:rgba(240,165,0,0.08);border:1px solid rgba(240,165,0,0.3);
-  color:var(--accent);font-size:11px;padding:4px 10px;
-  border-radius:20px;margin-bottom:12px;font-family:'Share Tech Mono';
-}
-.toast{
-  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
-  background:var(--ok);color:#000;padding:10px 20px;
-  border-radius:6px;font-weight:700;letter-spacing:1px;font-size:14px;
-  transition:transform .3s;z-index:999;pointer-events:none;
-}
+.tl{font-family:'Rajdhani';font-weight:600;font-size:12px;color:var(--tx)}
+.tt{color:var(--ac);font-weight:700}.tok{color:var(--ok)}.tst{color:var(--st)}.tv{color:var(--vg)}.ta{color:var(--am)}
+/* ISO / CHART */
+.iw{background:var(--card);border:1px solid var(--bdr);border-radius:9px;padding:13px;margin-bottom:13px}
+.iw h4{font-size:10px;letter-spacing:2px;color:var(--ac);margin-bottom:7px;font-weight:600}
+#isoCanvas{width:100%;border-radius:5px;display:block}
+.cw{background:var(--card);border:1px solid var(--bdr);border-radius:9px;padding:13px;margin-bottom:13px}
+.cw h4{font-size:10px;letter-spacing:2px;color:var(--ac);margin-bottom:7px;font-weight:600}
+/* CONCL */
+.concl{background:var(--card);border:1px solid var(--bdr);border-radius:9px;padding:15px;margin-bottom:13px}
+.concl h4{font-size:10px;letter-spacing:2px;color:var(--ac);margin-bottom:11px;font-weight:600}
+.ci{display:flex;gap:9px;align-items:flex-start;margin-bottom:9px}
+.cd{width:5px;height:5px;background:var(--ac);border-radius:50%;margin-top:7px;flex-shrink:0}
+.ci p{font-size:13px;line-height:1.4;color:var(--tx)}
+.chip{display:inline-flex;align-items:center;background:rgba(240,165,0,.07);border:1px solid rgba(240,165,0,.3);
+  color:var(--ac);font-size:10px;padding:3px 8px;border-radius:20px;margin-bottom:9px;font-family:'Share Tech Mono'}
+.chip.cv{background:rgba(167,139,250,.07);border-color:rgba(167,139,250,.3);color:var(--vg)}
+.chip.ca{background:rgba(52,211,153,.07);border-color:rgba(52,211,153,.3);color:var(--am)}
+.div{height:1px;background:linear-gradient(90deg,transparent,var(--bdr),transparent);margin:13px 0}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--ok);color:#000;padding:8px 16px;border-radius:5px;font-weight:700;font-size:12px;
+  transition:transform .3s;z-index:999;pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 
+<!-- HDR -->
 <div class="hdr">
-  <div class="hdr-logo">S</div>
-  <div class="hdr-title">
-    <h1>STRUCTURAPRO</h1>
-    <p>ESTIMADOR ESTRUCTURAL · v3.0</p>
-  </div>
-  <div class="hdr-badge">ING. CIVIL</div>
+  <div class="logo">S</div>
+  <div><h1>STRUCTURAPRO</h1><p>ESTIMADOR ESTRUCTURAL · v3.2 · INADEH/ACI 318</p></div>
+  <div class="hbg">REP · COPANIT</div>
 </div>
 
+<!-- TABS -->
 <div class="tabs">
-  <button class="tab on"    onclick="showTab('concreto',this)">🏗️ CONCRETO</button>
-  <button class="tab"       onclick="showTab('muros',this)">🧱 MUROS</button>
-  <button class="tab"       onclick="showTab('pisos',this)">🔷 PISOS</button>
-  <button class="tab"       onclick="showTab('columnas',this)">🏛️ COLUMNAS</button>
-  <button class="tab steel-tab" onclick="showTab('acero',this)">⚙️ ACERO</button>
-  <button class="tab"       onclick="showTab('resumen',this)">📊 RESUMEN</button>
+  <button class="tab on"  onclick="T('concreto',this)">🏗️ CONCRETO</button>
+  <button class="tab"     onclick="T('muros',this)">🧱 MUROS</button>
+  <button class="tab"     onclick="T('pisos',this)">🔷 PISOS</button>
+  <button class="tab"     onclick="T('columnas',this)">🏛️ COLUMNAS</button>
+  <button class="tab tv"  onclick="T('vigas',this)">〰️ V.SÍSMICA</button>
+  <button class="tab ta"  onclick="T('amarre',this)">🔗 AMARRE</button>
+  <button class="tab ts"  onclick="T('acero',this)">⚙️ ACERO</button>
+  <button class="tab"     onclick="T('resumen',this)">📊 RESUMEN</button>
 </div>
 
-<!-- ══════════════════ CONCRETO ══════════════════ -->
-<div id="tab-concreto" class="page on">
-  <div class="sec-hdr">
-    <div class="sec-icon">🏗️</div>
-    <div class="sec-title"><h2>CONCRETO ESTRUCTURAL</h2><p>LOSA · ZAPATA · VIGA</p></div>
-  </div>
-  <div class="formula-box">
-    <label>📐 FÓRMULAS APLICADAS</label>
-    <div class="formula">
-      V = A × e/100 &nbsp;<span>[m³]</span><br>
-      Cemento = V × <span>fc_factor</span> sacos<br>
-      Arena = V × <span>fa</span> m³ &nbsp;|&nbsp; Grava = V × <span>fg</span> m³<br>
-      Agua = V × <span>fw</span> litros
-    </div>
-  </div>
-  <div class="card">
-    <h4>PARÁMETROS DE ENTRADA</h4>
-    <div class="field"><label>ÁREA (m²)</label><input id="c_area" type="number" min="0" placeholder="ej. 25.0"></div>
-    <div class="field"><label>ESPESOR (cm)</label><input id="c_esp" type="number" min="1" placeholder="ej. 15"></div>
-    <div class="field">
-      <label>RESISTENCIA DE DISEÑO</label>
-      <select id="c_fc">
-        <option value="175">f'c = 175 kg/cm² — Uso general</option>
-        <option value="210" selected>f'c = 210 kg/cm² — Estructural típico</option>
-        <option value="245">f'c = 245 kg/cm² — Alta resistencia</option>
-        <option value="280">f'c = 280 kg/cm² — Estructuras especiales</option>
-      </select>
-    </div>
-    <button class="btn-calc" onclick="calcConcreto()">⚡ CALCULAR</button>
-  </div>
-  <div id="res-concreto" class="result-block">
-    <h4>✅ RESULTADOS — CONCRETO</h4>
-    <div class="res-grid">
-      <div class="res-item"><div class="val" id="cv">—</div><div class="lbl">VOLUMEN</div><div class="unit">m³</div></div>
-      <div class="res-item"><div class="val" id="cc">—</div><div class="lbl">CEMENTO</div><div class="unit">sacos 50kg</div></div>
-      <div class="res-item"><div class="val" id="ca">—</div><div class="lbl">ARENA</div><div class="unit">m³</div></div>
-      <div class="res-item"><div class="val" id="cg">—</div><div class="lbl">GRAVA</div><div class="unit">m³</div></div>
-      <div class="res-item"><div class="val" id="cw">—</div><div class="lbl">AGUA</div><div class="unit">litros</div></div>
-      <div class="res-item"><div class="val" id="cdos">—</div><div class="lbl">DOSIF.</div><div class="unit">C:A:G</div></div>
-    </div>
-  </div>
+<!-- ═══ CONCRETO ═══ -->
+<div id="tab-concreto" class="pg on">
+  <div class="sh"><div class="si">🏗️</div><div><h2>CONCRETO ESTRUCTURAL</h2><p>LOSA · ZAPATA · VIGA</p></div></div>
+  <div class="fb"><lbl>📐 FÓRMULAS ACI 318</lbl>
+    <div class="f">V = A × e/100 <span class="a">[m³]</span><br>
+    Cemento = V × <span class="a">fc_factor</span> sacos<br>
+    Arena = V × <span class="a">fa</span> m³ | Grava = V × <span class="a">fg</span> m³<br>
+    Agua = V × <span class="a">fw</span> litros</div></div>
+  <div class="card"><h4>PARÁMETROS</h4>
+    <div class="fi"><label>ÁREA (m²)</label><input id="c_area" type="number" min="0.1" step="0.1" placeholder="ej. 25.0"></div>
+    <div class="fi"><label>ESPESOR (cm)</label><input id="c_esp" type="number" min="5" placeholder="ej. 15"></div>
+    <div class="fi"><label>RESISTENCIA f'c</label><select id="c_fc">
+      <option value="175">f'c = 175 kg/cm² — Uso general</option>
+      <option value="210" selected>f'c = 210 kg/cm² — Estructural típico</option>
+      <option value="245">f'c = 245 kg/cm² — Alta resistencia</option>
+      <option value="280">f'c = 280 kg/cm² — Especial</option></select></div>
+    <button class="btn by" onclick="calcC()">⚡ CALCULAR</button></div>
+  <div id="res-c" class="rb"><h4>✅ CONCRETO</h4><div class="rg">
+    <div class="ri"><div class="v" id="cv">—</div><div class="l">VOLUMEN</div><div class="u">m³</div></div>
+    <div class="ri"><div class="v" id="cc">—</div><div class="l">CEMENTO</div><div class="u">sacos 50kg</div></div>
+    <div class="ri"><div class="v" id="ca">—</div><div class="l">ARENA</div><div class="u">m³</div></div>
+    <div class="ri"><div class="v" id="cg">—</div><div class="l">GRAVA</div><div class="u">m³</div></div>
+    <div class="ri"><div class="v" id="cw">—</div><div class="l">AGUA</div><div class="u">litros</div></div>
+    <div class="ri"><div class="v" id="cdos">—</div><div class="l">DOSIF. C:A:G</div></div>
+  </div></div>
 </div>
 
-<!-- ══════════════════ MUROS ══════════════════ -->
-<div id="tab-muros" class="page">
-  <div class="sec-hdr">
-    <div class="sec-icon">🧱</div>
-    <div class="sec-title"><h2>MUROS DE BLOQUES</h2><p>MAMPOSTERÍA · MORTERO</p></div>
-  </div>
-  <div class="formula-box">
-    <label>📐 FÓRMULAS APLICADAS</label>
-    <div class="formula">
-      Bloques = A × <span>ρ</span> × 1.05 (desperdicio)<br>
-      Cemento = A × <span>0.15</span> sacos &nbsp;|&nbsp; Arena = A × <span>0.03</span> m³
-    </div>
-  </div>
-  <div class="card">
-    <h4>PARÁMETROS DE ENTRADA</h4>
-    <div class="field"><label>ÁREA DE PARED (m²)</label><input id="m_area" type="number" min="0" placeholder="ej. 40.0"></div>
-    <div class="field">
-      <label>TIPO DE BLOQUE</label>
-      <select id="m_bloque">
-        <option value="8">Bloque 8 cm — Tabique ligero</option>
-        <option value="12" selected>Bloque 12 cm — Muro interior</option>
-        <option value="15">Bloque 15 cm — Muro exterior</option>
-        <option value="20">Bloque 20 cm — Muro estructural</option>
-      </select>
-    </div>
-    <button class="btn-calc" onclick="calcMuros()">⚡ CALCULAR</button>
-  </div>
-  <div id="res-muros" class="result-block">
-    <h4>✅ RESULTADOS — MUROS</h4>
-    <div class="res-grid">
-      <div class="res-item"><div class="val" id="mb">—</div><div class="lbl">BLOQUES</div><div class="unit">unidades</div></div>
-      <div class="res-item"><div class="val" id="mc">—</div><div class="lbl">CEMENTO</div><div class="unit">sacos</div></div>
-      <div class="res-item"><div class="val" id="ma">—</div><div class="lbl">ARENA</div><div class="unit">m³</div></div>
-      <div class="res-item"><div class="val" id="mw">—</div><div class="lbl">AGUA</div><div class="unit">litros</div></div>
-    </div>
-  </div>
+<!-- ═══ MUROS ═══ -->
+<div id="tab-muros" class="pg">
+  <div class="sh"><div class="si">🧱</div><div><h2>MUROS DE BLOQUES</h2><p>MAMPOSTERÍA · MORTERO</p></div></div>
+  <div class="fb"><lbl>📐 FÓRMULAS</lbl>
+    <div class="f">Bloques = A × <span class="a">ρ</span> × 1.05 (5% desperdicio)<br>
+    Cemento = A × <span class="a">0.15</span> sac | Arena = A × <span class="a">0.03</span> m³</div></div>
+  <div class="card"><h4>PARÁMETROS</h4>
+    <div class="fi"><label>ÁREA PARED (m²)</label><input id="m_area" type="number" min="0.1" step="0.1" placeholder="ej. 40.0"></div>
+    <div class="fi"><label>TIPO DE BLOQUE</label><select id="m_bloque">
+      <option value="8">8 cm — Tabique ligero (16.5 blq/m²)</option>
+      <option value="12" selected>12 cm — Interior (12.5 blq/m²)</option>
+      <option value="15">15 cm — Exterior (12.5 blq/m²)</option>
+      <option value="20">20 cm — Estructural (12.5 blq/m²)</option></select></div>
+    <button class="btn by" onclick="calcM()">⚡ CALCULAR</button></div>
+  <div id="res-m" class="rb"><h4>✅ MUROS</h4><div class="rg">
+    <div class="ri"><div class="v" id="mb">—</div><div class="l">BLOQUES</div><div class="u">und (c/5%)</div></div>
+    <div class="ri"><div class="v" id="mc">—</div><div class="l">CEMENTO</div><div class="u">sacos</div></div>
+    <div class="ri"><div class="v" id="ma">—</div><div class="l">ARENA</div><div class="u">m³</div></div>
+    <div class="ri"><div class="v" id="mw">—</div><div class="l">AGUA</div><div class="u">litros</div></div>
+  </div></div>
 </div>
 
-<!-- ══════════════════ PISOS ══════════════════ -->
-<div id="tab-pisos" class="page">
-  <div class="sec-hdr">
-    <div class="sec-icon">🔷</div>
-    <div class="sec-title"><h2>PISOS · BALDOSAS</h2><p>CERÁMICA · PORCELANA · MÁRMOL</p></div>
-  </div>
-  <div class="formula-box">
-    <label>📐 FÓRMULAS APLICADAS</label>
-    <div class="formula">
-      A_baldosa = (lado/100)² <span>[m²]</span><br>
-      N = (A_piso / A_baldosa) × <span>1.10</span><br>
-      Pega = A × <span>4.5</span> kg &nbsp;|&nbsp; Fragua = A × <span>0.30</span> kg
-    </div>
-  </div>
-  <div class="card">
-    <h4>PARÁMETROS DE ENTRADA</h4>
-    <div class="field"><label>ÁREA DE PISO (m²)</label><input id="p_area" type="number" min="0" placeholder="ej. 60.0"></div>
-    <div class="field">
-      <label>TAMAÑO BALDOSA (cm)</label>
-      <select id="p_lado">
-        <option value="20">20 × 20 cm</option><option value="30">30 × 30 cm</option>
-        <option value="40">40 × 40 cm</option><option value="45">45 × 45 cm</option>
-        <option value="60" selected>60 × 60 cm</option><option value="80">80 × 80 cm</option>
-        <option value="custom">Tamaño personalizado</option>
-      </select>
-    </div>
-    <div class="field" id="p_custom_wrap" style="display:none">
-      <label>LADO (cm)</label><input id="p_custom" type="number" min="5" placeholder="ej. 55">
-    </div>
-    <button class="btn-calc" onclick="calcPisos()">⚡ CALCULAR</button>
-  </div>
-  <div id="res-pisos" class="result-block">
-    <h4>✅ RESULTADOS — PISOS</h4>
-    <div class="res-grid">
-      <div class="res-item"><div class="val" id="pb">—</div><div class="lbl">BALDOSAS</div><div class="unit">unidades</div></div>
-      <div class="res-item"><div class="val" id="pcajas">—</div><div class="lbl">CAJAS ≈</div><div class="unit">aprox.</div></div>
-      <div class="res-item"><div class="val" id="ppega">—</div><div class="lbl">PEGA</div><div class="unit">kg</div></div>
-      <div class="res-item"><div class="val" id="pfragua">—</div><div class="lbl">FRAGUA</div><div class="unit">kg</div></div>
-    </div>
-  </div>
+<!-- ═══ PISOS ═══ -->
+<div id="tab-pisos" class="pg">
+  <div class="sh"><div class="si">🔷</div><div><h2>PISOS · BALDOSAS</h2><p>CERÁMICA · PORCELANA</p></div></div>
+  <div class="fb"><lbl>📐 FÓRMULAS</lbl>
+    <div class="f">N = (A / A_bald) × <span class="a">1.10</span> (10% desperdicio)<br>
+    Pega = A × <span class="a">4.5</span> kg | Fragua = A × <span class="a">0.30</span> kg</div></div>
+  <div class="card"><h4>PARÁMETROS</h4>
+    <div class="fi"><label>ÁREA PISO (m²)</label><input id="p_area" type="number" min="0.1" step="0.1" placeholder="ej. 60.0"></div>
+    <div class="fi"><label>BALDOSA</label><select id="p_lado" onchange="$('p_cw').style.display=this.value==='custom'?'block':'none'">
+      <option value="20">20×20 cm</option><option value="30">30×30 cm</option>
+      <option value="40">40×40 cm</option><option value="45">45×45 cm</option>
+      <option value="60" selected>60×60 cm</option><option value="80">80×80 cm</option>
+      <option value="custom">Personalizado</option></select></div>
+    <div id="p_cw" style="display:none" class="fi"><label>LADO (cm)</label><input id="p_custom" type="number" min="5"></div>
+    <button class="btn by" onclick="calcP()">⚡ CALCULAR</button></div>
+  <div id="res-p" class="rb"><h4>✅ PISOS</h4><div class="rg">
+    <div class="ri"><div class="v" id="pb">—</div><div class="l">BALDOSAS</div><div class="u">und (c/10%)</div></div>
+    <div class="ri"><div class="v" id="pcaj">—</div><div class="l">CAJAS ≈</div></div>
+    <div class="ri"><div class="v" id="ppega">—</div><div class="l">PEGA</div><div class="u">kg</div></div>
+    <div class="ri"><div class="v" id="pfrag">—</div><div class="l">FRAGUA</div><div class="u">kg</div></div>
+  </div></div>
 </div>
 
-<!-- ══════════════════ COLUMNAS ══════════════════ -->
-<div id="tab-columnas" class="page">
-  <div class="sec-hdr">
-    <div class="sec-icon">🏛️</div>
-    <div class="sec-title"><h2>COLUMNAS ESTRUCTURALES</h2><p>CONCRETO · ACERO · ESTRIBOS</p></div>
-  </div>
-  <div class="formula-box">
-    <label>📐 FÓRMULAS APLICADAS</label>
-    <div class="formula">
-      V_col = n × (s/100)² × h <span>[m³]</span><br>
-      Acero long. = n × 4 × (h+0.6) × <span>1.552</span> kg/m<br>
-      N_estrib = ⌈h/0.15⌉ &nbsp;|&nbsp; P_estrib = N×L×<span>0.560</span> kg/m
-    </div>
-  </div>
-  <div class="card">
-    <h4>PARÁMETROS DE ENTRADA</h4>
-    <div class="field-row">
-      <div class="field"><label>CANTIDAD</label><input id="col_n" type="number" min="1" placeholder="ej. 4"></div>
-      <div class="field"><label>ALTURA (m)</label><input id="col_h" type="number" min="0.1" placeholder="ej. 3.0"></div>
-    </div>
-    <div class="field"><label>SECCIÓN CUADRADA (cm)</label><input id="col_s" type="number" min="15" placeholder="ej. 30"></div>
-    <div class="field">
-      <label>RESISTENCIA CONCRETO</label>
-      <select id="col_fc">
-        <option value="210" selected>f'c = 210 kg/cm²</option>
-        <option value="245">f'c = 245 kg/cm²</option>
-        <option value="280">f'c = 280 kg/cm²</option>
-      </select>
-    </div>
-    <button class="btn-calc" onclick="calcColumnas()">⚡ CALCULAR</button>
-  </div>
-  <div id="res-columnas" class="result-block">
-    <h4>✅ RESULTADOS — COLUMNAS</h4>
-    <div class="res-grid">
-      <div class="res-item"><div class="val" id="colv">—</div><div class="lbl">CONCRETO</div><div class="unit">m³</div></div>
-      <div class="res-item"><div class="val" id="colce">—</div><div class="lbl">CEMENTO</div><div class="unit">sacos</div></div>
-      <div class="res-item"><div class="val" id="colac">—</div><div class="lbl">ACERO LONG.</div><div class="unit">kg (Ø5/8")</div></div>
-      <div class="res-item"><div class="val" id="colest">—</div><div class="lbl">ESTRIBOS</div><div class="unit">kg (Ø3/8")</div></div>
-      <div class="res-item"><div class="val" id="colatotal">—</div><div class="lbl">ACERO TOTAL</div><div class="unit">kg</div></div>
-      <div class="res-item"><div class="val" id="colvar">—</div><div class="lbl">VARILLAS Ø5/8"</div><div class="unit">unidades</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════ ACERO ══════════════════ -->
-<div id="tab-acero" class="page">
-  <div class="sec-hdr">
-    <div class="sec-icon steel-icon">⚙️</div>
-    <div class="sec-title">
-      <h2 class="steel">PLANILLA DE HIERRO</h2>
-      <p>ESTRIBOS · BARRAS LONG. · QUINTALES</p>
-    </div>
+<!-- ═══ COLUMNAS ═══ -->
+<div id="tab-columnas" class="pg">
+  <div class="sh"><div class="si">🏛️</div><div><h2>COLUMNAS</h2><p>CUAD/RECT · T/L · CILÍNDRICA</p></div></div>
+  <div class="stabs">
+    <button class="stab on" onclick="S2('cr',this)">▪ CUAD/RECT</button>
+    <button class="stab"    onclick="S2('tl',this)">┤ T / L</button>
+    <button class="stab"    onclick="S2('ci',this)">○ CILÍND.</button>
   </div>
 
-  <div class="info-chip">⚙️ Norma ACI 318 · Panamá · Factor 45.36 kg/qq</div>
-
-  <!-- SUB-TABS -->
-  <div class="subtabs">
-    <button class="subtab on" onclick="showSub('est',this)">🔩 ESTRIBOS</button>
-    <button class="subtab"    onclick="showSub('long',this)">📏 BARRAS LONG.</button>
-    <button class="subtab"    onclick="showSub('planilla',this)">📋 PLANILLA</button>
-  </div>
-
-  <!-- ── ESTRIBOS ── -->
-  <div id="sub-est" class="subpage on">
-    <div class="formula-box steel-formula">
-      <label>📐 FÓRMULAS — ESTRIBOS</label>
-      <div class="formula">
-        W<sub>útil</sub> = Ancho − (2 × Rec) &nbsp;<span class="s">[cm]</span><br>
-        H<sub>útil</sub> = Alto − (2 × Rec) &nbsp;<span class="s">[cm]</span><br>
-        L<sub>pieza</sub> = 2(W<sub>útil</sub>+H<sub>útil</sub>) + 2(<span class="s">6×ϕ</span>) <span class="s">[m]</span><br>
-        N<sub>total</sub> = Σ zonas de confinamiento<br>
-        kg = L<sub>pieza</sub> × N × peso_nom<br>
-        qq = (kg × <span class="s">1.07</span>) / <span class="s">45.36</span>
+  <!-- CUAD/RECT -->
+  <div id="sp-cr" class="sp on">
+    <div class="fb fs"><lbl>📐 CUAD/RECT — INADEH/ACI 318</lbl>
+      <div class="f">W<sub>u</sub>=b−2r | H<sub>u</sub>=h−2r <span class="s">[cm]</span><br>
+      L<sub>est</sub>=2(W<sub>u</sub>+H<sub>u</sub>)/100 + 2(<span class="s">g×ϕ</span>) <span class="s">[m]</span><br>
+      lo=max(L/6,dim_mayor,45cm) <span class="s">ACI§18.7.5</span><br>
+      s<sub>conf</sub>=min(d/4, 6ϕ<sub>lon</sub>, 15cm)<br>
+      Cola gancho: <span class="a">6ϕ</span> (#3–#5) | <span class="a">12ϕ</span> (#6,#8) ACI§25.3</div></div>
+    <div class="card"><h4>GEOMETRÍA</h4>
+      <div class="r2">
+        <div class="fi"><label>BASE b (cm)</label><input id="cr_b" type="number" min="15" placeholder="30"></div>
+        <div class="fi"><label>ALTO h (cm)</label><input id="cr_h" type="number" min="15" placeholder="30"></div>
       </div>
-    </div>
-
-    <div class="card">
-      <h4 class="steel">GEOMETRÍA DEL ELEMENTO</h4>
-      <div class="field-row">
-        <div class="field"><label>ANCHO (cm)</label><input id="e_ancho" type="number" min="10" placeholder="ej. 30"></div>
-        <div class="field"><label>ALTO (cm)</label><input id="e_alto" type="number" min="10" placeholder="ej. 50"></div>
+      <div class="r2">
+        <div class="fi"><label>LONG. COLUMNA (m)</label><input id="cr_L" type="number" min="0.5" step="0.1" placeholder="3.0"></div>
+        <div class="fi"><label>N° COLUMNAS</label><input id="cr_n" type="number" min="1" placeholder="4"></div>
       </div>
-      <div class="field-row">
-        <div class="field">
-          <label>RECUBRIMIENTO (cm)</label>
-          <select id="e_rec">
-            <option value="2.5">2.5 cm — Interior</option>
-            <option value="4" selected>4.0 cm — Exterior/típico</option>
-            <option value="5">5.0 cm — Contacto suelo</option>
-            <option value="7.5">7.5 cm — Mar / agresivo</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>DIÁMETRO ESTRIBO</label>
-          <select id="e_diam">
-            <option value="3" selected>#3 (3/8") — 9.5mm</option>
-            <option value="4">#4 (1/2") — 12.7mm</option>
-          </select>
-        </div>
+      <div class="r2">
+        <div class="fi"><label>RECUBRIMIENTO — INADEH</label><select id="cr_rec">
+          <option value="2.5">2.5cm — Interior seco</option>
+          <option value="4" selected>4.0cm — Exterior típico</option>
+          <option value="5">5.0cm — Exterior agresivo</option>
+          <option value="7.5">7.5cm — Contacto suelo/marino</option></select></div>
+        <div class="fi"><label>f'c</label><select id="cr_fc">
+          <option value="210" selected>210 kg/cm²</option>
+          <option value="245">245 kg/cm²</option><option value="280">280 kg/cm²</option></select></div>
       </div>
-      <div class="field">
-        <label>FACTOR DE GANCHO (×ϕ)</label>
-        <select id="e_gancho">
-          <option value="6" selected>6ϕ — Sísmico 135° (recomendado)</option>
-          <option value="8">8ϕ — Zona de alta sismicidad</option>
-          <option value="4">4ϕ — No sísmico (mínimo)</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="card">
-      <h4 class="steel">ZONAS DE CONFINAMIENTO</h4>
-      <p style="font-size:12px;color:var(--dim);margin-bottom:12px">
-        Ingresa cada zona: cantidad de estribos y espaciamiento.<br>
-        <span style="font-family:'Share Tech Mono';color:var(--steel)">Ej: 5 estrib @ 10cm, luego 8 estrib @ 15cm, etc.</span>
-      </p>
-      <div class="zone-list" id="zone-list">
-        <div class="zone-row">
-          <span class="zone-label">Z1</span>
-          <input type="number" class="z-cant" min="1" placeholder="n°" style="max-width:70px">
-          <span class="zone-label">@ </span>
-          <input type="number" class="z-sep" min="1" placeholder="cm" style="max-width:80px">
-          <span class="zone-label">cm</span>
-        </div>
-      </div>
-      <button class="btn-add" onclick="addZone()">+ AGREGAR ZONA</button>
-    </div>
-
-    <button class="btn-steel" onclick="calcEstribos()">⚙️ CALCULAR ESTRIBOS</button>
-
-    <div id="res-estribos" class="result-block">
-      <h4>✅ RESULTADOS — ESTRIBOS</h4>
-      <div class="res-grid">
-        <div class="res-item"><div class="val steel" id="e_wutil">—</div><div class="lbl">W útil</div><div class="unit">cm</div></div>
-        <div class="res-item"><div class="val steel" id="e_hutil">—</div><div class="lbl">H útil</div><div class="unit">cm</div></div>
-        <div class="res-item"><div class="val steel" id="e_lpieza">—</div><div class="lbl">L pieza</div><div class="unit">m</div></div>
-        <div class="res-item"><div class="val steel" id="e_ntotal">—</div><div class="lbl">N estribos</div><div class="unit">und</div></div>
-        <div class="res-item"><div class="val steel" id="e_metros">—</div><div class="lbl">Metros tot.</div><div class="unit">m lineales</div></div>
-        <div class="res-item"><div class="val steel" id="e_kg">—</div><div class="lbl">PESO</div><div class="unit">kg</div></div>
-        <div class="res-item" style="grid-column:span 2;background:rgba(192,200,216,0.05);border-color:var(--steel)">
-          <div class="val steel" id="e_qq" style="font-size:28px">—</div>
-          <div class="lbl">QUINTALES TOTALES (c/7% desperdicio)</div>
-          <div class="unit">qq · factor 45.36 kg</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── BARRAS LONGITUDINALES ── -->
-  <div id="sub-long" class="subpage">
-    <div class="formula-box steel-formula">
-      <label>📐 FÓRMULAS — BARRAS LONGITUDINALES</label>
-      <div class="formula">
-        L<sub>barra</sub> = L<sub>elem</sub> + traslape + 2×gancho <span class="s">[m]</span><br>
-        Traslape = factor × <span class="s">ϕ</span> (o ingresado manual)<br>
-        Gancho std = <span class="s">12×ϕ</span> (doblado 90°)<br>
-        L<sub>total</sub> = L<sub>barra</sub> × n_barras <span class="s">[m]</span><br>
-        kg = L<sub>total</sub> × peso_nom<br>
-        qq = (kg × <span class="s">1.07</span>) / <span class="s">45.36</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <h4 class="steel">PARÁMETROS DE LA BARRA</h4>
-      <div class="field-row">
-        <div class="field"><label>LONG. ELEMENTO (m)</label><input id="b_lon" type="number" min="0.1" placeholder="ej. 3.0"></div>
-        <div class="field"><label>N° BARRAS</label><input id="b_n" type="number" min="1" placeholder="ej. 4"></div>
-      </div>
-      <div class="field">
-        <label>DIÁMETRO BARRA</label>
-        <select id="b_diam">
-          <option value="3">#3 (3/8") — 0.560 kg/m</option>
+      <div class="r2">
+        <div class="fi"><label>BARRA LONG.</label><select id="cr_bl">
           <option value="4">#4 (1/2") — 0.994 kg/m</option>
           <option value="5" selected>#5 (5/8") — 1.552 kg/m</option>
           <option value="6">#6 (3/4") — 2.235 kg/m</option>
-          <option value="8">#8 (1")  — 3.973 kg/m</option>
-        </select>
+          <option value="8">#8 (1") — 3.973 kg/m</option></select></div>
+        <div class="fi"><label>ESTRIBO</label><select id="cr_be">
+          <option value="3" selected>#3 (3/8") — 0.560 kg/m</option>
+          <option value="4">#4 (1/2") — 0.994 kg/m</option></select></div>
       </div>
-      <div class="field">
-        <label>TRASLAPE</label>
-        <select id="b_traslape_tipo">
-          <option value="calc">Calculado (40×ϕ — ACI 318 mín.)</option>
-          <option value="manual">Manual (ingreso directo en cm)</option>
-        </select>
-      </div>
-      <div class="field" id="b_traslape_manual_wrap" style="display:none">
-        <label>TRASLAPE (cm)</label>
-        <input id="b_traslape_cm" type="number" min="0" placeholder="ej. 60">
-      </div>
-      <div class="field">
-        <label>GANCHO ESTÁNDAR</label>
-        <select id="b_gancho">
-          <option value="12" selected>12ϕ — Gancho 90° estándar</option>
-          <option value="0">Sin gancho (elemento continuo)</option>
-          <option value="6">6ϕ — Gancho 180° corto</option>
-        </select>
-      </div>
-      <button class="btn-steel" onclick="calcBarras()">⚙️ CALCULAR BARRAS</button>
-    </div>
-
-    <div id="res-barras" class="result-block">
-      <h4>✅ RESULTADOS — BARRAS LONGITUDINALES</h4>
-      <div class="res-grid">
-        <div class="res-item"><div class="val steel" id="b_lbarra">—</div><div class="lbl">L barra</div><div class="unit">m</div></div>
-        <div class="res-item"><div class="val steel" id="b_traslape_r">—</div><div class="lbl">Traslape</div><div class="unit">m</div></div>
-        <div class="res-item"><div class="val steel" id="b_ltotal">—</div><div class="lbl">L total</div><div class="unit">m lineales</div></div>
-        <div class="res-item"><div class="val steel" id="b_kg">—</div><div class="lbl">PESO</div><div class="unit">kg</div></div>
-        <div class="res-item" style="grid-column:span 2;background:rgba(192,200,216,0.05);border-color:var(--steel)">
-          <div class="val steel" id="b_qq" style="font-size:28px">—</div>
-          <div class="lbl">QUINTALES TOTALES (c/7% desperdicio)</div>
-          <div class="unit">qq · factor 45.36 kg</div>
-        </div>
-      </div>
-    </div>
+      <div class="r2">
+        <div class="fi"><label>N° BARRAS LONG.</label><input id="cr_nb" type="number" min="4" placeholder="4"></div>
+        <div class="fi"><label>GANCHO ESTRIBO</label><select id="cr_g">
+          <option value="6" selected>135°–6ϕ Sísmico (rec.)</option>
+          <option value="8">135°–8ϕ Alta sismicidad</option>
+          <option value="4">180°–4ϕ No sísmico</option></select></div>
+      </div></div>
+    <button class="btn by" onclick="calcColR()">⚡ CALCULAR</button>
+    <div id="res-cr" class="rb"><h4>✅ COLUMNA CUAD/RECT</h4><div class="rg">
+      <div class="ri"><div class="v" id="cr_vol">—</div><div class="l">CONCRETO</div><div class="u">m³</div></div>
+      <div class="ri"><div class="v" id="cr_cem">—</div><div class="l">CEMENTO</div><div class="u">sacos</div></div>
+      <div class="ri"><div class="v ss" id="cr_wu">—</div><div class="l">W útil</div><div class="u">cm</div></div>
+      <div class="ri"><div class="v ss" id="cr_hu">—</div><div class="l">H útil</div><div class="u">cm</div></div>
+      <div class="ri"><div class="v ss" id="cr_le">—</div><div class="l">L estribo</div><div class="u">m</div></div>
+      <div class="ri"><div class="v ss" id="cr_sc">—</div><div class="l">s conf.</div><div class="u">cm</div></div>
+      <div class="ri"><div class="v ss" id="cr_lo">—</div><div class="l">lo conf.</div><div class="u">m</div></div>
+      <div class="ri"><div class="v" id="cr_xt">—</div><div class="l">Crossties</div></div>
+      <div class="ri"><div class="v" id="cr_ke">—</div><div class="l">Acero est.</div><div class="u">kg</div></div>
+      <div class="ri"><div class="v" id="cr_kl">—</div><div class="l">Acero long.</div><div class="u">kg</div></div>
+      <div class="ri full" style="background:rgba(192,200,216,.05);border-color:var(--st)">
+        <div class="v ss" id="cr_qq" style="font-size:22px">—</div>
+        <div class="l">QQ ACERO TOTAL (c/7% desp.) · 45.36 kg/qq</div></div>
+    </div><div id="cr_wn" class="wb" style="display:none"></div></div>
   </div>
 
-  <!-- ── PLANILLA ── -->
-  <div id="sub-planilla" class="subpage">
-    <div class="planilla show" id="planilla-hierro">
-      <h4>📋 PLANILLA DE HIERRO — RESUMEN</h4>
-      <div class="tbl-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>ELEMENTO</th><th>DIÁM.</th><th>N°</th>
-              <th>L (m)</th><th>kg</th><th>qq</th>
-            </tr>
-          </thead>
-          <tbody id="planilla-body">
-            <tr><td colspan="6" style="color:var(--dim);text-align:center;padding:20px">
-              Calcula estribos y barras para ver planilla
-            </td></tr>
-          </tbody>
-          <tfoot id="planilla-foot" style="display:none">
-            <tr style="background:rgba(192,200,216,0.06)">
-              <td colspan="4" class="td-label" style="color:var(--steel)">TOTAL ACERO</td>
-              <td class="td-steel" id="pl-kg-total">—</td>
-              <td class="td-steel" id="pl-qq-total" style="font-size:16px;font-weight:700">—</td>
-            </tr>
-          </tfoot>
-        </table>
+  <!-- T/L -->
+  <div id="sp-tl" class="sp">
+    <div class="fb fs"><lbl>📐 T/L — 2 GRUPOS ESTRIBOS</lbl>
+      <div class="f">Est. <span class="a">alma</span>: 2(W<sub>u,alma</sub>+H<sub>u,alma</sub>)/100+gancho<br>
+      Est. <span class="a">ala</span>:  2(W<sub>u,ala</sub>+H<sub>u,ala</sub>)/100+gancho<br>
+      Área sección = b_alma×h_alma + b_ala×h_ala [cm²]</div></div>
+    <div class="card"><h4>ALMA (WEB)</h4>
+      <div class="r2">
+        <div class="fi"><label>ANCHO (cm)</label><input id="tl_wa" type="number" min="15" placeholder="25"></div>
+        <div class="fi"><label>ALTO (cm)</label><input id="tl_ha" type="number" min="15" placeholder="50"></div>
+      </div></div>
+    <div class="card"><h4>ALA (FLANGE)</h4>
+      <div class="r2">
+        <div class="fi"><label>ANCHO (cm)</label><input id="tl_wf" type="number" min="10" placeholder="40"></div>
+        <div class="fi"><label>ALTO (cm)</label><input id="tl_hf" type="number" min="10" placeholder="20"></div>
+      </div></div>
+    <div class="card"><h4>GENERAL</h4>
+      <div class="r2">
+        <div class="fi"><label>LONG. (m)</label><input id="tl_L" type="number" min="0.5" step="0.1" placeholder="3.0"></div>
+        <div class="fi"><label>N° COLUMNAS</label><input id="tl_n" type="number" min="1" placeholder="2"></div>
       </div>
+      <div class="r2">
+        <div class="fi"><label>RECUBRIMIENTO</label><select id="tl_rec">
+          <option value="2.5">2.5cm Int.</option><option value="4" selected>4.0cm Ext.</option>
+          <option value="5">5.0cm Agresivo</option><option value="7.5">7.5cm Suelo/Mar</option></select></div>
+        <div class="fi"><label>f'c</label><select id="tl_fc">
+          <option value="210" selected>210</option><option value="245">245</option><option value="280">280</option></select></div>
+      </div>
+      <div class="r2">
+        <div class="fi"><label>N° BAR ALMA</label><input id="tl_na" type="number" min="4" placeholder="4"></div>
+        <div class="fi"><label>N° BAR ALA</label><input id="tl_nf" type="number" min="2" placeholder="2"></div>
+      </div>
+      <div class="r2">
+        <div class="fi"><label>BARRA LONG.</label><select id="tl_bl">
+          <option value="4">#4</option><option value="5" selected>#5</option><option value="6">#6</option></select></div>
+        <div class="fi"><label>ESTRIBO</label><select id="tl_be">
+          <option value="3" selected>#3</option><option value="4">#4</option></select></div>
+      </div></div>
+    <button class="btn by" onclick="calcColTL()">⚡ CALCULAR T/L</button>
+    <div id="res-tl" class="rb"><h4>✅ COLUMNA T/L</h4><div class="rg">
+      <div class="ri"><div class="v" id="tl_vol">—</div><div class="l">CONCRETO</div><div class="u">m³</div></div>
+      <div class="ri"><div class="v" id="tl_cem">—</div><div class="l">CEMENTO</div><div class="u">sacos</div></div>
+      <div class="ri"><div class="v ss" id="tl_la">—</div><div class="l">L est. ALMA</div><div class="u">m</div></div>
+      <div class="ri"><div class="v ss" id="tl_lf">—</div><div class="l">L est. ALA</div><div class="u">m</div></div>
+      <div class="ri"><div class="v" id="tl_ke">—</div><div class="l">Acero est.</div><div class="u">kg</div></div>
+      <div class="ri"><div class="v" id="tl_kl">—</div><div class="l">Acero long.</div><div class="u">kg</div></div>
+      <div class="ri full" style="background:rgba(192,200,216,.05);border-color:var(--st)">
+        <div class="v ss" id="tl_qq" style="font-size:22px">—</div>
+        <div class="l">QQ TOTAL (c/7% desp.)</div></div>
+    </div></div>
+  </div>
 
-      <div class="tbl-wrap">
-        <table>
-          <caption>TABLA CONSTANTES — ACERO PANAMA / ACI 318</caption>
-          <thead>
-            <tr><th>BARRA</th><th>DIAM.</th><th>PESO (kg/m)</th><th>40×ϕ (cm)</th></tr>
-          </thead>
-          <tbody>
-            <tr><td class="td-label">#3 (3/8")</td><td>9.5 mm</td><td class="td-steel">0.560</td><td>38</td></tr>
-            <tr><td class="td-label">#4 (1/2")</td><td>12.7 mm</td><td class="td-steel">0.994</td><td>51</td></tr>
-            <tr><td class="td-label">#5 (5/8")</td><td>15.9 mm</td><td class="td-steel">1.552</td><td>64</td></tr>
-            <tr><td class="td-label">#6 (3/4")</td><td>19.1 mm</td><td class="td-steel">2.235</td><td>76</td></tr>
-            <tr><td class="td-label">#8 (1")</td><td>25.4 mm</td><td class="td-steel">3.973</td><td>102</td></tr>
-          </tbody>
-        </table>
+  <!-- CILÍNDRICA -->
+  <div id="sp-ci" class="sp">
+    <div class="fb fs"><lbl>📐 ESPIRAL CONTINUA — ACI §18.7.5.4</lbl>
+      <div class="f">D<sub>u</sub>=D−2r &nbsp;C<sub>v</sub>=π×D<sub>u</sub>/100 <span class="s">[m]</span><br>
+      N<sub>v</sub>=⌈(H−2r/100)/paso⌉<br>
+      L<sub>gancho</sub>=1.5×C<sub>v</sub>×2 extremos<br>
+      L<sub>total</sub>=N<sub>v</sub>×C<sub>v</sub>+L<sub>gancho</sub><br>
+      ρ<sub>s,mín</sub>=0.45(Ag/Ac−1)×f'c/fyt</div></div>
+    <div class="card"><h4>GEOMETRÍA</h4>
+      <div class="r2">
+        <div class="fi"><label>DIÁM. D (cm)</label><input id="ci_d" type="number" min="20" placeholder="40"></div>
+        <div class="fi"><label>LONG. (m)</label><input id="ci_L" type="number" min="0.5" step="0.1" placeholder="3.0"></div>
       </div>
-      <button class="btn-pdf" onclick="exportPlanilla()">📄 EXPORTAR PLANILLA PDF</button>
+      <div class="r2">
+        <div class="fi"><label>N° COLUMNAS</label><input id="ci_n" type="number" min="1" placeholder="4"></div>
+        <div class="fi"><label>RECUBRIMIENTO</label><select id="ci_rec">
+          <option value="2.5">2.5cm</option><option value="4" selected>4.0cm</option>
+          <option value="5">5.0cm</option><option value="7.5">7.5cm</option></select></div>
+      </div>
+      <div class="r2">
+        <div class="fi"><label>PASO ESPIRAL (cm)</label><input id="ci_paso" type="number" min="2" step="0.5" placeholder="7.5"></div>
+        <div class="fi"><label>BARRA ESPIRAL</label><select id="ci_be">
+          <option value="3" selected>#3 (3/8")</option><option value="4">#4 (1/2")</option></select></div>
+      </div>
+      <div class="r2">
+        <div class="fi"><label>N° BARRAS LONG.</label><input id="ci_nb" type="number" min="6" placeholder="8"></div>
+        <div class="fi"><label>BARRA LONG.</label><select id="ci_bl">
+          <option value="4">#4</option><option value="5" selected>#5</option><option value="6">#6</option></select></div>
+      </div>
+      <div class="fi"><label>f'c</label><select id="ci_fc">
+        <option value="210" selected>210</option><option value="245">245</option><option value="280">280</option></select></div>
     </div>
+    <button class="btn by" onclick="calcColCi()">⚡ CALCULAR CILÍNDRICA</button>
+    <div id="res-ci" class="rb"><h4>✅ COLUMNA CILÍNDRICA</h4><div class="rg">
+      <div class="ri"><div class="v" id="ci_vol">—</div><div class="l">CONCRETO</div><div class="u">m³</div></div>
+      <div class="ri"><div class="v" id="ci_cem">—</div><div class="l">CEMENTO</div><div class="u">sacos</div></div>
+      <div class="ri"><div class="v ss" id="ci_du">—</div><div class="l">D útil</div><div class="u">cm</div></div>
+      <div class="ri"><div class="v ss" id="ci_cv">—</div><div class="l">C/vuelta</div><div class="u">m</div></div>
+      <div class="ri"><div class="v ss" id="ci_nv">—</div><div class="l">N vueltas</div><div class="u">und</div></div>
+      <div class="ri"><div class="v ss" id="ci_lt">—</div><div class="l">L espiral</div><div class="u">m</div></div>
+      <div class="ri"><div class="v" id="ci_ke">—</div><div class="l">Acero espiral</div><div class="u">kg</div></div>
+      <div class="ri"><div class="v" id="ci_kl">—</div><div class="l">Acero long.</div><div class="u">kg</div></div>
+      <div class="ri full" style="background:rgba(192,200,216,.05);border-color:var(--st)">
+        <div class="v ss" id="ci_qq" style="font-size:22px">—</div>
+        <div class="l">QQ TOTAL (c/7% desp.)</div></div>
+    </div><div id="ci_wn" class="wb ok" style="display:none"></div></div>
   </div>
 </div>
 
-<!-- ══════════════════ RESUMEN ══════════════════ -->
-<div id="tab-resumen" class="page">
-  <div class="sec-hdr">
-    <div class="sec-icon">📊</div>
-    <div class="sec-title"><h2>RESUMEN DEL PROYECTO</h2><p>CANTIDADES · 3D · ANÁLISIS</p></div>
-  </div>
-  <div class="iso-wrap">
-    <h4>🏗️ VISTA ISOMÉTRICA — ESTRUCTURA</h4>
-    <canvas id="isoCanvas" height="280"></canvas>
-    <p style="font-size:11px;color:var(--dim);margin-top:8px;font-family:'Share Tech Mono'">↺ Se actualiza con datos de columnas</p>
-  </div>
-  <div class="chart-wrap">
-    <h4>📈 DISTRIBUCIÓN DE MATERIALES</h4>
-    <canvas id="matChart" height="200"></canvas>
-  </div>
-  <div class="tbl-wrap">
-    <table>
-      <caption>TABLA RESUMEN — VOLÚMENES Y CANTIDADES</caption>
-      <thead><tr><th>MÓDULO</th><th>CEMENTO</th><th>ARENA</th><th>GRAVA</th></tr></thead>
-      <tbody id="tbl-body">
-        <tr><td colspan="4" class="td-label" style="color:var(--dim);text-align:center;padding:20px">Calcula módulos para ver resumen</td></tr>
-      </tbody>
-      <tfoot id="tbl-foot" style="display:none">
-        <tr style="background:rgba(240,165,0,.06)">
-          <td class="td-label">TOTAL</td>
-          <td class="td-total" id="t-cem">—</td>
-          <td class="td-total" id="t-are">—</td>
-          <td class="td-total" id="t-gra">—</td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-  <div class="tbl-wrap" id="tbl-acero-wrap" style="display:none">
-    <table>
-      <caption>ACERO DE REFUERZO — CONSOLIDADO</caption>
-      <thead><tr><th>ELEMENTO</th><th>CANTIDAD</th><th>PESO (kg)</th><th>QUINTALES</th></tr></thead>
-      <tbody id="tbl-acero-body"></tbody>
-    </table>
-  </div>
-  <div class="annex">
-    <h4>📋 ANEXO — DOSIFICACIÓN ACI 318 (por m³)</h4>
-    <p>Valores de referencia para Panamá / Centroamérica</p>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>f'c</th><th>CEMENTO</th><th>ARENA</th><th>GRAVA</th><th>AGUA</th></tr></thead>
-        <tbody>
-          <tr><td class="td-label">175</td><td>6.5 sac</td><td>0.52 m³</td><td>0.78 m³</td><td>190 L</td></tr>
-          <tr><td class="td-label">210</td><td>7.0 sac</td><td>0.56 m³</td><td>0.84 m³</td><td>185 L</td></tr>
-          <tr><td class="td-label">245</td><td>7.5 sac</td><td>0.50 m³</td><td>0.75 m³</td><td>180 L</td></tr>
-          <tr><td class="td-label">280</td><td>8.0 sac</td><td>0.48 m³</td><td>0.72 m³</td><td>175 L</td></tr>
-        </tbody>
-      </table>
+<!-- ═══ VIGA SÍSMICA ═══ -->
+<div id="tab-vigas" class="pg">
+  <div class="sh"><div class="si sv">〰️</div><div><h2 class="sv">VIGA SÍSMICA</h2><p>ACI 318-19 §18.6 · COPANIT</p></div></div>
+  <div class="chip cv">〰️ Pórtico especial — REP/SPIA · ACI 318-19</div>
+  <div class="fb fv"><lbl>📐 VIGA SÍSMICA — ACI §18.6</lbl>
+    <div class="f">d=h−rec−ϕ<sub>est</sub>/2−ϕ<sub>lon</sub>/2 <span class="v">[m]</span><br>
+    lo=2h <span class="v">zona confinada c/extremo</span><br>
+    s<sub>conf</sub>=min(d/4, 6ϕ<sub>lon</sub>, 15cm)<br>
+    s<sub>cen</sub>=min(d/2, 30cm)<br>
+    N<sub>conf</sub>=⌈lo/s<sub>conf</sub>⌉×2 | N<sub>cen</sub>=⌈(L−2lo)/s<sub>cen</sub>⌉<br>
+    Cola est: <span class="a">6ϕ</span>(#3–#5) | <span class="a">12ϕ</span>(#6,#8) ACI§25.3</div></div>
+  <div class="card"><h4 class="hv">GEOMETRÍA</h4>
+    <div class="r2">
+      <div class="fi"><label>BASE b (cm)</label><input id="vs_b" type="number" min="20" placeholder="25"></div>
+      <div class="fi"><label>PERALTE h (cm)</label><input id="vs_h" type="number" min="30" placeholder="50"></div>
     </div>
+    <div class="r2">
+      <div class="fi"><label>LUZ LIBRE L (m)</label><input id="vs_L" type="number" min="1" step="0.1" placeholder="5.0"></div>
+      <div class="fi"><label>N° VIGAS</label><input id="vs_n" type="number" min="1" placeholder="4"></div>
+    </div>
+    <div class="r2">
+      <div class="fi"><label>RECUBRIMIENTO — INADEH</label><select id="vs_rec">
+        <option value="2.5">2.5cm — Interior</option>
+        <option value="4" selected>4.0cm — Exterior</option>
+        <option value="5">5.0cm — Agresivo</option>
+        <option value="7.5">7.5cm — Marino/Suelo</option></select></div>
+      <div class="fi"><label>f'c</label><select id="vs_fc">
+        <option value="210" selected>210</option><option value="245">245</option><option value="280">280</option></select></div>
+    </div></div>
+  <div class="card"><h4 class="hv">REFUERZO</h4>
+    <div class="r2">
+      <div class="fi"><label>BARRA LONG.</label><select id="vs_bl">
+        <option value="4">#4</option><option value="5" selected>#5</option>
+        <option value="6">#6</option><option value="8">#8</option></select></div>
+      <div class="fi"><label>ESTRIBO</label><select id="vs_be">
+        <option value="3" selected>#3</option><option value="4">#4</option></select></div>
+    </div>
+    <div class="r2">
+      <div class="fi"><label>BARRAS SUPERIORES</label><input id="vs_ns" type="number" min="2" placeholder="3"></div>
+      <div class="fi"><label>BARRAS INFERIORES</label><input id="vs_ni" type="number" min="2" placeholder="2"></div>
+    </div>
+    <div class="fi"><label>GANCHO ESTRIBO</label><select id="vs_g">
+      <option value="6" selected>135°–6ϕ Sísmico (recomendado INADEH)</option>
+      <option value="8">135°–8ϕ Alta sismicidad</option></select></div>
   </div>
-  <div class="concl">
-    <h4>🔍 CONCLUSIONES Y RECOMENDACIONES</h4>
-    <div id="concl-items"><div class="concl-item"><div class="concl-dot"></div><p style="color:var(--dim)">Calcula módulos para generar conclusiones automáticas.</p></div></div>
+  <button class="btn bv" onclick="calcVS()">〰️ CALCULAR VIGA SÍSMICA</button>
+  <div id="res-vs" class="rb"><h4>✅ VIGA SÍSMICA</h4><div class="rg">
+    <div class="ri"><div class="v sv" id="vs_d">—</div><div class="l">d efectivo</div><div class="u">m</div></div>
+    <div class="ri"><div class="v sv" id="vs_lo">—</div><div class="l">lo conf.</div><div class="u">m</div></div>
+    <div class="ri"><div class="v sv" id="vs_sc">—</div><div class="l">s conf.</div><div class="u">cm</div></div>
+    <div class="ri"><div class="v sv" id="vs_sm">—</div><div class="l">s centro</div><div class="u">cm</div></div>
+    <div class="ri"><div class="v sv" id="vs_ne">—</div><div class="l">Est. conf.</div><div class="u">und</div></div>
+    <div class="ri"><div class="v sv" id="vs_nm">—</div><div class="l">Est. centro</div><div class="u">und</div></div>
+    <div class="ri"><div class="v" id="vs_vol">—</div><div class="l">CONCRETO</div><div class="u">m³</div></div>
+    <div class="ri"><div class="v" id="vs_cem">—</div><div class="l">CEMENTO</div><div class="u">sacos</div></div>
+    <div class="ri"><div class="v" id="vs_ke">—</div><div class="l">Acero est.</div><div class="u">kg</div></div>
+    <div class="ri"><div class="v" id="vs_kl">—</div><div class="l">Acero long.</div><div class="u">kg</div></div>
+    <div class="ri full" style="background:rgba(167,139,250,.05);border-color:var(--vg)">
+      <div class="v sv" id="vs_qq" style="font-size:22px">—</div>
+      <div class="l">QQ TOTAL (c/7% desp.)</div></div>
+  </div><div id="vs_wn" class="wb" style="display:none"></div></div>
+</div>
+
+<!-- ═══ VIGA DE AMARRE ═══ -->
+<div id="tab-amarre" class="pg">
+  <div class="sh"><div class="si sa">🔗</div><div><h2 class="sa">VIGA DE AMARRE</h2><p>SOLERA · AMARRE PERIMETRAL</p></div></div>
+  <div class="chip ca">🔗 Mín. 20×20cm · 2#4 sup+inf · #3@20cm — INADEH/REP</div>
+  <div class="fb fa"><lbl>📐 VIGA DE AMARRE — REP/COPANIT</lbl>
+    <div class="f">L_barra=L + n_traslapes×40ϕ (si L&gt;9.15m)<br>
+    <span class="g">9.15m = 30 pies — long. comercial Panamá (INADEH)</span><br>
+    N_est=⌈L/sep⌉+1 | L_est=perímetro útil + gancho<br>
+    qq=(kg×<span class="g">1.07</span>)/<span class="g">45.36</span></div></div>
+  <div class="card"><h4 class="ha">GEOMETRÍA</h4>
+    <div class="r2">
+      <div class="fi"><label>BASE b (cm)</label><input id="am_b" type="number" min="15" value="20"></div>
+      <div class="fi"><label>PERALTE h (cm)</label><input id="am_h" type="number" min="15" value="20"></div>
+    </div>
+    <div class="r2">
+      <div class="fi"><label>LONG. TOTAL (m)</label><input id="am_L" type="number" min="1" step="0.1" placeholder="24.0"></div>
+      <div class="fi"><label>f'c</label><select id="am_fc">
+        <option value="175">175</option><option value="210" selected>210</option></select></div>
+    </div></div>
+  <div class="card"><h4 class="ha">REFUERZO</h4>
+    <div class="r2">
+      <div class="fi"><label>N° BARRAS CORRIDAS</label><select id="am_nb">
+        <option value="4" selected>4 (2sup+2inf)</option><option value="6">6 (3sup+3inf)</option></select></div>
+      <div class="fi"><label>DIÁM. BARRA</label><select id="am_bl">
+        <option value="3">#3</option><option value="4" selected>#4</option><option value="5">#5</option></select></div>
+    </div>
+    <div class="r2">
+      <div class="fi"><label>SEP. ESTRIBOS (cm)</label><input id="am_sep" type="number" min="10" value="20"></div>
+      <div class="fi"><label>RECUBRIMIENTO</label><select id="am_rec">
+        <option value="4" selected>4.0cm — Exterior</option>
+        <option value="5">5.0cm — Agresivo</option>
+        <option value="7.5">7.5cm — Suelo/Mar</option></select></div>
+    </div></div>
+  <button class="btn bg" onclick="calcAM()">🔗 CALCULAR AMARRE</button>
+  <div id="res-am" class="rb"><h4>✅ VIGA DE AMARRE</h4><div class="rg">
+    <div class="ri"><div class="v sa" id="am_vol">—</div><div class="l">CONCRETO</div><div class="u">m³</div></div>
+    <div class="ri"><div class="v sa" id="am_cem">—</div><div class="l">CEMENTO</div><div class="u">sacos</div></div>
+    <div class="ri"><div class="v" id="am_lb">—</div><div class="l">L barra</div><div class="u">m</div></div>
+    <div class="ri"><div class="v" id="am_ne">—</div><div class="l">N estribos</div><div class="u">und</div></div>
+    <div class="ri"><div class="v" id="am_kl">—</div><div class="l">Acero long.</div><div class="u">kg</div></div>
+    <div class="ri"><div class="v" id="am_ke">—</div><div class="l">Acero est.</div><div class="u">kg</div></div>
+    <div class="ri full" style="background:rgba(52,211,153,.05);border-color:var(--am)">
+      <div class="v sa" id="am_qq" style="font-size:22px">—</div>
+      <div class="l">QQ TOTAL (c/7% desp.) · 45.36 kg/qq</div></div>
+  </div><div id="am_wn" class="wb" style="display:none"></div></div>
+</div>
+
+<!-- ═══ ACERO ═══ -->
+<div id="tab-acero" class="pg">
+  <div class="sh"><div class="si ss">⚙️</div><div><h2 class="ss">PLANILLA DE HIERRO</h2><p>ESTRIBOS · BARRAS · QUINTALES</p></div></div>
+  <div class="chip">⚙️ INADEH · ACI 318 · Grado 60 · 45.36 kg/qq · Long. comercial 9.15m</div>
+  <div class="stabs">
+    <button class="stab ss on" onclick="SA('ae-e',this)">🔩 ESTRIBOS</button>
+    <button class="stab ss"    onclick="SA('ae-b',this)">📏 BARRAS</button>
+    <button class="stab ss"    onclick="SA('ae-p',this)">📋 PLANILLA</button>
   </div>
-  <div class="divider"></div>
-  <button class="btn-pdf" onclick="exportPDF()">📄 EXPORTAR REPORTE COMPLETO PDF</button>
+
+  <!-- ESTRIBOS -->
+  <div id="ae-e" class="sp on">
+    <div class="fb fs"><lbl>📐 ESTRIBOS — INADEH/ACI §25.3</lbl>
+      <div class="f">W<sub>u</sub>=Ancho−2×rec | H<sub>u</sub>=Alto−2×rec<br>
+      L=2(W<sub>u</sub>+H<sub>u</sub>)/100 + 2(<span class="s">g×ϕ</span>)<br>
+      Cola: <span class="a">6ϕ</span>(#3–#5) | <span class="a">12ϕ</span>(#6,#8) según ACI§25.3<br>
+      qq=(m×N×peso×<span class="s">1.07</span>)/<span class="s">45.36</span></div></div>
+    <div class="card"><h4 class="hs">GEOMETRÍA</h4>
+      <div class="r2">
+        <div class="fi"><label>ANCHO (cm)</label><input id="e_a" type="number" min="10" placeholder="30"></div>
+        <div class="fi"><label>ALTO (cm)</label><input id="e_h" type="number" min="10" placeholder="50"></div>
+      </div>
+      <div class="r2">
+        <div class="fi"><label>RECUBRIMIENTO — INADEH</label><select id="e_r">
+          <option value="2.5">2.5cm — Interior</option><option value="4" selected>4.0cm — Exterior</option>
+          <option value="5">5.0cm — Agresivo</option><option value="7.5">7.5cm — Suelo/Mar</option></select></div>
+        <div class="fi"><label>ESTRIBO</label><select id="e_d">
+          <option value="3" selected>#3 (3/8")</option><option value="4">#4 (1/2")</option></select></div>
+      </div>
+      <div class="fi"><label>GANCHO — INADEH</label><select id="e_g">
+        <option value="6" selected>135°–6ϕ Sísmico (recomendado)</option>
+        <option value="8">135°–8ϕ Alta sismicidad</option>
+        <option value="4">180°–4ϕ No sísmico</option></select></div>
+    </div>
+    <div class="card"><h4 class="hs">ZONAS DE CONFINAMIENTO</h4>
+      <p style="font-size:11px;color:var(--dim);margin-bottom:9px;font-family:'Share Tech Mono'">Ej: 5 @ 10cm | 8 @ 15cm | resto @ 20cm</p>
+      <div id="zl"><div class="zr">
+        <span class="zl">Z1</span>
+        <input type="number" class="zc" min="1" placeholder="n°" style="max-width:60px">
+        <span class="zl">@</span>
+        <input type="number" class="zs" min="1" placeholder="cm" style="max-width:65px">
+        <span class="zl">cm</span>
+      </div></div>
+      <button class="badd" onclick="addZ()">+ AGREGAR ZONA</button>
+    </div>
+    <button class="btn bs" onclick="calcEst()">⚙️ CALCULAR ESTRIBOS</button>
+    <div id="res-e" class="rb"><h4>✅ ESTRIBOS</h4><div class="rg">
+      <div class="ri"><div class="v ss" id="e_wu">—</div><div class="l">W útil</div><div class="u">cm</div></div>
+      <div class="ri"><div class="v ss" id="e_hu">—</div><div class="l">H útil</div><div class="u">cm</div></div>
+      <div class="ri"><div class="v ss" id="e_lp">—</div><div class="l">L pieza</div><div class="u">m</div></div>
+      <div class="ri"><div class="v ss" id="e_nt">—</div><div class="l">N total</div><div class="u">und</div></div>
+      <div class="ri"><div class="v ss" id="e_mt">—</div><div class="l">M lineales</div><div class="u">m</div></div>
+      <div class="ri"><div class="v ss" id="e_kg">—</div><div class="l">PESO</div><div class="u">kg</div></div>
+      <div class="ri full" style="background:rgba(192,200,216,.05);border-color:var(--st)">
+        <div class="v ss" id="e_qq" style="font-size:22px">—</div>
+        <div class="l">QQ (c/7% desp.) · 45.36 kg/qq</div></div>
+    </div></div>
+  </div>
+
+  <!-- BARRAS -->
+  <div id="ae-b" class="sp">
+    <div class="fb fs"><lbl>📐 BARRAS LONG. — INADEH/REP</lbl>
+      <div class="f">Traslape mín. = 40×ϕ (INADEH/ACI 318)<br>
+      Long. comercial Panamá = <span class="s">9.15m (30 pies)</span><br>
+      Gancho 90°: cola <span class="a">6ϕ</span>(#3–#5) | <span class="a">12ϕ</span>(#6,#8)<br>
+      qq=(m×n×peso×<span class="s">1.07</span>)/<span class="s">45.36</span></div></div>
+    <div class="card"><h4 class="hs">PARÁMETROS</h4>
+      <div class="r2">
+        <div class="fi"><label>LONG. ELEMENTO (m)</label><input id="b_l" type="number" min="0.1" step="0.1" placeholder="3.0"></div>
+        <div class="fi"><label>N° BARRAS</label><input id="b_n" type="number" min="1" placeholder="4"></div>
+      </div>
+      <div class="fi"><label>DIÁMETRO — Grado 60 (INADEH)</label><select id="b_d">
+        <option value="3">#3 (3/8") · 9.5mm · 0.560 kg/m · 40ϕ=38cm</option>
+        <option value="4">#4 (1/2") · 12.7mm · 0.994 kg/m · 40ϕ=51cm</option>
+        <option value="5" selected>#5 (5/8") · 15.9mm · 1.552 kg/m · 40ϕ=64cm</option>
+        <option value="6">#6 (3/4") · 19.1mm · 2.235 kg/m · 40ϕ=76cm</option>
+        <option value="8">#8 (1") · 25.4mm · 3.973 kg/m · 40ϕ=102cm</option></select></div>
+      <div class="r2">
+        <div class="fi"><label>TRASLAPE</label><select id="b_tt" onchange="$('b_tm').style.display=this.value==='m'?'block':'none'">
+          <option value="a">Auto 40×ϕ — INADEH/ACI</option>
+          <option value="m">Manual (cm)</option></select></div>
+        <div class="fi" id="b_tm" style="display:none"><label>TRASLAPE (cm)</label>
+          <input id="b_tcm" type="number" min="0" placeholder="ej. 60"></div>
+      </div>
+      <div class="fi"><label>GANCHO — ACI §25.3</label><select id="b_g">
+        <option value="12" selected>12ϕ — 90° estándar (#3–#5)</option>
+        <option value="12b">12ϕ — 90° estándar (#6–#8) cola larga</option>
+        <option value="0">Sin gancho (elemento continuo)</option>
+        <option value="6">6ϕ — 180° corto</option></select></div>
+    </div>
+    <button class="btn bs" onclick="calcBar()">⚙️ CALCULAR BARRAS</button>
+    <div id="res-b" class="rb"><h4>✅ BARRAS LONG.</h4><div class="rg">
+      <div class="ri"><div class="v ss" id="b_lb">—</div><div class="l">L barra c/traslape+gancho</div><div class="u">m</div></div>
+      <div class="ri"><div class="v ss" id="b_tr">—</div><div class="l">Traslape</div><div class="u">m</div></div>
+      <div class="ri"><div class="v ss" id="b_lt">—</div><div class="l">L total</div><div class="u">m lineales</div></div>
+      <div class="ri"><div class="v ss" id="b_kg">—</div><div class="l">PESO</div><div class="u">kg</div></div>
+      <div class="ri full" style="background:rgba(192,200,216,.05);border-color:var(--st)">
+        <div class="v ss" id="b_qq" style="font-size:22px">—</div>
+        <div class="l">QQ (c/7% desp.) · 45.36 kg/qq</div></div>
+    </div><div id="b_wn" class="wb inf" style="display:none"></div></div>
+  </div>
+
+  <!-- PLANILLA -->
+  <div id="ae-p" class="sp">
+    <div class="tw"><table><caption>PLANILLA DE HIERRO — RESUMEN CONSOLIDADO</caption>
+      <thead><tr><th>ELEMENTO</th><th>DIÁM.</th><th>N°</th><th>m lineal</th><th>kg</th><th>qq</th></tr></thead>
+      <tbody id="pl-body"><tr><td colspan="6" style="color:var(--dim);text-align:center;padding:14px">Calcula módulos para ver planilla</td></tr></tbody>
+      <tfoot id="pl-foot" style="display:none"><tr style="background:rgba(192,200,216,.06)">
+        <td colspan="4" class="tl" style="color:var(--st)">TOTAL ACERO</td>
+        <td class="tst" id="pl-kg">—</td>
+        <td class="tst" id="pl-qq" style="font-weight:700">—</td>
+      </tr></tfoot>
+    </table></div>
+    <div class="tw"><table><caption>CONSTANTES — ACERO GRADO 60 · INADEH · PANAMÁ</caption>
+      <thead><tr><th>BARRA</th><th>mm</th><th>kg/m</th><th>40ϕ cm</th><th>Cola 90°</th></tr></thead>
+      <tbody>
+        <tr><td class="tl">#3 (3/8")</td><td>9.5</td><td class="tst">0.560</td><td>38</td><td>6ϕ=5.7cm</td></tr>
+        <tr><td class="tl">#4 (1/2")</td><td>12.7</td><td class="tst">0.994</td><td>51</td><td>6ϕ=7.6cm</td></tr>
+        <tr><td class="tl">#5 (5/8")</td><td>15.9</td><td class="tst">1.552</td><td>64</td><td>6ϕ=9.5cm</td></tr>
+        <tr><td class="tl">#6 (3/4")</td><td>19.1</td><td class="tst">2.235</td><td>76</td><td class="tok">12ϕ=22.9cm</td></tr>
+        <tr><td class="tl">#8 (1")</td><td>25.4</td><td class="tst">3.973</td><td>102</td><td class="tok">12ϕ=30.5cm</td></tr>
+      </tbody>
+    </table></div>
+    <div class="wb inf">ℹ️ Long. comercial Panamá: <b>9.15m (30 pies)</b> — INADEH<br>
+    Cola gancho 90°: <b>6ϕ</b> para #3–#5 | <b>12ϕ</b> para #6 y #8 — ACI §25.3.2</div>
+    <br>
+    <button class="bpdf" onclick="exportPlan()">📄 EXPORTAR PLANILLA PDF</button>
+  </div>
+</div>
+
+<!-- ═══ RESUMEN ═══ -->
+<div id="tab-resumen" class="pg">
+  <div class="sh"><div class="si">📊</div><div><h2>RESUMEN DEL PROYECTO</h2><p>3D · CANTIDADES · ANÁLISIS</p></div></div>
+  <div class="iw"><h4>🏗️ VISTA ISOMÉTRICA — ESTRUCTURA</h4>
+    <canvas id="isoCanvas" height="240"></canvas>
+    <p style="font-size:10px;color:var(--dim);margin-top:5px;font-family:'Share Tech Mono'">↺ Gira automáticamente con datos de columnas</p></div>
+  <div class="cw"><h4>📈 DISTRIBUCIÓN DE MATERIALES</h4><canvas id="matChart" height="190"></canvas></div>
+  <div class="tw"><table><caption>RESUMEN — CONCRETO Y MORTERO</caption>
+    <thead><tr><th>MÓDULO</th><th>CEMENTO</th><th>ARENA</th><th>GRAVA</th></tr></thead>
+    <tbody id="tb-body"><tr><td colspan="4" style="color:var(--dim);text-align:center;padding:14px">Calcula módulos para ver resumen</td></tr></tbody>
+    <tfoot id="tb-foot" style="display:none"><tr style="background:rgba(240,165,0,.05)">
+      <td class="tl">TOTAL</td><td class="tt" id="t-c">—</td><td class="tt" id="t-a">—</td><td class="tt" id="t-g">—</td>
+    </tr></tfoot>
+  </table></div>
+  <div class="tw" id="ta-wrap" style="display:none"><table><caption>RESUMEN — ACERO DE REFUERZO</caption>
+    <thead><tr><th>MÓDULO</th><th>kg</th><th>qq</th><th>TIPO</th></tr></thead>
+    <tbody id="ta-body"></tbody>
+  </table></div>
+  <div class="concl"><h4>🔍 CONCLUSIONES Y RECOMENDACIONES — REP/INADEH</h4>
+    <div id="concl-items"><div class="ci"><div class="cd"></div>
+      <p style="color:var(--dim)">Calcula módulos para generar conclusiones.</p></div></div></div>
+  <div class="div"></div>
+  <button class="bpdf" onclick="exportPDF()">📄 EXPORTAR REPORTE COMPLETO PDF</button>
   <br><br>
 </div>
 
 <div class="toast" id="toast">✅ OK</div>
 
 <script>
-/* ── CONSTANTES ACERO ── */
-const BARRAS={
-  3:{label:'#3 (3/8")',diam:9.5,peso:0.560,traslape40:0.38},
-  4:{label:'#4 (1/2")',diam:12.7,peso:0.994,traslape40:0.508},
-  5:{label:'#5 (5/8")',diam:15.9,peso:1.552,traslape40:0.636},
-  6:{label:'#6 (3/4")',diam:19.1,peso:2.235,traslape40:0.764},
-  8:{label:'#8 (1")',diam:25.4,peso:3.973,traslape40:1.016}
+/* ════════════════════════════════════
+   CONSTANTES — INADEH/ACI 318/COPANIT
+   ════════════════════════════════════ */
+// Peso nominal Grado 60, cola gancho 90° corregida por diámetro
+const BR={
+  3:{lb:'#3(3/8")',d:9.5, w:0.560,t40:0.38, cola6:0.057, cola12:0.114},
+  4:{lb:'#4(1/2")',d:12.7,w:0.994,t40:0.508,cola6:0.076, cola12:0.152},
+  5:{lb:'#5(5/8")',d:15.9,w:1.552,t40:0.636,cola6:0.095, cola12:0.191},
+  6:{lb:'#6(3/4")',d:19.1,w:2.235,t40:0.764,cola6:0.115, cola12:0.229}, // ACI: 12ϕ para #6+
+  8:{lb:'#8(1")',  d:25.4,w:3.973,t40:1.016,cola6:0.152, cola12:0.305}  // ACI: 12ϕ para #8+
 };
+// Longitud comercial Panamá (INADEH): 30 pies = 9.15m
+const L_COMERCIAL=9.15;
 
 const DOS={
-  175:{cem:6.5,are:0.52,gra:0.78,agua:190,ratio:'1:2.5:3.8'},
-  210:{cem:7.0,are:0.56,gra:0.84,agua:185,ratio:'1:2.0:3.0'},
-  245:{cem:7.5,are:0.50,gra:0.75,agua:180,ratio:'1:1.8:2.7'},
-  280:{cem:8.0,are:0.48,gra:0.72,agua:175,ratio:'1:1.6:2.4'}
+  175:{c:6.5,a:0.52,g:0.78,w:190,r:'1:2.5:3.8'},
+  210:{c:7.0,a:0.56,g:0.84,w:185,r:'1:2.0:3.0'},
+  245:{c:7.5,a:0.50,g:0.75,w:180,r:'1:1.8:2.7'},
+  280:{c:8.0,a:0.48,g:0.72,w:175,r:'1:1.6:2.4'}
 };
 
-const S={concreto:null,muros:null,pisos:null,columnas:null,estribos:null,barras:null};
-const planillaItems=[];
+const S={};  // Estado global del proyecto
+const PI=[];  // Planilla de hierro
 
-/* ── TABS ── */
-function showTab(id,btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+/* ════ UTILS ════ */
+const $=id=>document.getElementById(id);
+const sv=(id,v)=>$(id)&&($(id).textContent=v);
+const gv=id=>{const el=$(id);if(!el)return null;const v=parseFloat(el.value);
+  if(isNaN(v)||v<=0){el.classList.add('er');return null;}el.classList.remove('er');return v;};
+// FIX-3: Validación para campos opcionales — no pinta error si existe valor default
+const gvOpt=(id,def)=>{const el=$(id);if(!el)return def;const v=parseFloat(el.value);
+  el.classList.remove('er');return(!isNaN(v)&&v>0)?v:def;};
+const toQQ=kg=>+((kg*1.07)/45.36).toFixed(3);
+const toKg=(m,dn)=>+(m*BR[dn].w).toFixed(2);
+const fmt=(v,dec=2)=>v.toFixed(dec);
+
+// Longitud de estribo corregida con cola según diámetro (INADEH/ACI §25.3)
+function lEst(wu,hu,ganchoF,dn){
+  // Cola: 6ϕ para #3–#5, 12ϕ para #6 y #8
+  const cola=(dn>=6)?BR[dn].cola12:BR[dn].cola6;
+  // ganchoF=6 → cola sísmico=6ϕ; ganchoF=8 → 8ϕ; ganchoF=4 → 4ϕ mínimo
+  // Para estribos, cola es fija por normativa independiente del ángulo; el factor g afecta longitud del arco
+  const arcFactor=(dn>=6)?BR[dn].cola12:BR[dn].cola6; // simplificado: cola según diám.
+  return +(2*(wu+hu)/100 + 2*arcFactor).toFixed(3);
+}
+
+/* ════ NAVIGATION ════ */
+function T(id,btn){
+  // FIX-1: Cancelar animación ISO al salir del tab resumen
+  if(isoAF){cancelAnimationFrame(isoAF);isoAF=null;}
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
-  document.getElementById('tab-'+id).classList.add('on');
-  btn.classList.add('on');
-  if(id==='resumen') buildResumen();
-  if(id==='acero') buildPlanilla();
+  $('tab-'+id).classList.add('on');btn.classList.add('on');
+  if(id==='resumen')buildRes();
+  if(id==='acero')buildPlan();
+}
+function S2(id,btn){
+  ['sp-cr','sp-tl','sp-ci'].forEach(i=>$(i).classList.remove('on'));
+  document.querySelectorAll('#tab-columnas .stab').forEach(t=>t.classList.remove('on'));
+  $('sp-'+id).classList.add('on');btn.classList.add('on');
+}
+function SA(id,btn){
+  ['ae-e','ae-b','ae-p'].forEach(i=>$(i).classList.remove('on'));
+  document.querySelectorAll('#tab-acero .stab').forEach(t=>t.classList.remove('on'));
+  $(id).classList.add('on');btn.classList.add('on');
+  if(id==='ae-p')buildPlan();
 }
 
-/* ── SUBTABS ACERO ── */
-function showSub(id,btn){
-  document.querySelectorAll('.subpage').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.subtab').forEach(t=>t.classList.remove('on'));
-  document.getElementById('sub-'+id).classList.add('on');
-  btn.classList.add('on');
-  if(id==='planilla') buildPlanilla();
+/* ════ CONCRETO ════ */
+function calcC(){
+  const a=gv('c_area'),e=gv('c_esp');if(!a||!e)return;
+  const fc=+$('c_fc').value,d=DOS[fc];
+  const vol=+(a*e/100).toFixed(3);
+  S.con={m:'CONCRETO',a,e,fc,vol,cem:+(vol*d.c).toFixed(1),are:+(vol*d.a).toFixed(2),gra:+(vol*d.g).toFixed(2),agua:+(vol*d.w).toFixed(0),r:d.r};
+  sv('cv',fmt(vol));sv('cc',S.con.cem);sv('ca',S.con.are);sv('cg',S.con.gra);sv('cw',S.con.agua);sv('cdos',d.r);
+  $('res-c').classList.add('show');toast('CONCRETO ✓');
 }
 
-/* ── CUSTOM PISO ── */
-document.getElementById('p_lado').addEventListener('change',function(){
-  document.getElementById('p_custom_wrap').style.display=this.value==='custom'?'block':'none';
-});
-
-/* ── TRASLAPE TIPO ── */
-document.getElementById('b_traslape_tipo').addEventListener('change',function(){
-  document.getElementById('b_traslape_manual_wrap').style.display=
-    this.value==='manual'?'block':'none';
-});
-
-/* ── VALIDATE ── */
-function val(id){
-  const el=document.getElementById(id);
-  const v=parseFloat(el.value);
-  if(isNaN(v)||v<=0){el.classList.add('err');return null;}
-  el.classList.remove('err');return v;
+/* ════ MUROS ════ */
+function calcM(){
+  const a=gv('m_area');if(!a)return;
+  const t=+$('m_bloque').value,den={8:16.5,12:12.5,15:12.5,20:12.5}[t];
+  const bl=Math.ceil(a*den*1.05),c=+(a*0.15).toFixed(1),ar=+(a*0.03).toFixed(2),w=Math.ceil(a*12);
+  S.mur={m:'MUROS',a,t,bl,cem:c,are:ar,agua:w};
+  sv('mb',bl);sv('mc',c);sv('ma',ar);sv('mw',w);
+  $('res-m').classList.add('show');toast('MUROS ✓');
 }
 
-/* ══ CALCULADORAS ORIGINALES ══ */
-function calcConcreto(){
-  const area=val('c_area'),esp=val('c_esp');
-  if(!area||!esp)return;
-  const fc=parseInt(document.getElementById('c_fc').value);
-  const d=DOS[fc],vol=area*(esp/100);
-  S.concreto={modulo:'CONCRETO',area,esp,fc,vol,
-    cem:+(vol*d.cem).toFixed(1),are:+(vol*d.are).toFixed(2),
-    gra:+(vol*d.gra).toFixed(2),agua:+(vol*d.agua).toFixed(0),ratio:d.ratio};
-  document.getElementById('cv').textContent=vol.toFixed(2);
-  document.getElementById('cc').textContent=S.concreto.cem;
-  document.getElementById('ca').textContent=S.concreto.are;
-  document.getElementById('cg').textContent=S.concreto.gra;
-  document.getElementById('cw').textContent=S.concreto.agua;
-  document.getElementById('cdos').textContent=d.ratio;
-  document.getElementById('res-concreto').classList.add('show');
-  toast('CONCRETO CALCULADO');
+/* ════ PISOS ════ */
+function calcP(){
+  const a=gv('p_area');if(!a)return;
+  const sel=$('p_lado').value;let lado=sel==='custom'?gv('p_custom'):+sel;if(!lado)return;
+  const ab=(lado/100)**2,n=Math.ceil(a/ab*1.10);
+  const caj=Math.ceil(n/Math.floor(1/ab));
+  const pega=+(a*4.5).toFixed(1),frag=+(a*0.30).toFixed(1);
+  S.pis={m:'PISOS',a,lado,n,caj,pega,frag};
+  sv('pb',n);sv('pcaj',caj);sv('ppega',pega+' kg');sv('pfrag',frag+' kg');
+  $('res-p').classList.add('show');toast('PISOS ✓');
 }
 
-function calcMuros(){
-  const area=val('m_area');if(!area)return;
-  const tipo=parseInt(document.getElementById('m_bloque').value);
-  const densidad={8:16.5,12:12.5,15:12.5,20:12.5}[tipo];
-  const bloques=Math.ceil(area*densidad*1.05);
-  const cem=+(area*0.15).toFixed(1),are=+(area*0.03).toFixed(2),agua=Math.ceil(area*12);
-  S.muros={modulo:'MUROS',area,tipo,bloques,cem,are,agua};
-  document.getElementById('mb').textContent=bloques;
-  document.getElementById('mc').textContent=cem;
-  document.getElementById('ma').textContent=are;
-  document.getElementById('mw').textContent=agua;
-  document.getElementById('res-muros').classList.add('show');
-  toast('MUROS CALCULADO');
+/* ════ COLUMNA CUAD/RECT ════ */
+function calcColR(){
+  const b=gv('cr_b'),h=gv('cr_h'),L=gv('cr_L'),n=gv('cr_n');
+  const nb=gvOpt('cr_nb',4);
+  if(!b||!h||!L||!n)return;
+  const rec=+$('cr_rec').value,fc=+$('cr_fc').value;
+  const bl=+$('cr_bl').value,be=+$('cr_be').value,gf=+$('cr_g').value;
+  const d=DOS[fc];
+  const wu=b-2*rec,hu=h-2*rec;
+  if(wu<=0||hu<=0){toast('⚠️ RECUBRIMIENTO > SECCIÓN');return;}
+
+  // L estribo con cola corregida por diámetro (INADEH/ACI §25.3)
+  const le=lEst(wu,hu,gf,be);
+
+  // Zona confinada ACI §18.7.5
+  const loCm=Math.max(L/6*100,Math.max(b,h),45);
+  // s_conf: d efectivo = h - rec - ϕ_est/2 - ϕ_long/2 (en cm)
+  const dEf=h-rec-BR[be].d/10/2-BR[bl].d/10/2;
+  const sc=+Math.min(dEf/4,6*(BR[bl].d/10),15).toFixed(1);
+  const sn=+Math.min(dEf/2,30).toFixed(1);
+
+  // Estribos
+  const Nc=Math.ceil((loCm/100)/(sc/100))*2;
+  const Lcen=Math.max(0,L-2*loCm/100);
+  const Nm=Lcen>0?Math.ceil(Lcen/(sn/100)):0;
+  const nEst=(Nc+Nm)*n;
+
+  // Crossties si b > 35cm (ACI §25.7.2)
+  const xt=b>35;
+  const lxt=xt?+(wu/100+2*(be>=6?BR[be].cola12:BR[be].cola6)).toFixed(3):0;
+  const nxt=xt?Math.ceil(nb/4)*nEst:0;
+
+  const mEst=+(le*nEst+lxt*nxt).toFixed(2);
+  const ke=toKg(mEst,be);
+
+  // Barras long: L + traslape 40ϕ + 2 ganchos (cola según diámetro ACI §25.3)
+  const cola_lon=(bl>=6)?BR[bl].cola12:BR[bl].cola6;
+  const lb=+(L+BR[bl].t40+2*cola_lon).toFixed(3);
+  const kl=toKg(lb*nb*n,bl);
+
+  const vol=+(n*(b/100)*(h/100)*L).toFixed(3);
+  const cem=+(vol*d.c).toFixed(1);
+  const q=toQQ(ke+kl);
+
+  S.colR={m:'COL CUAD/RECT',b,h,L,n,vol,cem,ke,kl,qq:q,wu,hu,le,sc,loCm,xt};
+  sv('cr_vol',vol);sv('cr_cem',cem);
+  sv('cr_wu',fmt(wu,1));sv('cr_hu',fmt(hu,1));
+  sv('cr_le',le);sv('cr_sc',sc);sv('cr_lo',fmt(loCm/100));
+  sv('cr_xt',xt?'SÍ — req.':'NO');
+  sv('cr_ke',ke);sv('cr_kl',kl);sv('cr_qq',q);
+
+  const wn=$('cr_wn');let ws=[];
+  if(xt)ws.push(`⚠️ b=${b}cm > 35cm → Crossties req. cada 2 barras — ACI §25.7.2`);
+  if(sc<8)ws.push(`⚠️ s_conf=${sc}cm muy reducido. Revisar constructibilidad`);
+  if(bl>=6)ws.push(`ℹ️ Barra #${bl>=8?8:6}: cola gancho = 12ϕ = ${(BR[bl].cola12*100).toFixed(1)}cm — ACI §25.3`);
+  if(ws.length){wn.innerHTML=ws.join('<br>');wn.style.display='block';}else wn.style.display='none';
+  $('res-cr').classList.add('show');
+  addPI('COL CUAD/RECT',BR[be].lb,nEst,mEst,ke+kl,q);
+  toast('COLUMNA ✓');
 }
 
-function calcPisos(){
-  const area=val('p_area');if(!area)return;
-  let lado;
-  const sel=document.getElementById('p_lado').value;
-  if(sel==='custom'){lado=val('p_custom');if(!lado)return;}else lado=parseFloat(sel);
-  const ab=(lado/100)**2,n=Math.ceil((area/ab)*1.10);
-  const cajas=Math.ceil(n/(1/(ab)*1.2));
-  const pega=+(area*4.5).toFixed(1),fragua=+(area*0.30).toFixed(1);
-  S.pisos={modulo:'PISOS',area,lado,n,cajas,pega,fragua};
-  document.getElementById('pb').textContent=n;
-  document.getElementById('pcajas').textContent=cajas;
-  document.getElementById('ppega').textContent=pega+' kg';
-  document.getElementById('pfragua').textContent=fragua+' kg';
-  document.getElementById('res-pisos').classList.add('show');
-  toast('PISOS CALCULADO');
+/* ════ COLUMNA T/L ════ */
+function calcColTL(){
+  const wa=gv('tl_wa'),ha=gv('tl_ha'),wf=gv('tl_wf'),hf=gv('tl_hf');
+  const L=gv('tl_L'),n=gv('tl_n');
+  if(!wa||!ha||!wf||!hf||!L||!n)return;
+  const rec=+$('tl_rec').value,fc=+$('tl_fc').value;
+  const bl=+$('tl_bl').value,be=+$('tl_be').value;
+  const na=gvOpt('tl_na',4),nf=gvOpt('tl_nf',2);
+  const d=DOS[fc];
+  const wau=wa-2*rec,hau=ha-2*rec,wfu=wf-2*rec,hfu=hf-2*rec;
+  if(wau<=0||hau<=0||wfu<=0||hfu<=0){toast('⚠️ RECUBRIMIENTO > SECCIÓN');return;}
+
+  const laAlma=lEst(wau,hau,6,be);
+  const laAla=lEst(wfu,hfu,6,be);
+
+  const dimMax=Math.max(wa,ha,wf,hf);
+  const loCm=Math.max(L/6*100,dimMax,45);
+  const sc=Math.min(Math.max(ha,hf)/4,15);
+  const sn=Math.min(Math.max(ha,hf)/2,30);
+  const Nc=Math.ceil((loCm/100)/(sc/100))*2;
+  const Lcen=Math.max(0,L-2*loCm/100);
+  const Nm=Lcen>0?Math.ceil(Lcen/(sn/100)):0;
+  const nEst=(Nc+Nm)*n;
+
+  const mAlma=laAlma*nEst,mAla=laAla*nEst;
+  const ke=toKg(mAlma+mAla,be);
+
+  const cola_lon=(bl>=6)?BR[bl].cola12:BR[bl].cola6;
+  const lbarra=+(L+BR[bl].t40+2*cola_lon).toFixed(3);
+  const kl=toKg(lbarra*(na+nf)*n,bl);
+
+  const areaS=((wa*ha)+(wf*hf))/10000;
+  const vol=+(n*areaS*L).toFixed(3);
+  const cem=+(vol*d.c).toFixed(1);
+  const q=toQQ(ke+kl);
+
+  S.colTL={m:'COL T/L',vol,cem,ke,kl,qq:q,laAlma,laAla,nEst};
+  sv('tl_vol',vol);sv('tl_cem',cem);
+  sv('tl_la',laAlma);sv('tl_lf',laAla);
+  sv('tl_ke',ke);sv('tl_kl',kl);sv('tl_qq',q);
+  $('res-tl').classList.add('show');
+  addPI('COL T/L',BR[be].lb,nEst,mAlma+mAla,ke+kl,q);
+  toast('COL T/L ✓');
 }
 
-function calcColumnas(){
-  const n=val('col_n'),h=val('col_h'),s=val('col_s');if(!n||!h||!s)return;
-  const fc=parseInt(document.getElementById('col_fc').value);
-  const d=DOS[fc],sec=s/100,vol=+(n*sec*sec*h).toFixed(3);
-  const cem=+(vol*d.cem).toFixed(1);
-  const varillasTotal=n*4,longVar=h+0.6;
-  const aceroLong=+(varillasTotal*longVar*1.552).toFixed(1);
-  const nEst=Math.ceil(h/0.15)*n,lEst=4*sec+0.24;
-  const aceroEst=+(nEst*lEst*0.560).toFixed(1);
-  const aceroTotal=+(aceroLong+aceroEst).toFixed(1);
-  S.columnas={modulo:'COLUMNAS',n,h,s,fc,vol,cem,aceroLong,aceroEst,aceroTotal,varillasTotal,nEst};
-  document.getElementById('colv').textContent=vol;
-  document.getElementById('colce').textContent=cem;
-  document.getElementById('colac').textContent=aceroLong;
-  document.getElementById('colest').textContent=aceroEst;
-  document.getElementById('colatotal').textContent=aceroTotal;
-  document.getElementById('colvar').textContent=varillasTotal;
-  document.getElementById('res-columnas').classList.add('show');
-  toast('COLUMNAS CALCULADO');
-  drawISO();
+/* ════ COLUMNA CILÍNDRICA ════ */
+function calcColCi(){
+  const D=gv('ci_d'),L=gv('ci_L'),n=gv('ci_n'),paso=gv('ci_paso'),nb=gv('ci_nb');
+  if(!D||!L||!n||!paso||!nb)return;
+  const rec=+$('ci_rec').value,fc=+$('ci_fc').value;
+  const be=+$('ci_be').value,bl=+$('ci_bl').value;
+  const d=DOS[fc];
+  const Du=D-2*rec;
+  if(Du<=0){toast('⚠️ RECUBRIMIENTO > SECCIÓN');return;}
+
+  const Cv=+(Math.PI*Du/100).toFixed(4);
+  const Hr=L-2*rec/100;
+  const Nv=Math.ceil(Hr/(paso/100));
+  const Lg=+(1.5*Cv*2).toFixed(3);
+  const Lt=+(Nv*Cv+Lg).toFixed(2);
+  const ke=toKg(Lt*n,be);
+
+  const cola_lon=(bl>=6)?BR[bl].cola12:BR[bl].cola6;
+  const lbarra=+(L+BR[bl].t40+2*cola_lon).toFixed(3);
+  const kl=toKg(lbarra*nb*n,bl);
+
+  const vol=+(n*Math.PI*(D/200)**2*L).toFixed(3);
+  const cem=+(vol*d.c).toFixed(1);
+  const q=toQQ(ke+kl);
+
+  // ρs_mín ACI §18.7.5.4 (fyt=4200 kg/cm² Grado 60 — INADEH)
+  const Ag=Math.PI*(D/2)**2,Ac=Math.PI*(Du/2)**2;
+  const rhoMin=+(0.45*(Ag/Ac-1)*(fc/4200)).toFixed(4);
+
+  S.colCi={m:'COL CILÍND.',D,L,n,vol,cem,ke,kl,qq:q,Du,Cv,Nv,Lt};
+  sv('ci_vol',vol);sv('ci_cem',cem);
+  sv('ci_du',fmt(Du,1));sv('ci_cv',Cv);
+  sv('ci_nv',Nv);sv('ci_lt',Lt);
+  sv('ci_ke',ke);sv('ci_kl',kl);sv('ci_qq',q);
+
+  $('ci_wn').innerHTML=`✅ ρs_mín ACI §18.7.5.4 = ${rhoMin} | Paso ${paso}cm · ${Nv} vueltas · fyt=4200 kg/cm² (Grado 60 — INADEH)`;
+  $('ci_wn').style.display='block';
+  $('res-ci').classList.add('show');
+  addPI('COL CILÍND.',BR[be].lb,Nv*n,Lt*n,ke+kl,q);
+  toast('CILÍNDRICA ✓');
 }
 
-/* ══ MÓDULO ACERO ══ */
+/* ════ VIGA SÍSMICA ════ */
+function calcVS(){
+  const b=gv('vs_b'),h=gv('vs_h'),L=gv('vs_L'),n=gv('vs_n');
+  if(!b||!h||!L||!n)return;
+  const rec=+$('vs_rec').value,fc=+$('vs_fc').value;
+  const bl=+$('vs_bl').value,be=+$('vs_be').value;
+  const ns=gvOpt('vs_ns',3),ni=gvOpt('vs_ni',2),gf=+$('vs_g').value;
+  const d=DOS[fc];
 
-/* ZONAS DE CONFINAMIENTO */
-let zoneCount=1;
-function addZone(){
-  zoneCount++;
-  const div=document.createElement('div');
-  div.className='zone-row';
-  div.id='zone-'+zoneCount;
-  div.innerHTML=`
-    <span class="zone-label">Z${zoneCount}</span>
-    <input type="number" class="z-cant" min="1" placeholder="n°" style="max-width:70px">
-    <span class="zone-label">@ </span>
-    <input type="number" class="z-sep" min="1" placeholder="cm" style="max-width:80px">
-    <span class="zone-label">cm</span>
-    <button class="btn-del" onclick="this.parentNode.remove()">×</button>
-  `;
-  document.getElementById('zone-list').appendChild(div);
+  // d efectivo (m)
+  const dEf=+((h-rec-BR[be].d/10/2-BR[bl].d/10/2)/100).toFixed(4);
+  // lo = 2h (m)
+  const lo=+(2*h/100).toFixed(3);
+  // Separaciones (cm)
+  const sc=+Math.min(dEf/4*100,6*(BR[bl].d/10),15).toFixed(1);
+  const sm=+Math.min(dEf/2*100,30).toFixed(1);
+
+  const wu=b-2*rec,hu=h-2*rec;
+  if(wu<=0||hu<=0){toast('⚠️ RECUBRIMIENTO > SECCIÓN');return;}
+
+  const le=lEst(wu,hu,gf,be);
+  const Nec=Math.ceil(lo/(sc/100))*2;
+  const Lcen=+(L-2*lo).toFixed(3);
+  const Nem=Lcen>0?Math.ceil(Lcen/(sm/100)):0;
+  const nEst=(Nec+Nem)*n;
+  const mEst=+(le*nEst).toFixed(2);
+  const ke=toKg(mEst,be);
+
+  // Barras long con traslape sísmico (2×40ϕ en vigas sísmicas)
+  const cola_lon=(bl>=6)?BR[bl].cola12:BR[bl].cola6;
+  const lbarra=+(L+2*BR[bl].t40+2*cola_lon).toFixed(3);
+  const kl=toKg(lbarra*(ns+ni)*n,bl);
+
+  const vol=+(n*(b/100)*(h/100)*L).toFixed(3);
+  const cem=+(vol*d.c).toFixed(1);
+  const q=toQQ(ke+kl);
+
+  S.vs={m:'VIGA SÍSMICA',b,h,L,n,dEf,lo,sc,sm,Nec,Nem,vol,cem,ke,kl,qq:q};
+  sv('vs_d',dEf.toFixed(3));sv('vs_lo',lo);sv('vs_sc',sc);sv('vs_sm',sm);
+  sv('vs_ne',Nec);sv('vs_nm',Nem);sv('vs_vol',vol);sv('vs_cem',cem);
+  sv('vs_ke',ke);sv('vs_kl',kl);sv('vs_qq',q);
+
+  const wn=$('vs_wn');let ws=[];
+  if(L/h<4)ws.push('⚠️ L/h < 4 — Verificar clasificación viga corta ACI §18.6.1');
+  if(b<20)ws.push('⚠️ b < 20cm — Ancho mínimo ACI §18.6.2.1');
+  if(sc<6)ws.push(`⚠️ s_conf=${sc}cm — Muy reducido, verificar constructibilidad`);
+  if(bl>=6)ws.push(`ℹ️ Barra long. #${bl>=8?8:6}: cola gancho = 12ϕ = ${(BR[bl].cola12*100).toFixed(1)}cm — ACI §25.3`);
+  if(ws.length){wn.innerHTML=ws.join('<br>');wn.style.display='block';wn.className='wb';}
+  else{wn.innerHTML='✅ Geometría dentro de ACI 318-19 §18.6 y REP/SPIA';wn.style.display='block';wn.className='wb ok';}
+  $('res-vs').classList.add('show');
+  addPI('VIGA SÍSMICA',BR[be].lb,nEst,mEst,ke+kl,q);
+  toast('VIGA SÍSMICA ✓');
 }
 
-function calcEstribos(){
-  const ancho=val('e_ancho'),alto=val('e_alto');
-  if(!ancho||!alto){toast('⚠️ VERIFICA GEOMETRÍA');return;}
+/* ════ VIGA DE AMARRE ════ */
+function calcAM(){
+  const b=gv('am_b'),h=gv('am_h'),L=gv('am_L');if(!b||!h||!L)return;
+  const fc=+$('am_fc').value,bl=+$('am_bl').value;
+  const nb=+$('am_nb').value,sep=gvOpt('am_sep',20),rec=+$('am_rec').value;
+  const d=DOS[fc];
 
-  const rec=parseFloat(document.getElementById('e_rec').value);
-  const diamN=parseInt(document.getElementById('e_diam').value);
-  const gancho=parseInt(document.getElementById('e_gancho').value);
-  const barra=BARRAS[diamN];
+  // Traslape: si L > 9.15m (30 pies — INADEH) se incluyen traslapes de 40ϕ
+  const nTras=L>L_COMERCIAL?Math.ceil(L/L_COMERCIAL)-1:0;
+  const lb=+(L+nTras*BR[bl].t40).toFixed(2);
+  const kl=toKg(lb*nb,bl);
 
-  // Útiles
-  const wUtil=ancho-(2*rec);
-  const hUtil=alto-(2*rec);
-  if(wUtil<=0||hUtil<=0){toast('⚠️ RECUBRIMIENTO > SECCIÓN');return;}
+  const wu=b-2*rec,hu=h-2*rec;
+  if(wu<=0||hu<=0){toast('⚠️ RECUBRIMIENTO > SECCIÓN');return;}
+  // Estribos de amarre: gancho 180°–4ϕ, cola #3=6ϕ (barras pequeñas)
+  const le=lEst(wu,hu,4,3);
+  const ne=Math.ceil(L/(sep/100))+1;
+  const ke=toKg(le*ne,3);
 
-  // L pieza: perímetro + 2 ganchos (en metros)
-  const diampM=barra.diam/100; // cm → m
-  const lPieza=+(2*(wUtil+hUtil)/100 + 2*(gancho*diampM)).toFixed(3);
+  const vol=+(b/100*h/100*L).toFixed(3);
+  const cem=+(vol*d.c).toFixed(1);
+  const q=toQQ(kl+ke);
 
-  // Zonas
-  const zones=document.querySelectorAll('.zone-row');
-  let nTotal=0;
-  let zonaDetalle=[];
-  zones.forEach((z,i)=>{
-    const cant=parseFloat(z.querySelector('.z-cant').value)||0;
-    const sep=parseFloat(z.querySelector('.z-sep').value)||0;
-    if(cant>0){nTotal+=cant;zonaDetalle.push({z:i+1,cant,sep});}
-  });
+  S.am={m:'VIGA AMARRE',b,h,L,vol,cem,nb,lb,ne,le,kl,ke,qq:q};
+  sv('am_vol',vol);sv('am_cem',cem);sv('am_lb',lb);sv('am_ne',ne);
+  sv('am_kl',kl);sv('am_ke',ke);sv('am_qq',q);
 
-  if(nTotal===0){toast('⚠️ INGRESA AL MENOS UNA ZONA');return;}
-
-  const metrosTot=+(lPieza*nTotal).toFixed(2);
-  const kg=+(metrosTot*barra.peso).toFixed(2);
-  const qq=+((kg*1.07)/45.36).toFixed(3);
-
-  S.estribos={
-    diam:barra.label,diamN,wUtil,hUtil,lPieza,nTotal,
-    metrosTot,kg,qq,peso_nom:barra.peso,zonaDetalle
-  };
-
-  document.getElementById('e_wutil').textContent=wUtil.toFixed(1);
-  document.getElementById('e_hutil').textContent=hUtil.toFixed(1);
-  document.getElementById('e_lpieza').textContent=lPieza;
-  document.getElementById('e_ntotal').textContent=nTotal;
-  document.getElementById('e_metros').textContent=metrosTot;
-  document.getElementById('e_kg').textContent=kg;
-  document.getElementById('e_qq').textContent=qq;
-  document.getElementById('res-estribos').classList.add('show');
-
-  updatePlanillaItem('ESTRIBOS',barra.label,nTotal,metrosTot,kg,qq);
-  toast('ESTRIBOS CALCULADOS');
+  const wn=$('am_wn');let ws=[];
+  if(b<20||h<20)ws.push('⚠️ Sección mínima recomendada 20×20cm — INADEH/REP');
+  if(nTras>0)ws.push(`ℹ️ L=${fmt(L)}m > 9.15m (30 pies INADEH) → ${nTras} traslape(s) de ${(BR[bl].t40*100).toFixed(0)}cm (40×ϕ) incluidos`);
+  if(ws.length){wn.innerHTML=ws.join('<br>');wn.style.display='block';wn.className='wb';}
+  else{wn.innerHTML='✅ Sección y refuerzo dentro de parámetros REP/INADEH';wn.style.display='block';wn.className='wb ok';}
+  $('res-am').classList.add('show');
+  addPI('VIGA AMARRE',BR[bl].lb,nb,lb,kl+ke,q);
+  toast('AMARRE ✓');
 }
 
-function calcBarras(){
-  const lon=val('b_lon'),nB=val('b_n');
-  if(!lon||!nB)return;
+/* ════ MÓDULO ACERO — ESTRIBOS ════ */
+let zc=1;
+function addZ(){
+  zc++;const div=document.createElement('div');div.className='zr';
+  div.innerHTML=`<span class="zl">Z${zc}</span>
+    <input type="number" class="zc" min="1" placeholder="n°" style="max-width:60px">
+    <span class="zl">@</span>
+    <input type="number" class="zs" min="1" placeholder="cm" style="max-width:65px">
+    <span class="zl">cm</span>
+    <button class="bdel" onclick="this.parentNode.remove()">×</button>`;
+  $('zl').appendChild(div);
+}
 
-  const diamN=parseInt(document.getElementById('b_diam').value);
-  const barra=BARRAS[diamN];
-  const ganchoFactor=parseInt(document.getElementById('b_gancho').value);
-  const diampM=barra.diam/100;
+function calcEst(){
+  const a=gv('e_a'),h=gv('e_h');if(!a||!h)return;
+  const rec=+$('e_r').value,dn=+$('e_d').value,gf=+$('e_g').value;
+  const wu=a-2*rec,hu=h-2*rec;
+  if(wu<=0||hu<=0){toast('⚠️ RECUBRIMIENTO > SECCIÓN');return;}
+  const lp=lEst(wu,hu,gf,dn);
+  let nt=0;
+  document.querySelectorAll('#zl .zc').forEach(el=>{const c=+el.value||0;if(c>0)nt+=c;});
+  if(nt===0){toast('⚠️ INGRESA AL MENOS 1 ZONA');return;}
+  const mt=+(lp*nt).toFixed(2),kg=toKg(mt,dn),q=toQQ(kg);
+  S.est={diam:BR[dn].lb,dn,wu,hu,lp,nt,mt,kg,qq:q};
+  sv('e_wu',fmt(wu,1));sv('e_hu',fmt(hu,1));
+  sv('e_lp',lp);sv('e_nt',nt);sv('e_mt',mt);sv('e_kg',kg);sv('e_qq',q);
+  $('res-e').classList.add('show');
+  addPI('ESTRIBOS',BR[dn].lb,nt,mt,kg,q);
+  toast('ESTRIBOS ✓');
+}
 
-  // Traslape
-  let traslape;
-  const tipoT=document.getElementById('b_traslape_tipo').value;
-  if(tipoT==='manual'){
-    traslape=(parseFloat(document.getElementById('b_traslape_cm').value)||0)/100;
-  } else {
-    traslape=barra.traslape40; // 40×ϕ ACI 318 mínimo
+/* ════ MÓDULO ACERO — BARRAS ════ */
+function calcBar(){
+  const l=gv('b_l'),n=gv('b_n');if(!l||!n)return;
+  const dn=+$('b_d').value,gStr=$('b_g').value;
+  const tt=$('b_tt').value;
+  let tras=tt==='m'?(parseFloat($('b_tcm').value)||0)/100:BR[dn].t40;
+
+  // Gancho: cola corregida por diámetro (INADEH/ACI §25.3)
+  let gan=0;
+  if(gStr==='12'||gStr==='12b'){
+    gan=2*((dn>=6)?BR[dn].cola12:BR[dn].cola6); // ambos extremos
+  } else if(gStr==='6'){
+    gan=2*BR[dn].cola6;
   }
 
-  // Gancho
-  const gancho=ganchoFactor*diampM;
+  const lb=+(l+tras+gan).toFixed(3);
+  const lt=+(lb*n).toFixed(2);
+  const kg=toKg(lt,dn);const q=toQQ(kg);
+  S.bar={diam:BR[dn].lb,dn,n,tras,lb,lt,kg,qq:q};
+  sv('b_lb',lb);sv('b_tr',fmt(tras));sv('b_lt',lt);sv('b_kg',kg);sv('b_qq',q);
 
-  const lBarra=+(lon+traslape+2*gancho).toFixed(3);
-  const lTotal=+(lBarra*nB).toFixed(2);
-  const kg=+(lTotal*barra.peso).toFixed(2);
-  const qq=+((kg*1.07)/45.36).toFixed(3);
-
-  S.barras={diam:barra.label,diamN,lon,nB,traslape,gancho,lBarra,lTotal,kg,qq,peso_nom:barra.peso};
-
-  document.getElementById('b_lbarra').textContent=lBarra;
-  document.getElementById('b_traslape_r').textContent=traslape.toFixed(2);
-  document.getElementById('b_ltotal').textContent=lTotal;
-  document.getElementById('b_kg').textContent=kg;
-  document.getElementById('b_qq').textContent=qq;
-  document.getElementById('res-barras').classList.add('show');
-
-  updatePlanillaItem('BARRAS LONG.',barra.label,nB,lTotal,kg,qq);
-  toast('BARRAS CALCULADAS');
+  // Advertencia longitud comercial (INADEH)
+  const wn=$('b_wn');let ws=[];
+  if(l>L_COMERCIAL)ws.push(`ℹ️ Elemento L=${fmt(l)}m > 9.15m (30 pies INADEH) → traslape de ${(BR[dn].t40*100).toFixed(0)}cm incluido`);
+  if(dn>=6)ws.push(`ℹ️ #${dn>=8?8:6}: cola gancho = 12ϕ = ${(BR[dn].cola12*100).toFixed(1)}cm — ACI §25.3.2`);
+  if(ws.length){wn.innerHTML=ws.join('<br>');wn.style.display='block';}else wn.style.display='none';
+  $('res-b').classList.add('show');
+  addPI('BARRAS LONG.',BR[dn].lb,n,lt,kg,q);
+  toast('BARRAS ✓');
 }
 
-/* PLANILLA DE HIERRO */
-function updatePlanillaItem(elem,diam,n,metros,kg,qq){
-  const idx=planillaItems.findIndex(i=>i.elem===elem);
-  const obj={elem,diam,n,metros,kg,qq};
-  if(idx>=0)planillaItems[idx]=obj;
-  else planillaItems.push(obj);
+/* ════ PLANILLA ════ */
+function addPI(elem,diam,n,m,kg,q){
+  const idx=PI.findIndex(i=>i.e===elem);
+  const o={e:elem,d:diam,n:Math.round(n),m:+parseFloat(m).toFixed(2),kg:+parseFloat(kg).toFixed(2),q:+parseFloat(q).toFixed(3)};
+  if(idx>=0)PI[idx]=o;else PI.push(o);
 }
-
-function buildPlanilla(){
-  const body=document.getElementById('planilla-body');
-  const foot=document.getElementById('planilla-foot');
-  if(!planillaItems.length){
-    body.innerHTML='<tr><td colspan="6" style="color:var(--dim);text-align:center;padding:20px">Calcula estribos y barras para ver planilla</td></tr>';
+function buildPlan(){
+  const body=$('pl-body'),foot=$('pl-foot');
+  if(!PI.length){
+    body.innerHTML='<tr><td colspan="6" style="color:var(--dim);text-align:center;padding:13px">Calcula módulos para ver planilla</td></tr>';
     foot.style.display='none';return;
   }
-  let tkgSum=0,tqqSum=0;
-  body.innerHTML='';
-  planillaItems.forEach(it=>{
-    tkgSum+=it.kg;tqqSum+=it.qq;
+  let tk=0,tq=0;body.innerHTML='';
+  PI.forEach(it=>{tk+=it.kg;tq+=it.q;
     body.innerHTML+=`<tr>
-      <td class="td-label">${it.elem}</td>
-      <td class="td-steel">${it.diam}</td>
-      <td>${it.n}</td>
-      <td>${it.metros.toFixed(2)} m</td>
-      <td class="td-ok">${it.kg.toFixed(2)}</td>
-      <td class="td-steel" style="font-weight:700">${it.qq.toFixed(3)}</td>
+      <td class="tl">${it.e}</td><td class="tst">${it.d}</td>
+      <td>${it.n}</td><td>${it.m}m</td>
+      <td class="tok">${it.kg}</td>
+      <td class="tst" style="font-weight:700">${it.q}</td>
     </tr>`;
   });
-  document.getElementById('pl-kg-total').textContent=tkgSum.toFixed(2)+' kg';
-  document.getElementById('pl-qq-total').textContent=tqqSum.toFixed(3)+' qq';
+  sv('pl-kg',fmt(tk)+' kg');sv('pl-qq',fmt(tq,3)+' qq');
   foot.style.display='';
 }
 
-/* EXPORT PLANILLA PDF */
-function exportPlanilla(){
-  if(!planillaItems.length){toast('⚠️ NADA QUE EXPORTAR');return;}
-  const {jsPDF}=window.jspdf;
-  const doc=new jsPDF();
+/* ════ RESUMEN ════ */
+function buildRes(){buildTabR();buildConcl();drawISO();buildChart();}
 
-  doc.setFillColor(10,30,58);doc.rect(0,0,210,28,'F');
-  doc.setTextColor(240,165,0);doc.setFontSize(16);doc.setFont('helvetica','bold');
-  doc.text('PLANILLA DE HIERRO',14,12);
-  doc.setFontSize(9);doc.setFont('helvetica','normal');
-  doc.setTextColor(150,180,210);
-  doc.text('StructuraPro · Cálculo de Acero de Refuerzo · ACI 318 / Panamá',14,19);
-  doc.text('Fecha: '+new Date().toLocaleString('es'),14,25);
-
-  let y=35;
-  const rows=planillaItems.map(it=>[it.elem,it.diam,it.n,it.metros.toFixed(2)+' m',it.kg.toFixed(2)+' kg',it.qq.toFixed(3)+' qq']);
-  const tkgSum=planillaItems.reduce((a,b)=>a+b.kg,0);
-  const tqqSum=planillaItems.reduce((a,b)=>a+b.qq,0);
-
-  doc.autoTable({
-    startY:y,
-    head:[['ELEMENTO','DIÁMETRO','N°','METROS','PESO (kg)','QUINTALES']],
-    body:rows,
-    foot:[['','','TOTAL','',tkgSum.toFixed(2)+' kg',tqqSum.toFixed(3)+' qq']],
-    styles:{font:'courier',fontSize:10},
-    headStyles:{fillColor:[10,30,58],textColor:[240,165,0],fontStyle:'bold'},
-    footStyles:{fillColor:[20,50,90],textColor:[240,165,0],fontStyle:'bold'},
-    alternateRowStyles:{fillColor:[240,245,255]},
-    margin:{left:10,right:10}
-  });
-
-  y=doc.lastAutoTable.finalY+12;
-  doc.setFillColor(20,50,90);doc.rect(10,y-4,190,7,'F');
-  doc.setTextColor(240,165,0);doc.setFontSize(10);doc.setFont('helvetica','bold');
-  doc.text('TABLA DE CONSTANTES — ACERO PANAMÁ',14,y);
-  y+=8;
-  doc.autoTable({
-    startY:y,
-    head:[['BARRA','DIÁMETRO','PESO (kg/m)','TRASLAPE 40×ϕ (m)']],
-    body:[
-      ['#3 (3/8")','9.5 mm','0.560','0.38'],
-      ['#4 (1/2")','12.7 mm','0.994','0.508'],
-      ['#5 (5/8")','15.9 mm','1.552','0.636'],
-      ['#6 (3/4")','19.1 mm','2.235','0.764'],
-      ['#8 (1")','25.4 mm','3.973','1.016'],
-    ],
-    styles:{font:'courier',fontSize:9},
-    headStyles:{fillColor:[10,30,58],textColor:[192,200,216]},
-    alternateRowStyles:{fillColor:[240,245,255]},
-    margin:{left:10,right:10}
-  });
-
-  y=doc.lastAutoTable.finalY+10;
-  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(80,100,120);
-  doc.text('* Cantidades incluyen 7% de desperdicio. Factor conversión: 45.36 kg = 1 quintal.',12,y);
-  doc.text('* Traslape mínimo 40×ϕ según ACI 318-19. Verificar con diseñador estructural.',12,y+5);
-  doc.text('* Este documento es orientativo. Requiere aprobación de ingeniero estructural colegiado.',12,y+10);
-
-  const pages=doc.internal.getNumberOfPages();
-  for(let i=1;i<=pages;i++){
-    doc.setPage(i);
-    doc.setFillColor(10,30,58);doc.rect(0,285,210,12,'F');
-    doc.setTextColor(100,130,160);doc.setFontSize(7);
-    doc.text('STRUCTURAPRO · Planilla de Hierro · ACI 318',14,292);
-    doc.text(`Página ${i}/${pages}`,196,292,{align:'right'});
-  }
-
-  doc.save('StructuraPro_Planilla_Hierro.pdf');
-  toast('PLANILLA EXPORTADA');
-}
-
-/* ══ RESUMEN ══ */
-function buildResumen(){
-  buildTable();buildConclusiones();drawISO();buildChart();
-}
-
-function buildTable(){
-  const items=[S.concreto,S.muros,S.columnas].filter(Boolean);
-  const body=document.getElementById('tbl-body');
-  const foot=document.getElementById('tbl-foot');
+function buildTabR(){
+  const items=[S.con,S.mur,S.colR,S.colTL,S.colCi,S.vs,S.am].filter(Boolean);
+  const body=$('tb-body'),foot=$('tb-foot');
   if(!items.length){
-    body.innerHTML='<tr><td colspan="4" class="td-label" style="color:var(--dim);text-align:center;padding:20px">Calcula módulos para ver resumen</td></tr>';
+    body.innerHTML='<tr><td colspan="4" style="color:var(--dim);text-align:center;padding:13px">Calcula módulos</td></tr>';
     foot.style.display='none';return;
   }
   let tc=0,ta=0,tg=0;body.innerHTML='';
   items.forEach(it=>{
-    const c=it.cem||0,a=it.are||0,g=it.gra||0;
-    tc+=c;ta+=a;tg+=g;
-    body.innerHTML+=`<tr>
-      <td class="td-label">${it.modulo}</td>
-      <td class="td-ok">${c} sac</td>
-      <td>${a} m³</td>
-      <td>${g?g+' m³':'—'}</td>
-    </tr>`;
+    const c=it.cem||0,a=it.are||0,g=it.gra||0;tc+=c;ta+=a;tg+=g;
+    body.innerHTML+=`<tr><td class="tl">${it.m}</td><td class="tok">${c} sac</td>
+      <td>${a?a+' m³':'—'}</td><td>${g?g+' m³':'—'}</td></tr>`;
   });
-  document.getElementById('t-cem').textContent=tc.toFixed(1)+' sac';
-  document.getElementById('t-are').textContent=ta.toFixed(2)+' m³';
-  document.getElementById('t-gra').textContent=tg.toFixed(2)+' m³';
+  sv('t-c',fmt(tc,1)+' sac');sv('t-a',fmt(ta)+' m³');sv('t-g',fmt(tg)+' m³');
   foot.style.display='';
 
-  if(S.columnas){
-    const aw=document.getElementById('tbl-acero-wrap');
-    const ab=document.getElementById('tbl-acero-body');
-    const qqCol=+((S.columnas.aceroTotal*1.07)/45.36).toFixed(3);
-    aw.style.display='';
-    let rows=`
-      <tr><td class="td-label">Acero Long. Ø5/8"</td><td>${S.columnas.varillasTotal} var.</td>
-          <td class="td-ok">${S.columnas.aceroLong} kg</td><td>—</td></tr>
-      <tr><td class="td-label">Estribos Ø3/8"</td><td>${S.columnas.nEst} estrib.</td>
-          <td class="td-ok">${S.columnas.aceroEst} kg</td><td>—</td></tr>`;
-    if(S.estribos)rows+=`
-      <tr><td class="td-label">Estribos (módulo acero)</td><td>${S.estribos.nTotal}</td>
-          <td class="td-ok">${S.estribos.kg} kg</td><td class="td-steel">${S.estribos.qq} qq</td></tr>`;
-    if(S.barras)rows+=`
-      <tr><td class="td-label">Barras Long. (módulo acero)</td><td>${S.barras.nB} bar.</td>
-          <td class="td-ok">${S.barras.kg} kg</td><td class="td-steel">${S.barras.qq} qq</td></tr>`;
-    rows+=`<tr style="background:rgba(240,165,0,.06)">
-          <td class="td-label">TOTAL COLUMNAS</td><td>—</td>
-          <td class="td-total">${S.columnas.aceroTotal} kg</td>
-          <td class="td-total">${qqCol} qq</td></tr>`;
-    ab.innerHTML=rows;
+  const aceros=[S.colR,S.colTL,S.colCi,S.vs,S.am].filter(Boolean);
+  if(aceros.length||PI.length){
+    $('ta-wrap').style.display='';
+    const ab=$('ta-body');ab.innerHTML='';
+    aceros.forEach(it=>{
+      ab.innerHTML+=`<tr><td class="tl">${it.m}</td>
+        <td class="tok">${fmt(+(it.ke+it.kl))}</td>
+        <td class="tst">${it.qq}</td><td>Est.+Long.</td></tr>`;
+    });
+    PI.forEach(it=>{
+      ab.innerHTML+=`<tr><td class="tl">${it.e}</td>
+        <td class="tok">${it.kg}</td><td class="tst">${it.q}</td><td>${it.d}</td></tr>`;
+    });
   }
 }
 
-function buildConclusiones(){
-  const box=document.getElementById('concl-items');
-  const items=[];
-  if(S.concreto) items.push(`Volumen concreto estructural: <b>${S.concreto.vol.toFixed(2)} m³</b> · f'c=${S.concreto.fc} kg/cm². Cemento requerido: <b>${S.concreto.cem} sacos</b>.`);
-  if(S.concreto&&S.concreto.fc<210) items.push('⚠️ f\'c = 175 kg/cm² es mínimo para uso estructural. Considere f\'c ≥ 210 para elementos bajo carga.');
-  if(S.muros) items.push(`Mampostería: <b>${S.muros.bloques} bloques</b> tipo ${S.muros.tipo}cm, 5% desperdicio incluido.`);
-  if(S.columnas){
-    const ratio=S.columnas.aceroTotal/(S.columnas.vol*7850);
-    items.push(`Cuantía de acero estimada: <b>${(ratio*100).toFixed(2)}%</b>. ACI 318 rango: 1% – 8%.`);
-    if(S.columnas.s<25) items.push('⚠️ Sección < 25 cm puede ser insuficiente bajo cargas sísmicas.');
-    if(S.columnas.h/S.columnas.s*100>20) items.push('⚠️ Esbeltez > 20. Verificar efectos P-Δ según ACI 318 cap. 6.');
+function buildConcl(){
+  const box=$('concl-items');const it=[];
+  if(S.con)it.push(`Concreto: <b>${fmt(S.con.vol)} m³</b> · f'c=${S.con.fc} kg/cm² · <b>${S.con.cem} sacos</b> cemento Portland.`);
+  if(S.colR){
+    it.push(`Col ${S.colR.b}×${S.colR.h}cm: s_conf=${S.colR.sc}cm · lo=${fmt(S.colR.loCm/100)}m · Acero total: <b>${fmt(+(S.colR.ke+S.colR.kl))} kg = ${S.colR.qq} qq</b>.`);
+    if(S.colR.xt)it.push('⚠️ Columna b>35cm: crossties intermedios requeridos — ACI §25.7.2');
   }
-  if(S.estribos) items.push(`Estribos ${S.estribos.diam}: <b>${S.estribos.nTotal} und</b> · L pieza = ${S.estribos.lPieza} m · Total: <b>${S.estribos.qq} qq</b>.`);
-  if(S.barras) items.push(`Barras long. ${S.barras.diam}: traslape = ${(S.barras.traslape*100).toFixed(0)} cm · Total: <b>${S.barras.qq} qq</b>.`);
-  items.push('📌 Sumar 10-15% adicional a materiales por mermas y desperdicios en obra.');
-  items.push('📌 Este reporte no sustituye planos estructurales firmados por ing. estructural colegiado.');
-  box.innerHTML=items.map(i=>`<div class="concl-item"><div class="concl-dot"></div><p>${i}</p></div>`).join('');
+  if(S.colTL)it.push(`Col T/L: 2 grupos de estribos (alma + ala) · <b>${S.colTL.qq} qq</b>.`);
+  if(S.colCi)it.push(`Col cilíndrica Ø${S.colCi.D}cm: espiral continua ${S.colCi.Nv} vueltas · <b>${S.colCi.qq} qq</b>.`);
+  if(S.vs){
+    it.push(`Viga sísmica ${S.vs.b}×${S.vs.h}cm: s_conf=${S.vs.sc}cm · s_cen=${S.vs.sm}cm · Est.conf.=${S.vs.Nec} und · <b>${S.vs.qq} qq</b>.`);
+    if(S.vs.L/S.vs.h<4)it.push('⚠️ L/h < 4 — Verificar clasificación viga corta — ACI §18.6.1');
+  }
+  if(S.am)it.push(`Viga amarre ${S.am.b}×${S.am.h}cm · L=${fmt(S.am.L)}m · ${S.am.nb} barras corridas · <b>${S.am.qq} qq</b>.`);
+  it.push('📌 Recubrimientos: interior ≥2.5cm · exterior ≥4.0cm · suelo/marino ≥7.5cm — INADEH/ACI 318');
+  it.push('📌 Cola gancho 90°: 6ϕ para #3–#5 | 12ϕ para #6 y #8 — ACI §25.3.2');
+  it.push('📌 Long. comercial Panamá: 9.15m (30 pies) — INADEH. Traslape mínimo: 40×ϕ — REP/COPANIT');
+  it.push('📌 Agregar 7% acero · 10–15% concreto · 5% bloques por mermas en obra.');
+  it.push('📌 Reporte orientativo. Requiere validación de ing. estructural colegiado — REP/SPIA Panamá.');
+  box.innerHTML=it.map(i=>`<div class="ci"><div class="cd"></div><p>${i}</p></div>`).join('');
 }
 
-/* ── ISO 3D ── */
-let isoAngle=0,isoAnim=null;
+/* ════ ISO 3D ════ */
+let isoA=0,isoAF=null;
 function drawISO(){
-  const canvas=document.getElementById('isoCanvas');
-  canvas.width=canvas.offsetWidth||320;canvas.height=280;
-  const ctx=canvas.getContext('2d');
-  const n=S.columnas?.n||4,h=S.columnas?.h||3,s=(S.columnas?.s||30)/100;
-  const cols=Math.ceil(Math.sqrt(n)),rows=Math.ceil(n/cols),span=3.5;
-  if(isoAnim) cancelAnimationFrame(isoAnim);
+  const cv=$('isoCanvas');if(!cv)return;
+  cv.width=cv.offsetWidth||300;cv.height=240;
+  const ctx=cv.getContext('2d');
+  const nCol=S.colR?.n||S.colCi?.n||4;
+  const h=S.colR?.L||S.colCi?.L||3;
+  const s=S.colR?Math.max(S.colR.b,S.colR.h)/100:(S.colCi?.D||30)/100;
+  const cols=Math.ceil(Math.sqrt(nCol)),rows=Math.ceil(nCol/cols),sp=3.5;
+  if(isoAF)cancelAnimationFrame(isoAF);
   function frame(){
-    isoAngle+=0.008;ctx.clearRect(0,0,canvas.width,canvas.height);
-    drawScene(ctx,canvas.width,canvas.height,isoAngle,cols,rows,span,h,s);
-    isoAnim=requestAnimationFrame(frame);
+    isoA+=0.007;ctx.clearRect(0,0,cv.width,cv.height);
+    drawSc(ctx,cv.width,cv.height,isoA,cols,rows,sp,h,s);
+    isoAF=requestAnimationFrame(frame);
   }
   frame();
 }
-
-function iso(x,y,z,angle,scale,ox,oy){
-  const a=angle,sx=(x*Math.cos(a)-y*Math.sin(a))*scale;
-  const sy=((x*Math.sin(a)+y*Math.cos(a))*0.5-z)*scale;
-  return{x:ox+sx,y:oy+sy};
+function ip(x,y,z,a,sc,ox,oy){
+  return{x:ox+(x*Math.cos(a)-y*Math.sin(a))*sc,
+         y:oy+((x*Math.sin(a)+y*Math.cos(a))*.5-z)*sc};
 }
-
-function drawBox(ctx,x,y,z,w,d,h,angle,scale,ox,oy,colors){
-  const pts=[[x,y,z],[x+w,y,z],[x+w,y+d,z],[x,y+d,z],[x,y,z+h],[x+w,y,z+h],[x+w,y+d,z+h],[x,y+d,z+h]]
-    .map(p=>iso(p[0],p[1],p[2],angle,scale,ox,oy));
-  [[4,5,6,7,colors[0]],[1,2,6,5,colors[1]],[0,1,5,4,colors[2]]].forEach(face=>{
-    const c=face.pop();
-    ctx.beginPath();face.forEach((i,j)=>j?ctx.lineTo(pts[i].x,pts[i].y):ctx.moveTo(pts[i].x,pts[i].y));
+function dbx(ctx,x,y,z,w,d,h,a,sc,ox,oy,cl){
+  const p=[[x,y,z],[x+w,y,z],[x+w,y+d,z],[x,y+d,z],
+            [x,y,z+h],[x+w,y,z+h],[x+w,y+d,z+h],[x,y+d,z+h]]
+    .map(pt=>ip(pt[0],pt[1],pt[2],a,sc,ox,oy));
+  [[4,5,6,7,cl[0]],[1,2,6,5,cl[1]],[0,1,5,4,cl[2]]].forEach(f=>{
+    const c=f.pop();
+    ctx.beginPath();
+    f.forEach((i,j)=>j?ctx.lineTo(p[i].x,p[i].y):ctx.moveTo(p[i].x,p[i].y));
     ctx.closePath();ctx.fillStyle=c;ctx.fill();
-    ctx.strokeStyle=colors[3];ctx.lineWidth=.5;ctx.stroke();
+    ctx.strokeStyle=cl[3];ctx.lineWidth=.5;ctx.stroke();
   });
 }
-
-function drawScene(ctx,W,H,angle,cols,rows,span,colH,colS){
-  const scale=34,ox=W/2,oy=H*0.75;
-  ctx.strokeStyle='rgba(0,100,200,0.18)';ctx.lineWidth=0.5;
+function drawSc(ctx,W,H,a,cols,rows,sp,colH,colS){
+  const sc=30,ox=W/2,oy=H*.75;
+  ctx.strokeStyle='rgba(0,100,200,0.12)';ctx.lineWidth=.5;
   for(let i=-1;i<=cols+1;i++){
-    const a=iso(-span*.5+i*span,-span*.5,0,angle,scale,ox,oy);
-    const b=iso(-span*.5+i*span,rows*span+span*.5,0,angle,scale,ox,oy);
-    ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+    const p1=ip(-sp*.5+i*sp,-sp*.5,0,a,sc,ox,oy);
+    const p2=ip(-sp*.5+i*sp,rows*sp+sp*.5,0,a,sc,ox,oy);
+    ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();
   }
   for(let j=-1;j<=rows+1;j++){
-    const a=iso(-span*.5,j*span-span*.5,0,angle,scale,ox,oy);
-    const b=iso(cols*span+span*.5,j*span-span*.5,0,angle,scale,ox,oy);
-    ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+    const p1=ip(-sp*.5,j*sp-sp*.5,0,a,sc,ox,oy);
+    const p2=ip(cols*sp+sp*.5,j*sp-sp*.5,0,a,sc,ox,oy);
+    ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();
   }
-  let drawn=0;
+  let dr=0;
   for(let r=0;r<rows;r++){
     for(let c=0;c<cols;c++){
-      if(drawn>=cols*rows)break;
-      const bx=c*span-colS/2,by=r*span-colS/2,zap=colS*2;
-      drawBox(ctx,bx-zap*.5,by-zap*.5,-0.5,colS+zap,colS+zap,0.4,angle,scale,ox,oy,['#3a2800','#1e1400','#2a1c00','#5a3c00']);
-      drawBox(ctx,bx-colS*.3,by-colS*.3,-0.1,colS*1.6,colS*1.6,0.25,angle,scale,ox,oy,['#4a3800','#2a2000','#3a2c00','#6a5000']);
-      drawBox(ctx,bx,by,0,colS,colS,colH,angle,scale,ox,oy,['rgba(240,165,0,0.7)','rgba(180,110,0,0.85)','rgba(160,90,0,0.9)','rgba(100,60,0,0.5)']);
-      if(c<cols-1){const vw=span-colS,vy=by+colS*.3;drawBox(ctx,bx+colS,vy,colH-0.3,vw,colS*.6,0.3,angle,scale,ox,oy,['rgba(0,180,255,0.5)','rgba(0,120,200,0.6)','rgba(0,100,180,0.7)','rgba(0,80,150,0.3)']);}
-      if(r<rows-1){const vx=bx+colS*.3;drawBox(ctx,vx,by+colS,0,colS*.6,span-colS,colH-0.3,angle,scale,ox,oy,['rgba(0,180,255,0.5)','rgba(0,120,200,0.6)','rgba(0,100,180,0.7)','rgba(0,80,150,0.3)']);}
-      drawn++;
+      if(dr>=cols*rows)break;
+      const bx=c*sp-colS/2,by=r*sp-colS/2,zap=colS*2;
+      dbx(ctx,bx-zap*.5,by-zap*.5,-.5,colS+zap,colS+zap,.4,a,sc,ox,oy,
+        ['#3a2800','#1e1400','#2a1c00','#5a3c00']);
+      dbx(ctx,bx,by,0,colS,colS,colH,a,sc,ox,oy,
+        ['rgba(240,165,0,.7)','rgba(180,110,0,.85)','rgba(160,90,0,.9)','rgba(100,60,0,.4)']);
+      if(S.vs&&c<cols-1)
+        dbx(ctx,bx+colS,by+colS*.3,colH-.3,sp-colS,colS*.6,.25,a,sc,ox,oy,
+          ['rgba(167,139,250,.5)','rgba(120,100,200,.6)','rgba(100,80,180,.7)','rgba(80,60,150,.3)']);
+      if(S.am&&r<rows-1)
+        dbx(ctx,bx+colS*.3,by+colS,0,colS*.6,sp-colS,colH-.3,a,sc,ox,oy,
+          ['rgba(52,211,153,.4)','rgba(30,160,110,.5)','rgba(20,140,100,.6)','rgba(10,100,80,.3)']);
+      dr++;
     }
   }
   ctx.font='10px Share Tech Mono';
-  ['rgba(240,165,0,0.8)■ COLUMNA','rgba(0,180,255,0.8)■ VIGA','rgba(90,60,0,0.9)■ CIMENTACIÓN'].forEach((s,i)=>{
-    const[col,...rest]=s.split('■');
-    ctx.fillStyle=col;ctx.fillText('■ '+rest.join(''),10,H-50+i*14);
+  [['rgba(240,165,0,.9)','■ COLUMNA'],['rgba(167,139,250,.9)','■ VIGA SÍS.'],
+   ['rgba(52,211,153,.8)','■ AMARRE'],['rgba(90,60,0,.9)','■ CIMENT.']].forEach(([col,txt],i)=>{
+    ctx.fillStyle=col;ctx.fillText(txt,8,H-50+i*13);
   });
-  ctx.fillStyle='var(--dim)';
-  ctx.fillText(`n=${cols*rows} col · h=${colH}m · s=${(colS*100).toFixed(0)}cm`,10,H-8);
+  ctx.fillStyle='rgba(90,120,160,.8)';
+  ctx.fillText(`n=${cols*rows} col · H=${colH}m · s=${(colS*100).toFixed(0)}cm`,8,H-5);
 }
 
-/* ── CHART ── */
+/* ════ CHART ════ */
 let chartInst=null;
 function buildChart(){
   const labels=[],cems=[],ares=[],gras=[];
-  [S.concreto,S.muros,S.columnas].filter(Boolean).forEach(it=>{
-    labels.push(it.modulo);cems.push(it.cem||0);
-    ares.push((it.are||0)*1000);gras.push((it.gra||0)*1000);
+  [S.con,S.mur,S.colR,S.vs,S.am].filter(Boolean).forEach(it=>{
+    labels.push((it.m||'').substring(0,10));
+    cems.push(it.cem||0);
+    ares.push(+(it.are||0).toFixed(2));
+    gras.push(+(it.gra||0).toFixed(2));
   });
   if(!labels.length)return;
-  if(chartInst)chartInst.destroy();
-  chartInst=new Chart(document.getElementById('matChart').getContext('2d'),{
+  // FIX-2: Destruir instancia y reemplazar canvas para eliminar ResizeObserver y listeners huérfanos de Chart.js 4.x
+  if(chartInst){chartInst.destroy();chartInst=null;}
+  const oldCanvas=$('matChart');if(!oldCanvas)return;
+  const parent=oldCanvas.parentNode;
+  const newCanvas=oldCanvas.cloneNode(false);
+  parent.replaceChild(newCanvas,oldCanvas);
+  const ctx=newCanvas;
+  chartInst=new Chart(ctx.getContext('2d'),{
     type:'bar',
     data:{labels,datasets:[
-      {label:'Cemento (sacos)',data:cems,backgroundColor:'rgba(240,165,0,0.7)',borderColor:'#f0a500',borderWidth:1},
-      {label:'Arena (×10⁻³m³)',data:ares,backgroundColor:'rgba(0,201,255,0.4)',borderColor:'#00c9ff',borderWidth:1},
-      {label:'Grava (×10⁻³m³)',data:gras,backgroundColor:'rgba(0,229,160,0.4)',borderColor:'#00e5a0',borderWidth:1}
+      {label:'Cemento (sacos)',data:cems,backgroundColor:'rgba(240,165,0,.7)',borderColor:'#f0a500',borderWidth:1},
+      {label:'Arena (m³)',data:ares,backgroundColor:'rgba(0,201,255,.4)',borderColor:'#00c9ff',borderWidth:1},
+      {label:'Grava (m³)',data:gras,backgroundColor:'rgba(0,229,160,.4)',borderColor:'#00e5a0',borderWidth:1}
     ]},
-    options:{
-      responsive:true,
-      plugins:{legend:{labels:{color:'#7a95b0',font:{family:'Rajdhani',size:11}}}},
+    options:{responsive:true,
+      plugins:{legend:{labels:{color:'#7a95b0',font:{family:'Rajdhani',size:10}}}},
       scales:{
-        x:{ticks:{color:'#7a95b0'},grid:{color:'rgba(26,58,96,0.4)'}},
-        y:{ticks:{color:'#7a95b0',font:{family:'Share Tech Mono',size:10}},grid:{color:'rgba(26,58,96,0.4)'}}
+        x:{ticks:{color:'#7a95b0',font:{size:10}},grid:{color:'rgba(26,58,96,.4)'}},
+        y:{ticks:{color:'#7a95b0',font:{family:'Share Tech Mono',size:9}},grid:{color:'rgba(26,58,96,.4)'}}
       }
     }
   });
 }
 
-/* ── EXPORT PDF COMPLETO ── */
-function exportPDF(){
-  const {jsPDF}=window.jspdf;
-  const doc=new jsPDF();
-
-  doc.setFillColor(10,30,58);doc.rect(0,0,210,30,'F');
-  doc.setTextColor(240,165,0);doc.setFontSize(18);doc.setFont('helvetica','bold');
-  doc.text('STRUCTURAPRO v3.0',14,12);
-  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(150,180,210);
-  doc.text('ESTIMADOR ESTRUCTURAL DE MATERIALES — ACI 318 / Panamá',14,19);
-  doc.text('Generado: '+new Date().toLocaleString('es'),14,25);
-
-  let y=38;
-  function section(t){
-    doc.setFillColor(20,50,90);doc.rect(10,y-5,190,8,'F');
-    doc.setTextColor(240,165,0);doc.setFontSize(10);doc.setFont('helvetica','bold');
-    doc.text(t,14,y);y+=10;doc.setTextColor(30,30,30);
-  }
-
-  if(S.concreto){
-    section('CONCRETO ESTRUCTURAL');
-    doc.autoTable({startY:y,
-      head:[['PARÁMETRO','VALOR','UNIDAD']],
-      body:[['Área',S.concreto.area,'m²'],['Espesor',S.concreto.esp,'cm'],
-        ["f'c",S.concreto.fc,'kg/cm²'],['Volumen',S.concreto.vol.toFixed(2),'m³'],
-        ['Cemento',S.concreto.cem,'sacos'],['Arena',S.concreto.are,'m³'],
-        ['Grava',S.concreto.gra,'m³'],['Agua',S.concreto.agua,'L'],
-        ['Dosif.',S.concreto.ratio,'C:A:G']],
-      styles:{font:'courier',fontSize:9},headStyles:{fillColor:[10,30,58],textColor:[240,165,0]},
-      alternateRowStyles:{fillColor:[240,245,255]},margin:{left:10,right:10}});
-    y=doc.lastAutoTable.finalY+10;
-  }
-  if(S.muros){
-    if(y>220)doc.addPage();
-    section('MUROS DE BLOQUES');
-    doc.autoTable({startY:y,
-      head:[['PARÁMETRO','VALOR','UNIDAD']],
-      body:[['Área',S.muros.area,'m²'],['Bloque',S.muros.tipo,'cm'],
-        ['Bloques',S.muros.bloques,'und'],['Cemento',S.muros.cem,'sacos'],
-        ['Arena',S.muros.are,'m³'],['Agua',S.muros.agua,'L']],
-      styles:{font:'courier',fontSize:9},headStyles:{fillColor:[10,30,58],textColor:[240,165,0]},
-      alternateRowStyles:{fillColor:[240,245,255]},margin:{left:10,right:10}});
-    y=doc.lastAutoTable.finalY+10;
-  }
-  if(S.columnas){
-    if(y>220)doc.addPage();
-    section('COLUMNAS ESTRUCTURALES');
-    const qq=+((S.columnas.aceroTotal*1.07)/45.36).toFixed(3);
-    doc.autoTable({startY:y,
-      head:[['PARÁMETRO','VALOR','UNIDAD']],
-      body:[['N° columnas',S.columnas.n,''],['Altura',S.columnas.h,'m'],
-        ['Sección',S.columnas.s,'cm'],['Concreto',S.columnas.vol,'m³'],
-        ['Cemento',S.columnas.cem,'sacos'],['Acero long.',S.columnas.aceroLong,'kg'],
-        ['Estribos',S.columnas.aceroEst,'kg'],['Acero total',S.columnas.aceroTotal,'kg'],
-        ['Quintales acero',qq,'qq']],
-      styles:{font:'courier',fontSize:9},headStyles:{fillColor:[10,30,58],textColor:[240,165,0]},
-      alternateRowStyles:{fillColor:[240,245,255]},margin:{left:10,right:10}});
-    y=doc.lastAutoTable.finalY+10;
-  }
-  if(planillaItems.length){
-    if(y>200)doc.addPage();
-    section('PLANILLA DE HIERRO');
-    const tkgSum=planillaItems.reduce((a,b)=>a+b.kg,0);
-    const tqqSum=planillaItems.reduce((a,b)=>a+b.qq,0);
-    doc.autoTable({startY:y,
-      head:[['ELEMENTO','DIÁMETRO','N°','METROS','PESO (kg)','QUINTALES']],
-      body:planillaItems.map(it=>[it.elem,it.diam,it.n,it.metros.toFixed(2)+' m',it.kg.toFixed(2)+' kg',it.qq.toFixed(3)+' qq']),
-      foot:[['','','TOTAL','',tkgSum.toFixed(2)+' kg',tqqSum.toFixed(3)+' qq']],
-      styles:{font:'courier',fontSize:9},headStyles:{fillColor:[10,30,58],textColor:[240,165,0]},
-      footStyles:{fillColor:[20,50,90],textColor:[240,165,0],fontStyle:'bold'},
-      alternateRowStyles:{fillColor:[240,245,255]},margin:{left:10,right:10}});
-    y=doc.lastAutoTable.finalY+10;
-  }
-  if(y>220)doc.addPage();
-  section('DOSIFICACIÓN ACI 318 (referencia)');
-  doc.autoTable({startY:y,
-    head:[["f'c",'Cemento','Arena','Grava','Agua']],
-    body:[[175,'6.5 sac','0.52 m³','0.78 m³','190 L'],[210,'7.0 sac','0.56 m³','0.84 m³','185 L'],
-      [245,'7.5 sac','0.50 m³','0.75 m³','180 L'],[280,'8.0 sac','0.48 m³','0.72 m³','175 L']],
-    styles:{font:'courier',fontSize:9},headStyles:{fillColor:[10,30,58],textColor:[240,165,0]},
+/* ════ PDF PLANILLA ════ */
+function exportPlan(){
+  if(!PI.length){toast('⚠️ NADA QUE EXPORTAR');return;}
+  const{jsPDF}=window.jspdf;const doc=new jsPDF();
+  doc.setFillColor(10,30,58);doc.rect(0,0,210,26,'F');
+  doc.setTextColor(240,165,0);doc.setFontSize(14);doc.setFont('helvetica','bold');
+  doc.text('PLANILLA DE HIERRO',14,11);
+  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(150,180,210);
+  doc.text('StructuraPro v3.2 · ACI 318 · INADEH · Grado 60 · Panamá | '+new Date().toLocaleString('es'),14,18);
+  doc.text('Long. comercial: 9.15m (30 pies) · Traslape mín. 40ϕ · Cola 90°: 6ϕ(#3–#5) / 12ϕ(#6–#8)',14,23);
+  const tk=PI.reduce((a,b)=>a+b.kg,0);
+  const tq=PI.reduce((a,b)=>a+b.q,0);
+  doc.autoTable({startY:30,
+    head:[['ELEMENTO','DIÁMETRO','N°','METROS','PESO (kg)','QUINTALES']],
+    body:PI.map(i=>[i.e,i.d,i.n,i.m+' m',i.kg+' kg',i.q+' qq']),
+    foot:[['','','TOTAL','',fmt(tk)+' kg',fmt(tq,3)+' qq']],
+    styles:{font:'courier',fontSize:9},
+    headStyles:{fillColor:[10,30,58],textColor:[240,165,0],fontStyle:'bold'},
+    footStyles:{fillColor:[20,50,90],textColor:[240,165,0],fontStyle:'bold'},
     alternateRowStyles:{fillColor:[240,245,255]},margin:{left:10,right:10}});
-  y=doc.lastAutoTable.finalY+12;
-
-  if(y>240)doc.addPage();
-  doc.setFillColor(20,50,90);doc.rect(10,y-4,190,7,'F');
-  doc.setTextColor(240,165,0);doc.setFontSize(10);doc.setFont('helvetica','bold');
-  doc.text('CONCLUSIONES Y RECOMENDACIONES',14,y);y+=8;
-  doc.setTextColor(30,30,50);doc.setFontSize(8.5);doc.setFont('helvetica','normal');
-  const notas=[
-    '• Cantidades incluyen 7% desperdicio en acero y 5% en bloques.',
-    '• Dosificación concreto según ACI 318. Verificar norma local vigente.',
-    '• Cuantía mínima columnas: 1%. Máxima: 8%. Separación estribos según zona sísmica.',
-    '• Traslape mínimo barras: 40×ϕ (ACI 318-19, sección 25.5.1).',
-    '• Este reporte es orientativo. Requiere validación de ingeniero estructural colegiado.'
-  ];
-  notas.forEach(n=>{doc.text(n,12,y,{maxWidth:186});y+=6;});
-
-  const pages=doc.internal.getNumberOfPages();
-  for(let i=1;i<=pages;i++){
-    doc.setPage(i);
-    doc.setFillColor(10,30,58);doc.rect(0,285,210,12,'F');
+  let y=doc.lastAutoTable.finalY+10;
+  doc.autoTable({startY:y,
+    head:[['BARRA','mm','kg/m','40ϕ cm','Cola 90°']],
+    body:[['#3(3/8")','9.5','0.560','38','6ϕ=5.7cm'],['#4(1/2")','12.7','0.994','51','6ϕ=7.6cm'],
+      ['#5(5/8")','15.9','1.552','64','6ϕ=9.5cm'],['#6(3/4")','19.1','2.235','76','12ϕ=22.9cm ACI§25.3'],
+      ['#8(1")','25.4','3.973','102','12ϕ=30.5cm ACI§25.3']],
+    styles:{font:'courier',fontSize:8},
+    headStyles:{fillColor:[10,30,58],textColor:[192,200,216]},
+    alternateRowStyles:{fillColor:[240,245,255]},margin:{left:10,right:10}});
+  y=doc.lastAutoTable.finalY+8;
+  doc.setFontSize(7.5);doc.setFont('helvetica','normal');doc.setTextColor(60,80,110);
+  ['• Cantidades incluyen 7% desperdicio — INADEH/REP Panamá.',
+   '• Traslape mínimo 40×ϕ — REP/COPANIT/ACI 318-19 §25.5.1.',
+   '• Cola gancho 90°: 6ϕ barras #3–#5 | 12ϕ barras #6 y #8 — ACI §25.3.2.',
+   '• Longitud comercial Panamá: 9.15m (30 pies) — INADEH.',
+   '• Factor conversión: 45.36 kg = 1 quintal (qq) — Norma Panamá.',
+   '• Acero Grado 60, fy=4200 kg/cm² — COPANIT 153-78/INADEH.',
+   '• Documento orientativo. Requiere validación de ing. estructural colegiado — REP/SPIA.'
+  ].forEach(n=>{doc.text(n,12,y,{maxWidth:186});y+=5;});
+  const pgs=doc.internal.getNumberOfPages();
+  for(let i=1;i<=pgs;i++){
+    doc.setPage(i);doc.setFillColor(10,30,58);doc.rect(0,285,210,12,'F');
     doc.setTextColor(100,130,160);doc.setFontSize(7);
-    doc.text('STRUCTURAPRO v3.0 · Estimador Estructural · ACI 318',14,292);
-    doc.text(`Página ${i}/${pages}`,196,292,{align:'right'});
+    doc.text('STRUCTURAPRO v3.2 · INADEH · ACI 318 · Planilla de Hierro · Panamá',14,292);
+    doc.text(`Pág. ${i}/${pgs}`,196,292,{align:'right'});
   }
-  doc.save('StructuraPro_Reporte_Completo.pdf');
-  toast('PDF EXPORTADO');
+  doc.save('StructuraPro_v3.2_Planilla_Hierro.pdf');toast('PLANILLA PDF ✓');
 }
 
-/* ── TOAST ── */
+/* ════ PDF REPORTE COMPLETO ════ */
+function exportPDF(){
+  const{jsPDF}=window.jspdf;const doc=new jsPDF();
+  doc.setFillColor(10,30,58);doc.rect(0,0,210,30,'F');
+  doc.setTextColor(240,165,0);doc.setFontSize(16);doc.setFont('helvetica','bold');
+  doc.text('STRUCTURAPRO v3.2',14,11);
+  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(150,180,210);
+  doc.text('ESTIMADOR ESTRUCTURAL · ACI 318-19 · INADEH · REP/SPIA · COPANIT · Panamá',14,18);
+  doc.text('Generado: '+new Date().toLocaleString('es'),14,25);
+  let y=35;
+  function sec(t,rgb){
+    if(y>235){doc.addPage();y=20;}
+    doc.setFillColor(20,50,90);doc.rect(10,y-4,190,7,'F');
+    doc.setTextColor(...(rgb||[240,165,0]));doc.setFontSize(9);doc.setFont('helvetica','bold');
+    doc.text(t,14,y);y+=9;doc.setTextColor(30,30,30);
+  }
+  function tbl(head,body){
+    doc.autoTable({startY:y,head:[head],body,
+      styles:{font:'courier',fontSize:8},
+      headStyles:{fillColor:[10,30,58],textColor:[240,165,0]},
+      alternateRowStyles:{fillColor:[240,245,255]},margin:{left:10,right:10}});
+    y=doc.lastAutoTable.finalY+8;
+  }
+
+  if(S.con){
+    sec('CONCRETO ESTRUCTURAL');
+    tbl(['PARAM','VALOR','UNIDAD'],[
+      ['Área',S.con.a,'m²'],['Espesor',S.con.e,'cm'],["f'c",S.con.fc,'kg/cm²'],
+      ['Volumen',fmt(S.con.vol),'m³'],['Cemento',S.con.cem,'sacos 50kg'],
+      ['Arena',S.con.are,'m³'],['Grava',S.con.gra,'m³'],['Agua',S.con.agua,'litros'],
+      ['Dosif.',S.con.r,'C:A:G']]);
+  }
+  if(S.mur){
+    sec('MUROS DE BLOQUES');
+    tbl(['PARAM','VALOR','UNIDAD'],[
+      ['Área',S.mur.a,'m²'],['Bloque',S.mur.t,'cm'],
+      ['Bloques (c/5%)',S.mur.bl,'und'],['Cemento',S.mur.cem,'sacos'],
+      ['Arena',S.mur.are,'m³'],['Agua',S.mur.agua,'litros']]);
+  }
+  if(S.colR){
+    sec('COLUMNA CUAD/RECT');
+    tbl(['PARAM','VALOR','UNIDAD'],[
+      ['b×h',`${S.colR.b}×${S.colR.h}`,'cm'],['Long.',S.colR.L,'m'],['N°',S.colR.n,'und'],
+      ['Recubrim.',`→ exterior 4cm / suelo 7.5cm`,'INADEH'],
+      ['W/H útil',`${fmt(S.colR.wu,1)}/${fmt(S.colR.hu,1)}`,'cm'],
+      ['L estribo',S.colR.le,'m'],['s conf.',S.colR.sc,'cm'],
+      ['lo conf.',fmt(S.colR.loCm/100),'m'],
+      ['Crossties b>35cm',S.colR.xt?'SÍ — ACI §25.7.2':'NO',''],
+      ['Acero est.',S.colR.ke,'kg'],['Acero long.',S.colR.kl,'kg'],['TOTAL qq',S.colR.qq,'qq']]);
+  }
+  if(S.colTL){
+    sec('COLUMNA T/L',[192,200,216]);
+    tbl(['PARAM','VALOR','UNIDAD'],[
+      ['Concreto',S.colTL.vol,'m³'],['Cemento',S.colTL.cem,'sacos'],
+      ['L est. alma',S.colTL.laAlma,'m'],['L est. ala',S.colTL.laAla,'m'],
+      ['Acero est.',S.colTL.ke,'kg'],['Acero long.',S.colTL.kl,'kg'],['TOTAL qq',S.colTL.qq,'qq']]);
+  }
+  if(S.colCi){
+    sec('COLUMNA CILÍNDRICA — ESPIRAL');
+    tbl(['PARAM','VALOR','UNIDAD'],[
+      ['Ø',S.colCi.D,'cm'],['D útil',fmt(S.colCi.Du,1),'cm'],
+      ['N vueltas',S.colCi.Nv,'und'],['C/vuelta',S.colCi.Cv,'m'],
+      ['L espiral',S.colCi.Lt,'m'],
+      ['Acero esp.',S.colCi.ke,'kg'],['Acero long.',S.colCi.kl,'kg'],['TOTAL qq',S.colCi.qq,'qq']]);
+  }
+  if(S.vs){
+    sec('VIGA SÍSMICA — ACI 318-19 §18.6',[167,139,250]);
+    tbl(['PARAM','VALOR','UNIDAD'],[
+      ['b×h',`${S.vs.b}×${S.vs.h}`,'cm'],['L',S.vs.L,'m'],
+      ['d efectivo',S.vs.dEf.toFixed(3),'m'],['lo confinado',S.vs.lo,'m'],
+      ['s conf.',S.vs.sc,'cm'],['s centro',S.vs.sm,'cm'],
+      ['Est. conf.',S.vs.Nec,'und'],['Est. centro',S.vs.Nem,'und'],
+      ['Concreto',S.vs.vol,'m³'],['Cemento',S.vs.cem,'sacos'],
+      ['Acero est.',S.vs.ke,'kg'],['Acero long.',S.vs.kl,'kg'],['TOTAL qq',S.vs.qq,'qq']]);
+  }
+  if(S.am){
+    sec('VIGA DE AMARRE — REP/INADEH',[52,211,153]);
+    tbl(['PARAM','VALOR','UNIDAD'],[
+      ['b×h',`${S.am.b}×${S.am.h}`,'cm'],['L total',fmt(S.am.L),'m'],
+      ['L barra',S.am.lb,'m'],['N barras',S.am.nb,'und'],
+      ['N estribos',S.am.ne,'und'],['L estribo',S.am.le,'m'],
+      ['Acero long.',S.am.kl,'kg'],['Acero est.',S.am.ke,'kg'],['TOTAL qq',S.am.qq,'qq']]);
+  }
+  if(PI.length){
+    if(y>200)doc.addPage();y=y>200?20:y;
+    sec('PLANILLA DE HIERRO — CONSOLIDADO');
+    const tk=PI.reduce((a,b)=>a+b.kg,0);
+    const tq=PI.reduce((a,b)=>a+b.q,0);
+    doc.autoTable({startY:y,
+      head:[['ELEMENTO','DIÁMETRO','N°','METROS','PESO (kg)','QUINTALES']],
+      body:PI.map(i=>[i.e,i.d,i.n,i.m+' m',i.kg+' kg',i.q+' qq']),
+      foot:[['','','TOTAL','',fmt(tk)+' kg',fmt(tq,3)+' qq']],
+      styles:{font:'courier',fontSize:8},
+      headStyles:{fillColor:[10,30,58],textColor:[240,165,0]},
+      footStyles:{fillColor:[20,50,90],textColor:[240,165,0],fontStyle:'bold'},
+      alternateRowStyles:{fillColor:[240,245,255]},margin:{left:10,right:10}});
+    y=doc.lastAutoTable.finalY+8;
+  }
+  if(y>220)doc.addPage();y=y>220?20:y;
+  sec('DOSIFICACIÓN REFERENCIA — ACI 318 · DOS. POR m³');
+  doc.autoTable({startY:y,
+    head:[["f'c (kg/cm²)",'Cemento (sacos)','Arena (m³)','Grava (m³)','Agua (L)']],
+    body:[[175,'6.5','0.52','0.78','190'],[210,'7.0','0.56','0.84','185'],
+      [245,'7.5','0.50','0.75','180'],[280,'8.0','0.48','0.72','175']],
+    styles:{font:'courier',fontSize:8},headStyles:{fillColor:[10,30,58],textColor:[240,165,0]},
+    alternateRowStyles:{fillColor:[240,245,255]},margin:{left:10,right:10}});
+  y=doc.lastAutoTable.finalY+10;
+
+  if(y>230)doc.addPage();y=y>230?20:y;
+  sec('NOTAS NORMATIVAS — INADEH · REP · ACI 318');
+  doc.setFontSize(7.5);doc.setFont('helvetica','normal');doc.setTextColor(40,50,70);
+  ['• Acero Grado 60, fy=4200 kg/cm² — COPANIT 153-78 / INADEH / Grado 420 ACI.',
+   '• Traslape mínimo: 40×ϕ barra corrugada — REP/COPANIT/ACI 318-19 §25.5.1.',
+   '• Cola gancho 90°: 6ϕ para #3–#5 | 12ϕ para #6 y #8 — ACI 318-19 §25.3.2.',
+   '• Gancho 135° sísmico recomendado en zonas de confinamiento — ACI §18.6.4.',
+   '• Recubrimientos INADEH: interior ≥2.5cm · exterior ≥4.0cm · suelo/marino ≥7.5cm.',
+   '• Long. comercial barras Panamá: 9.15m (30 pies) — INADEH.',
+   '• Zona confinada viga sísmica: lo=2h, s_conf=min(d/4, 6ϕ, 15cm) — ACI §18.6.4.',
+   '• Espiral cilíndrica: ρs_mín ACI §18.7.5.4, fyt=4200 kg/cm² (Grado 60).',
+   '• Viga de amarre mín. 20×20cm, 4 barras #4, estribos #3@20cm — REP/INADEH.',
+   '• Crossties requeridos si b>35cm — ACI §25.7.2.',
+   '• Desperdicio: acero 7% · concreto 10–15% · bloques 5%.',
+   '• Factor qq: 45.36 kg = 1 quintal — Norma comercial Panamá.',
+   '• Reporte orientativo — requiere aprobación de ing. estructural colegiado REP/SPIA.'
+  ].forEach(n=>{if(y>280){doc.addPage();y=20;}doc.text(n,12,y,{maxWidth:186});y+=5;});
+
+  const pgs=doc.internal.getNumberOfPages();
+  for(let i=1;i<=pgs;i++){
+    doc.setPage(i);doc.setFillColor(10,30,58);doc.rect(0,285,210,12,'F');
+    doc.setTextColor(100,130,160);doc.setFontSize(7);
+    doc.text('STRUCTURAPRO v3.2 · INADEH · ACI 318-19 · REP/SPIA · Estimador Estructural · Panamá',14,292);
+    doc.text(`Pág. ${i}/${pgs}`,196,292,{align:'right'});
+  }
+  doc.save('StructuraPro_v3.2_Reporte_Completo.pdf');toast('PDF COMPLETO ✓');
+}
+
+/* ════ TOAST ════ */
 function toast(msg){
-  const t=document.getElementById('toast');
-  t.textContent='✅ '+msg;t.classList.add('show');
+  const t=$('toast');t.textContent='✅ '+msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2200);
 }
 
-/* ── INIT ── */
+/* ════ INIT ════ */
 window.addEventListener('load',()=>{
   drawISO();
-  window.addEventListener('resize',()=>drawISO());
+  window.addEventListener('resize',drawISO);
 });
 </script>
 </body>
