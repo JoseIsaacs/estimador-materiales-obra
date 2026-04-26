@@ -1133,7 +1133,7 @@ function calcVCim(){
     </tbody>
     <tfoot><tr class="trow-tot">
       <td>TOTAL acero</td><td>—</td><td>—</td>
-      <td>${fmt(+(lb_lon*n_lon*nv).toFixed(2)++(le*ne*nv).toFixed(2),2)} m</td>
+      <td>${fmt(+(lb_lon*n_lon*nv).toFixed(2)+ +(le*ne*nv).toFixed(2),2)} m</td>
       <td style="color:var(--vc)">${qq} qq</td>
     </tr></tfoot></table>`;
   $('vc_sum').innerHTML=`
@@ -1203,8 +1203,8 @@ function calcPed(){
       <div class="v" style="color:var(--ped);font-size:22px">${qq}</div>
       <div class="l">QUINTALES ACERO TOTAL (c/7% desp.)</div></div>`;
   const wn=$('pd_wn');
-  wn.innerHTML=`✅ L_barra=${L_long}m = ${H}m+${fmt(cola_lon,3)}m(gancho)+0.08m(doblez) — ACI §25.3<br>
-  ℹ️ L_estribo=${le}m | N_est=${nEst}@${sep}cm${bl>=6?` | ${BR[bl].lb}: cola=12ϕ=${fmt(BR[bl].cola12*100,1)}cm — ACI §25.3.2`:''}`;
+  const _pedExtra = bl>=6 ? ' | '+BR[bl].lb+': cola=12φ='+fmt(BR[bl].cola12*100,1)+'cm — ACI §25.3.2' : '';
+  wn.innerHTML = '✅ L_barra='+L_long+'m = '+H+'m+'+fmt(cola_lon,3)+'m(gancho)+0.08m(doblez) — ACI §25.3<br>ℹ️ L_estribo='+le+'m | N_est='+nEst+'@'+sep+'cm'+_pedExtra;
   wn.style.display='block';wn.className='wb ok';
   $('res-pd').classList.add('show');
   addPI('PEDESTALES',BR[bl].lb,nb*nP,m_tot_long,toKg(m_tot_long,bl),toQQ(toKg(m_tot_long,bl)));
@@ -1510,14 +1510,12 @@ function buildExecSummary(){
     const kg=+(+(d.ke||0)+ +(d.kl||0)+ +(d.kg_tot||0)).toFixed(2);
     const qq=d.qq||0;
     totalVol+=vol;totalKg+=kg;totalQQ+=qq;
-    html+=`<div class="sum-row">
-      <span class="sr-mod" style="color:${color}">${icon} ${d.m}</span>
-      <div class="sr-vals">
-        ${vol?`<div class="sr-val"><div class="v" style="color:var(--ac2)">${fmt(vol)}</div><div class="u">m³</div></div>`:''}
-        ${kg?`<div class="sr-val"><div class="v" style="color:var(--ok)">${fmt(kg)}</div><div class="u">kg</div></div>`:''}
-        ${qq?`<div class="sr-val"><div class="v" style="color:${color};font-size:16px">${fmt(qq,3)}</div><div class="u">qq</div></div>`:''}
-      </div>
-    </div>`;
+    let _row = '<div class="sum-row"><span class="sr-mod" style="color:'+color+'">'+icon+' '+d.m+'</span><div class="sr-vals">';
+    if(vol) _row += '<div class="sr-val"><div class="v" style="color:var(--ac2)">'+fmt(vol)+'</div><div class="u">m³</div></div>';
+    if(kg)  _row += '<div class="sr-val"><div class="v" style="color:var(--ok)">'+fmt(kg)+'</div><div class="u">kg</div></div>';
+    if(qq)  _row += '<div class="sr-val"><div class="v" style="color:'+color+';font-size:16px">'+fmt(qq,3)+'</div><div class="u">qq</div></div>';
+    _row += '</div></div>';
+    html += _row;
   });
   $('sum-exec').innerHTML=html;
   sv('st-vol',fmt(totalVol));
