@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
-<title>StructuraPro v3.3</title>
+<title>StructuraPro v3.4</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -13,7 +13,7 @@
   --bg:#060e1c;--card:#0f2040;--bdr:#1a3a60;
   --ac:#f0a500;--ac2:#00c9ff;--tx:#ddeeff;--dim:#5580a0;
   --ok:#00e5a0;--er:#ff4d6d;--st:#c0c8d8;
-  --vg:#a78bfa;--am:#34d399;--zap:#fbbf24;--ped:#fb923c;--esc:#e879f9;
+  --vg:#a78bfa;--am:#34d399;--zap:#fbbf24;--ped:#fb923c;--esc:#e879f9;--vc:#06b6d4;
   --gr:rgba(0,100,200,0.07);
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -21,7 +21,6 @@ html,body{min-height:100vh;overflow-x:hidden}
 body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--tx);
   background-image:linear-gradient(var(--gr) 1px,transparent 1px),linear-gradient(90deg,var(--gr) 1px,transparent 1px);
   background-size:40px 40px}
-/* HDR */
 .hdr{background:linear-gradient(135deg,#020912,#071428,#0a1e3a);border-bottom:1px solid var(--bdr);
   padding:11px 14px;display:flex;align-items:center;gap:11px;position:sticky;top:0;z-index:100}
 .logo{width:38px;height:38px;background:var(--ac);
@@ -32,38 +31,37 @@ body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--tx);
 .hbg{margin-left:auto;font-family:'Share Tech Mono';font-size:9px;
   background:rgba(0,201,255,.1);border:1px solid var(--ac2);color:var(--ac2);
   padding:3px 7px;border-radius:2px;white-space:nowrap}
-/* TABS */
 .tabs{display:flex;overflow-x:auto;scrollbar-width:none;background:#07111f;border-bottom:1px solid var(--bdr);padding:0 2px}
 .tabs::-webkit-scrollbar{display:none}
 .tab{flex-shrink:0;padding:9px 8px;font-family:'Rajdhani';font-weight:600;font-size:10px;letter-spacing:.5px;
   color:var(--dim);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
 .tab:hover{color:var(--tx)}.tab.on{color:var(--ac);border-color:var(--ac)}
 .tab.tz.on{color:var(--zap);border-color:var(--zap)}
+.tab.tvc.on{color:var(--vc);border-color:var(--vc)}
 .tab.tp.on{color:var(--ped);border-color:var(--ped)}
 .tab.tv.on{color:var(--vg);border-color:var(--vg)}
 .tab.ta.on{color:var(--am);border-color:var(--am)}
 .tab.ts.on{color:var(--st);border-color:var(--st)}
 .tab.te.on{color:var(--esc);border-color:var(--esc)}
-/* PAGE */
 .pg{display:none;padding:14px 12px;max-width:560px;margin:0 auto}.pg.on{display:block}
-/* SEC HDR */
 .sh{display:flex;align-items:center;gap:9px;margin-bottom:13px}
 .si{width:38px;height:38px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
 .si-y{background:rgba(240,165,0,.1);border:1px solid rgba(240,165,0,.4)}
 .si-z{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.4)}
+.si-vc{background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.4)}
 .si-p{background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.4)}
 .si-v{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.4)}
 .si-a{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.4)}
 .si-s{background:rgba(192,200,216,.07);border:1px solid rgba(192,200,216,.3)}
 .si-e{background:rgba(232,121,249,.1);border:1px solid rgba(232,121,249,.4)}
 .sh h2{font-size:19px;font-weight:700;letter-spacing:1px}
-.sh h2.cy{color:var(--ac)}.sh h2.cz{color:var(--zap)}.sh h2.cp{color:var(--ped)}
-.sh h2.cv{color:var(--vg)}.sh h2.ca{color:var(--am)}.sh h2.cs{color:var(--st)}.sh h2.ce{color:var(--esc)}
+.cy{color:var(--ac)}.cz{color:var(--zap)}.cvc{color:var(--vc)}.cp{color:var(--ped)}
+.cv{color:var(--vg)}.ca{color:var(--am)}.cs{color:var(--st)}.ce{color:var(--esc)}
 .sh p{font-size:11px;color:var(--dim)}
-/* FORMULA */
 .fb{border-left:3px solid;border-radius:6px;padding:10px 12px;margin-bottom:12px}
-.fb-y{background:rgba(0,201,255,.04);border-color:var(--ac2);}.fb-y lbl{color:var(--ac2)}
+.fb-y{background:rgba(0,201,255,.04);border-color:var(--ac2)}.fb-y lbl{color:var(--ac2)}
 .fb-z{background:rgba(251,191,36,.04);border-color:var(--zap)}.fb-z lbl{color:var(--zap)}
+.fb-vc{background:rgba(6,182,212,.04);border-color:var(--vc)}.fb-vc lbl{color:var(--vc)}
 .fb-p{background:rgba(251,146,60,.04);border-color:var(--ped)}.fb-p lbl{color:var(--ped)}
 .fb-v{background:rgba(167,139,250,.04);border-color:var(--vg)}.fb-v lbl{color:var(--vg)}
 .fb-a{background:rgba(52,211,153,.04);border-color:var(--am)}.fb-a lbl{color:var(--am)}
@@ -71,14 +69,12 @@ body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--tx);
 .fb-e{background:rgba(232,121,249,.04);border-color:var(--esc)}.fb-e lbl{color:var(--esc)}
 .fb lbl{display:block;font-size:9px;letter-spacing:2px;margin-bottom:5px;font-weight:600}
 .f{font-family:'Share Tech Mono';font-size:11px;color:var(--tx);line-height:1.8}
-.f .a{color:var(--ac)}.f .z{color:var(--zap)}.f .pp{color:var(--ped)}
-.f .v{color:var(--vg)}.f .g{color:var(--ok)}.f .s{color:var(--st)}.f .e{color:var(--esc)}
-/* CARD */
+.f .a{color:var(--ac)}.f .z{color:var(--zap)}.f .vc{color:var(--vc)}
+.f .pp{color:var(--ped)}.f .v{color:var(--vg)}.f .g{color:var(--ok)}.f .s{color:var(--st)}.f .e{color:var(--esc)}
 .card{background:var(--card);border:1px solid var(--bdr);border-radius:9px;padding:14px;margin-bottom:12px}
 .card h4{font-size:10px;letter-spacing:2px;margin-bottom:10px;font-weight:600}
-.hy{color:var(--ac)}.hz{color:var(--zap)}.hp{color:var(--ped)}
+.hy{color:var(--ac)}.hz{color:var(--zap)}.hvc{color:var(--vc)}.hp{color:var(--ped)}
 .hv{color:var(--vg)}.ha{color:var(--am)}.hs{color:var(--st)}.he{color:var(--esc)}
-/* FIELD */
 .fi{margin-bottom:10px}
 .fi label{display:block;font-size:11px;letter-spacing:.6px;color:var(--dim);margin-bottom:4px;font-weight:600}
 .fi input,.fi select{width:100%;padding:9px 10px;background:#071628;border:1px solid var(--bdr);
@@ -86,12 +82,12 @@ body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--tx);
 .fi input:focus,.fi select:focus{border-color:var(--ac)}.fi input.er{border-color:var(--er)}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
-/* BTN */
 .btn{width:100%;padding:11px;font-family:'Rajdhani';font-size:13px;font-weight:700;
   letter-spacing:2px;border:none;border-radius:7px;cursor:pointer;margin-top:5px;transition:opacity .2s}
 .btn:hover{opacity:.87}
 .by{background:linear-gradient(135deg,#c47a00,var(--ac));color:#000}
 .bz{background:linear-gradient(135deg,#b45309,var(--zap));color:#000}
+.bvc{background:linear-gradient(135deg,#0e7490,var(--vc));color:#000}
 .bpp{background:linear-gradient(135deg,#c2410c,var(--ped));color:#fff}
 .bv{background:linear-gradient(135deg,#6d28d9,var(--vg));color:#fff}
 .bg2{background:linear-gradient(135deg,#059669,var(--am));color:#000}
@@ -104,7 +100,6 @@ body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--tx);
 .bpdf{width:100%;padding:9px;background:rgba(0,201,255,.07);border:1px solid var(--ac2);
   color:var(--ac2);font-family:'Rajdhani';font-size:12px;font-weight:700;
   border-radius:7px;cursor:pointer;margin-top:7px}
-/* RESULT */
 .rb{background:#071628;border:1px solid var(--bdr);border-radius:7px;padding:12px;margin-top:11px;display:none}
 .rb.show{display:block}
 .rb h4{font-size:9px;letter-spacing:2px;color:var(--ok);margin-bottom:9px;font-weight:600}
@@ -113,7 +108,6 @@ body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--tx);
 .ri .v{font-family:'Share Tech Mono';font-size:16px;color:var(--ac);font-weight:700}
 .ri .l{font-size:10px;color:var(--dim);margin-top:1px}.ri .u{font-size:9px;color:var(--ac2)}
 .ri.full{grid-column:span 2}.ri.full .v{font-size:22px}
-/* STABS */
 .stabs{display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap}
 .stab{flex:1;min-width:65px;padding:7px 4px;text-align:center;background:rgba(0,0,0,.3);
   border:1px solid var(--bdr);color:var(--dim);font-family:'Rajdhani';font-size:10px;
@@ -121,17 +115,14 @@ body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--tx);
 .stab.on{background:rgba(240,165,0,.07);border-color:var(--ac);color:var(--ac)}
 .stab.ss.on{background:rgba(192,200,216,.07);border-color:var(--st);color:var(--st)}
 .sp{display:none}.sp.on{display:block}
-/* ZONE ROW */
 .zr{display:flex;gap:5px;align-items:center;margin-bottom:7px}
 .zr input{flex:1;padding:7px 8px;background:#071628;border:1px solid var(--bdr);
   color:var(--tx);border-radius:4px;font-family:'Share Tech Mono';font-size:12px;outline:none}
 .zl{font-size:10px;color:var(--dim);white-space:nowrap;font-family:'Share Tech Mono'}
-/* WARN */
 .wb{background:rgba(240,165,0,.06);border:1px solid rgba(240,165,0,.3);border-radius:5px;
   padding:8px 10px;margin-top:8px;font-size:11px;color:var(--ac);line-height:1.6}
 .wb.ok{background:rgba(0,229,160,.05);border-color:rgba(0,229,160,.25);color:var(--ok)}
 .wb.inf{background:rgba(0,201,255,.05);border-color:rgba(0,201,255,.25);color:var(--ac2)}
-/* TABLE */
 .tw{overflow-x:auto;margin-bottom:12px}
 table{width:100%;border-collapse:collapse;font-size:11px}
 table caption{font-size:9px;letter-spacing:2px;color:var(--ac2);padding:6px 0;text-align:left;font-weight:600}
@@ -140,16 +131,49 @@ td{padding:7px 8px;border-bottom:1px solid rgba(26,58,96,.4);font-family:'Share 
 tr:last-child td{border-bottom:none}
 .tl{font-family:'Rajdhani';font-weight:600;font-size:12px;color:var(--tx)}
 .tt{color:var(--ac);font-weight:700}.tok{color:var(--ok)}.tst{color:var(--st)}
-.tz2{color:var(--zap)}.tp2{color:var(--ped)}.te2{color:var(--esc)}
+.tz2{color:var(--zap)}.tp2{color:var(--ped)}.te2{color:var(--esc)}.tvc2{color:var(--vc)}
 .trow-tot{background:rgba(240,165,0,.07)}
 .trow-tot td{color:var(--ac);font-family:'Rajdhani';font-weight:700;font-size:13px;border-bottom:none}
-/* ISO / CHART */
-.iw{background:var(--card);border:1px solid var(--bdr);border-radius:9px;padding:12px;margin-bottom:12px}
-.iw h4{font-size:10px;letter-spacing:2px;color:var(--ac);margin-bottom:7px;font-weight:600}
-#isoCanvas{width:100%;border-radius:5px;display:block}
-#diagCanvas{width:100%;border-radius:5px;display:block;background:#06111e}
+/* ISO 3D */
+.iso-outer{background:var(--card);border:1px solid var(--bdr);border-radius:9px;padding:12px;margin-bottom:12px}
+.iso-outer h4{font-size:10px;letter-spacing:2px;color:var(--ac);margin-bottom:6px;font-weight:600}
+.iso-hint{font-size:10px;color:var(--dim);margin-bottom:7px;font-family:'Share Tech Mono'}
+#isoCanvas{width:100%;border-radius:6px;display:block;cursor:grab;touch-action:none}
+#isoCanvas:active{cursor:grabbing}
+/* SUMMARY IMPROVED */
+.sum-section{background:var(--card);border:1px solid var(--bdr);border-radius:9px;padding:14px;margin-bottom:12px}
+.sum-section h4{font-size:10px;letter-spacing:2px;color:var(--ac);margin-bottom:12px;font-weight:600}
+.sum-row{display:flex;justify-content:space-between;align-items:center;
+  padding:8px 10px;border-radius:6px;margin-bottom:6px;background:rgba(0,0,0,.2)}
+.sum-row:last-child{margin-bottom:0}
+.sum-row .sr-mod{font-family:'Rajdhani';font-weight:700;font-size:13px}
+.sum-row .sr-vals{display:flex;gap:12px;align-items:center}
+.sr-val{text-align:right}
+.sr-val .v{font-family:'Share Tech Mono';font-size:13px;font-weight:700}
+.sr-val .u{font-size:9px;color:var(--dim)}
+.sum-total{background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.3);
+  border-radius:7px;padding:12px;margin-bottom:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.st-item{text-align:center}
+.st-item .v{font-family:'Share Tech Mono';font-size:20px;color:var(--ac);font-weight:700}
+.st-item .l{font-size:10px;color:var(--dim);margin-top:2px}
+.st-item .u{font-size:9px;color:var(--ac2)}
+/* DONUT */
+.donut-wrap{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+#donutChart{flex-shrink:0}
+.donut-legend{flex:1}
+.dl-item{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.dl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.dl-item span{font-size:11px;color:var(--dim)}
+.dl-item strong{font-family:'Share Tech Mono';font-size:11px;color:var(--tx)}
+/* CANVAS */
 .cw{background:var(--card);border:1px solid var(--bdr);border-radius:9px;padding:12px;margin-bottom:12px}
 .cw h4{font-size:10px;letter-spacing:2px;color:var(--ac);margin-bottom:7px;font-weight:600}
+#matChart{width:100%}
+#diagCanvas{width:100%;border-radius:5px;display:block;background:#06111e}
+#zapCanvas{width:100%;border-radius:5px;display:block;background:#06111e}
+.zap-canvas-wrap{background:var(--card);border:1px solid var(--bdr);border-radius:9px;padding:12px;margin-bottom:12px}
+.zap-canvas-wrap h4{font-size:10px;letter-spacing:2px;color:var(--zap);margin-bottom:8px;font-weight:600}
+/* CONCL */
 .concl{background:var(--card);border:1px solid var(--bdr);border-radius:9px;padding:14px;margin-bottom:12px}
 .concl h4{font-size:10px;letter-spacing:2px;color:var(--ac);margin-bottom:10px;font-weight:600}
 .ci{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
@@ -157,16 +181,12 @@ tr:last-child td{border-bottom:none}
 .ci p{font-size:12px;line-height:1.4;color:var(--tx)}
 .chip{display:inline-flex;align-items:center;font-size:10px;padding:3px 8px;border-radius:20px;margin-bottom:9px;font-family:'Share Tech Mono'}
 .chip-z{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.3);color:var(--zap)}
+.chip-vc{background:rgba(6,182,212,.07);border:1px solid rgba(6,182,212,.3);color:var(--vc)}
 .chip-p{background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.3);color:var(--ped)}
 .chip-v{background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.3);color:var(--vg)}
 .chip-a{background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.3);color:var(--am)}
 .chip-e{background:rgba(232,121,249,.07);border:1px solid rgba(232,121,249,.3);color:var(--esc)}
 .div{height:1px;background:linear-gradient(90deg,transparent,var(--bdr),transparent);margin:12px 0}
-/* ZAPATAS CANVAS */
-.zap-canvas-wrap{background:var(--card);border:1px solid var(--bdr);border-radius:9px;padding:12px;margin-bottom:12px}
-.zap-canvas-wrap h4{font-size:10px;letter-spacing:2px;color:var(--zap);margin-bottom:8px;font-weight:600}
-#zapCanvas{width:100%;border-radius:5px;display:block;background:#06111e}
-/* LEGEND */
 .legend{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
 .leg{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--dim)}
 .leg-d{width:11px;height:3px;border-radius:1px}
@@ -180,8 +200,8 @@ tr:last-child td{border-bottom:none}
 <!-- HDR -->
 <div class="hdr">
   <div class="logo">S</div>
-  <div><h1>STRUCTURAPRO</h1><p>ESTIMADOR ESTRUCTURAL · v3.3 · ACI 318 · INADEH · REP/SPIA</p></div>
-  <div class="hbg">COPANIT</div>
+  <div><h1>STRUCTURAPRO</h1><p>ESTIMADOR ESTRUCTURAL · v3.4 · ACI 318-19 · REP/SPIA · COPANIT</p></div>
+  <div class="hbg">REP · SPIA</div>
 </div>
 
 <!-- TABS -->
@@ -190,6 +210,7 @@ tr:last-child td{border-bottom:none}
   <button class="tab"     onclick="T('mur',this)">🧱 MUROS</button>
   <button class="tab"     onclick="T('pis',this)">🔷 PISOS</button>
   <button class="tab tz"  onclick="T('zap',this)">⬛ ZAPATAS</button>
+  <button class="tab tvc" onclick="T('vcim',this)">🔶 V.CIMEN.</button>
   <button class="tab tp"  onclick="T('ped',this)">🔩 PEDEST.</button>
   <button class="tab"     onclick="T('col',this)">🏛️ COLUM.</button>
   <button class="tab tv"  onclick="T('vis',this)">〰️ V.SÍS.</button>
@@ -228,7 +249,7 @@ tr:last-child td{border-bottom:none}
 <div id="tab-mur" class="pg">
   <div class="sh"><div class="si si-y">🧱</div><div><h2 class="cy">MUROS DE BLOQUES</h2><p>MAMPOSTERÍA · MORTERO</p></div></div>
   <div class="fb fb-y"><lbl>📐 FÓRMULAS</lbl>
-    <div class="f">Bloques = A × <span class="a">ρ</span> × 1.05<br>Cemento = A × <span class="a">0.15</span> sac</div></div>
+    <div class="f">Bloques = A × <span class="a">ρ</span> × 1.05 (5% desp.)<br>Cemento = A × <span class="a">0.15</span> sac</div></div>
   <div class="card"><h4 class="hy">PARÁMETROS</h4>
     <div class="fi"><label>ÁREA PARED (m²)</label><input id="m_area" type="number" min="0.1" step="0.1" placeholder="ej. 40.0"></div>
     <div class="fi"><label>TIPO BLOQUE</label><select id="m_bloque">
@@ -249,7 +270,7 @@ tr:last-child td{border-bottom:none}
 <div id="tab-pis" class="pg">
   <div class="sh"><div class="si si-y">🔷</div><div><h2 class="cy">PISOS · BALDOSAS</h2><p>CERÁMICA · PORCELANA</p></div></div>
   <div class="fb fb-y"><lbl>📐 FÓRMULAS</lbl>
-    <div class="f">N = (A/A_bald)×<span class="a">1.10</span><br>Pega=A×<span class="a">4.5</span>kg | Fragua=A×<span class="a">0.30</span>kg</div></div>
+    <div class="f">N=(A/A_bald)×<span class="a">1.10</span> | Pega=A×<span class="a">4.5</span>kg</div></div>
   <div class="card"><h4 class="hy">PARÁMETROS</h4>
     <div class="fi"><label>ÁREA (m²)</label><input id="p_area" type="number" min="0.1" step="0.1" placeholder="ej. 60.0"></div>
     <div class="fi"><label>BALDOSA</label><select id="p_lado" onchange="$('p_cw').style.display=this.value==='c'?'block':'none'">
@@ -269,11 +290,11 @@ tr:last-child td{border-bottom:none}
 <!-- ═══ ZAPATAS ═══ -->
 <div id="tab-zap" class="pg">
   <div class="sh"><div class="si si-z">⬛</div><div><h2 class="cz">ZAPATAS</h2><p>AISLADA · CUADRADA / RECTANGULAR</p></div></div>
-  <div class="chip chip-z">⬛ Recubrimiento mínimo 7.5cm — INADEH/ACI 318 (contacto suelo)</div>
-  <div class="fb fb-z"><lbl>📐 FÓRMULAS — ZAPATA (INADEH)</lbl>
+  <div class="chip chip-z">⬛ Rec. mín. 7.5cm — ACI 318 §20.6.1.3 (contacto con suelo)</div>
+  <div class="fb fb-z"><lbl>📐 FÓRMULAS — ZAPATA ACI 318 / REP</lbl>
     <div class="f">L_barra = Lado − 2×rec &nbsp;<span class="z">[m]</span><br>
-    N_barras (A/D) = ⌊(Lado−2×rec)/sep⌋+1<br>
-    Total/zapata = N_barras × L_barra × <span class="z">2 direcciones</span><br>
+    N_barras = ⌊(Lado−2×rec)/sep⌋+1 (A/D)<br>
+    Total/zapata = N_X×L_X + N_Y×L_Y<br>
     Total proyecto = Total/zapata × <span class="z">N_zapatas</span><br>
     qq = (kg × <span class="g">1.07</span>) / <span class="g">45.36</span></div></div>
   <div class="card"><h4 class="hz">GEOMETRÍA</h4>
@@ -286,10 +307,10 @@ tr:last-child td{border-bottom:none}
       <div class="fi"><label>N° ZAPATAS</label><input id="z_n" type="number" min="1" placeholder="ej. 10"></div>
     </div>
     <div class="r2">
-      <div class="fi"><label>RECUBRIMIENTO — INADEH</label><select id="z_rec">
-        <option value="7.5" selected>7.5cm — Suelo/contacto tierra</option>
+      <div class="fi"><label>RECUBRIMIENTO — ACI 318</label><select id="z_rec">
+        <option value="7.5" selected>7.5cm — Contacto suelo ACI §20.6.1.3</option>
         <option value="5">5.0cm — Losa sobre suelo mejorado</option>
-        <option value="10">10.0cm — Suelo agresivo</option></select></div>
+        <option value="10">10.0cm — Suelo agresivo/sulfatos</option></select></div>
       <div class="fi"><label>f'c</label><select id="z_fc">
         <option value="175">175 kg/cm²</option>
         <option value="210" selected>210 kg/cm²</option>
@@ -304,21 +325,18 @@ tr:last-child td{border-bottom:none}
         <option value="6">#6 (3/4") · 2.235 kg/m</option>
         <option value="7">#7 (7/8") · 3.042 kg/m</option>
         <option value="8">#8 (1") · 3.973 kg/m</option></select></div>
-      <div class="fi"><label>SEPARACIÓN (cm)</label><input id="z_sep" type="number" min="10" value="15" placeholder="15"></div>
+      <div class="fi"><label>SEPARACIÓN (cm)</label><input id="z_sep" type="number" min="10" value="15"></div>
     </div></div>
   <button class="btn bz" onclick="calcZap()">⬛ CALCULAR ZAPATA</button>
-
-  <!-- ZAPATA CANVAS -->
   <div class="zap-canvas-wrap">
-    <h4>📐 DIAGRAMA — PARRILLA DE REFUERZO</h4>
-    <canvas id="zapCanvas" height="200"></canvas>
+    <h4>📐 DIAGRAMA — PARRILLA DE REFUERZO A/D</h4>
+    <canvas id="zapCanvas" height="190"></canvas>
     <div class="legend">
       <div class="leg"><div class="leg-d" style="background:var(--zap)"></div>Barras dir. X</div>
       <div class="leg"><div class="leg-d" style="background:var(--ac2)"></div>Barras dir. Y</div>
-      <div class="leg"><div class="leg-d" style="background:rgba(167,139,250,.7)"></div>Concreto</div>
+      <div class="leg"><div class="leg-d" style="background:rgba(167,139,250,.6)"></div>Concreto</div>
     </div>
   </div>
-
   <div id="res-z" class="rb"><h4>✅ ZAPATA — DESARROLLO DE CÁLCULO</h4>
     <div class="tw" id="z_tbl_wrap"></div>
     <div class="rg" id="z_sum"></div>
@@ -326,15 +344,74 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
+<!-- ═══ VIGA DE CIMENTACIÓN ═══ -->
+<div id="tab-vcim" class="pg">
+  <div class="sh"><div class="si si-vc">🔶</div><div><h2 class="cvc">VIGA DE CIMENTACIÓN</h2><p>VIGA DE AMARRE SOBRE TERRENO · REP/SPIA</p></div></div>
+  <div class="chip chip-vc">🔶 Rec. mín. 7.5cm — ACI 318 §20.6.1.3 contacto suelo</div>
+  <div class="fb fb-vc"><lbl>📐 FÓRMULAS — VIGA CIMENTACIÓN ACI 318 / REP</lbl>
+    <div class="f">Sección mín. 25×30cm | rec = <span class="vc">7.5cm</span> (suelo)<br>
+    L_barra = L + n_traslapes×40ϕ (si L&gt;9.15m)<br>
+    <span class="vc">9.15m = 30 pies — Largo comercial Panamá</span><br>
+    L_est = 2(W<sub>u</sub>+H<sub>u</sub>)/100 + 2(cola×ϕ)<br>
+    N_est = ⌈L/sep⌉+1 | qq=(kg×<span class="g">1.07</span>)/<span class="g">45.36</span></div></div>
+  <div class="card"><h4 class="hvc">GEOMETRÍA</h4>
+    <div class="r2">
+      <div class="fi"><label>BASE b (cm)</label><input id="vc_b" type="number" min="20" value="25"></div>
+      <div class="fi"><label>PERALTE h (cm)</label><input id="vc_h" type="number" min="25" value="30"></div>
+    </div>
+    <div class="r2">
+      <div class="fi"><label>LONG. TOTAL (m)</label><input id="vc_L" type="number" min="1" step="0.1" placeholder="ej. 28.0"></div>
+      <div class="fi"><label>N° VIGAS</label><input id="vc_nv" type="number" min="1" value="1" placeholder="ej. 2"></div>
+    </div>
+    <div class="r2">
+      <div class="fi"><label>RECUBRIMIENTO — ACI §20.6.1.3</label><select id="vc_rec">
+        <option value="7.5" selected>7.5cm — Contacto suelo (mín. REP)</option>
+        <option value="5">5.0cm — Sobre solado</option>
+        <option value="10">10.0cm — Suelo agresivo</option></select></div>
+      <div class="fi"><label>f'c</label><select id="vc_fc">
+        <option value="175">175 kg/cm²</option>
+        <option value="210" selected>210 kg/cm²</option>
+        <option value="245">245 kg/cm²</option></select></div>
+    </div></div>
+  <div class="card"><h4 class="hvc">ACERO LONGITUDINAL</h4>
+    <div class="r2">
+      <div class="fi"><label>N° BARRAS SUPERIORES</label><input id="vc_ns" type="number" min="2" value="3"></div>
+      <div class="fi"><label>N° BARRAS INFERIORES</label><input id="vc_ni" type="number" min="2" value="3"></div>
+    </div>
+    <div class="fi"><label>DIÁMETRO BARRA LONG.</label><select id="vc_bl">
+      <option value="4">#4 (1/2") · 0.994 kg/m</option>
+      <option value="5" selected>#5 (5/8") · 1.552 kg/m</option>
+      <option value="6">#6 (3/4") · 2.235 kg/m</option>
+      <option value="8">#8 (1") · 3.973 kg/m</option></select></div>
+  </div>
+  <div class="card"><h4 class="hvc">ESTRIBOS</h4>
+    <div class="r2">
+      <div class="fi"><label>DIÁMETRO ESTRIBO</label><select id="vc_be">
+        <option value="3" selected>#3 (3/8") · 0.560 kg/m</option>
+        <option value="4">#4 (1/2") · 0.994 kg/m</option></select></div>
+      <div class="fi"><label>SEPARACIÓN (cm)</label><input id="vc_sep" type="number" min="10" value="20"></div>
+    </div>
+    <div class="fi"><label>GANCHO ESTRIBO — ACI §25.3</label><select id="vc_g">
+      <option value="4" selected>180°–4ϕ Estándar cimentación</option>
+      <option value="6">135°–6ϕ Sísmico</option></select></div>
+  </div>
+  <button class="btn bvc" onclick="calcVCim()">🔶 CALCULAR VIGA CIMENTACIÓN</button>
+  <div id="res-vc" class="rb"><h4>✅ VIGA DE CIMENTACIÓN — DESARROLLO</h4>
+    <div class="tw" id="vc_tbl_wrap"></div>
+    <div class="rg" id="vc_sum"></div>
+    <div id="vc_wn" class="wb" style="display:none"></div>
+  </div>
+</div>
+
 <!-- ═══ PEDESTALES ═══ -->
 <div id="tab-ped" class="pg">
   <div class="sh"><div class="si si-p">🔩</div><div><h2 class="cp">PEDESTALES</h2><p>ACERO LONG. · ESTRIBOS · GANCHOS</p></div></div>
-  <div class="chip chip-p">🔩 Recubrimiento 4cm columna — INADEH/ACI 318</div>
-  <div class="fb fb-p"><lbl>📐 FÓRMULAS — PEDESTAL (INADEH)</lbl>
+  <div class="chip chip-p">🔩 Rec. 4cm columna exterior — ACI 318 §20.6.1</div>
+  <div class="fb fb-p"><lbl>📐 FÓRMULAS — PEDESTAL ACI 318 / REP</lbl>
     <div class="f">L_long = H + gancho 90° + doblez <span class="pp">[m]</span><br>
-    Cola: <span class="a">6ϕ</span>(#3–#5) | <span class="a">12ϕ</span>(#6–#8) ACI§25.3<br>
+    Cola: <span class="a">6ϕ</span>(#3–#5) | <span class="a">12ϕ</span>(#6–#8) ACI §25.3<br>
     L_est = 2(W<sub>u</sub>+H<sub>u</sub>)/100 + 2(cola×ϕ)<br>
-    N_est = ⌈H/sep⌉ &nbsp;| &nbsp;qq=(kg×<span class="g">1.07</span>)/<span class="g">45.36</span></div></div>
+    qq=(kg×<span class="g">1.07</span>)/<span class="g">45.36</span></div></div>
   <div class="card"><h4 class="hp">GEOMETRÍA</h4>
     <div class="r2">
       <div class="fi"><label>BASE b (cm)</label><input id="pd_b" type="number" min="20" placeholder="ej. 30"></div>
@@ -345,7 +422,7 @@ tr:last-child td{border-bottom:none}
       <div class="fi"><label>N° PEDESTALES</label><input id="pd_n" type="number" min="1" placeholder="ej. 10"></div>
     </div>
     <div class="r2">
-      <div class="fi"><label>RECUBRIMIENTO</label><select id="pd_rec">
+      <div class="fi"><label>RECUBRIMIENTO — ACI §20.6.1</label><select id="pd_rec">
         <option value="4" selected>4.0cm — Columna exterior</option>
         <option value="2.5">2.5cm — Interior</option>
         <option value="5">5.0cm — Agresivo</option></select></div>
@@ -357,21 +434,20 @@ tr:last-child td{border-bottom:none}
     <div class="r2">
       <div class="fi"><label>N° BARRAS</label><input id="pd_nb" type="number" min="4" placeholder="ej. 4"></div>
       <div class="fi"><label>DIÁMETRO</label><select id="pd_bl">
-        <option value="4">#4 (1/2") · 0.994 kg/m</option>
-        <option value="5">#5 (5/8") · 1.552 kg/m</option>
-        <option value="6" selected>#6 (3/4") · 2.235 kg/m</option>
-        <option value="7">#7 (7/8") · 3.042 kg/m</option>
-        <option value="8">#8 (1") · 3.973 kg/m</option></select></div>
+        <option value="4">#4 · 0.994 kg/m</option>
+        <option value="5">#5 · 1.552 kg/m</option>
+        <option value="6" selected>#6 · 2.235 kg/m</option>
+        <option value="7">#7 · 3.042 kg/m</option>
+        <option value="8">#8 · 3.973 kg/m</option></select></div>
     </div></div>
   <div class="card"><h4 class="hp">ESTRIBOS</h4>
     <div class="r2">
-      <div class="fi"><label>DIÁMETRO ESTRIBO</label><select id="pd_be">
-        <option value="3" selected>#3 (3/8") · 0.560 kg/m</option>
-        <option value="4">#4 (1/2") · 0.994 kg/m</option></select></div>
-      <div class="fi"><label>SEPARACIÓN (cm)</label><input id="pd_sep" type="number" min="5" value="15" placeholder="15"></div>
+      <div class="fi"><label>ESTRIBO</label><select id="pd_be">
+        <option value="3" selected>#3</option><option value="4">#4</option></select></div>
+      <div class="fi"><label>SEPARACIÓN (cm)</label><input id="pd_sep" type="number" min="5" value="15"></div>
     </div>
-    <div class="fi"><label>GANCHO ESTRIBO</label><select id="pd_g">
-      <option value="6" selected>135°–6ϕ Sísmico (recomendado)</option>
+    <div class="fi"><label>GANCHO</label><select id="pd_g">
+      <option value="6" selected>135°–6ϕ Sísmico</option>
       <option value="4">180°–4ϕ No sísmico</option></select></div>
   </div>
   <button class="btn bpp" onclick="calcPed()">🔩 CALCULAR PEDESTAL</button>
@@ -390,13 +466,11 @@ tr:last-child td{border-bottom:none}
     <button class="stab"    onclick="S2('tl',this)">┤ T / L</button>
     <button class="stab"    onclick="S2('ci',this)">○ CILÍND.</button>
   </div>
-  <!-- CUAD/RECT -->
   <div id="sp-cr" class="sp on">
-    <div class="fb fb-y"><lbl>📐 CUAD/RECT — ACI§18.7.5</lbl>
+    <div class="fb fb-y"><lbl>📐 CUAD/RECT — ACI 318 §18.7.5 / REP</lbl>
       <div class="f">W<sub>u</sub>=b−2r | H<sub>u</sub>=h−2r<br>
-      L_est=2(W<sub>u</sub>+H<sub>u</sub>)/100+2(<span class="s">cola×ϕ</span>)<br>
-      lo=max(L/6,dim_mayor,45cm)<br>
-      Cola: <span class="a">6ϕ</span>(#3–#5) | <span class="a">12ϕ</span>(#6–#8) ACI§25.3</div></div>
+      L_est=2(W<sub>u</sub>+H<sub>u</sub>)/100+2(cola×ϕ)<br>
+      lo=max(L/6,dim_mayor,45cm) | Cola: <span class="a">6ϕ</span>/#3–#5 | <span class="a">12ϕ</span>/#6–#8</div></div>
     <div class="card"><h4 class="hy">GEOMETRÍA</h4>
       <div class="r2">
         <div class="fi"><label>BASE b (cm)</label><input id="cr_b" type="number" min="15" placeholder="30"></div>
@@ -407,7 +481,7 @@ tr:last-child td{border-bottom:none}
         <div class="fi"><label>N° COLUMNAS</label><input id="cr_n" type="number" min="1" placeholder="4"></div>
       </div>
       <div class="r2">
-        <div class="fi"><label>RECUBRIMIENTO</label><select id="cr_rec">
+        <div class="fi"><label>RECUBRIMIENTO — ACI §20.6.1</label><select id="cr_rec">
           <option value="2.5">2.5cm — Interior</option>
           <option value="4" selected>4.0cm — Exterior</option>
           <option value="5">5.0cm — Agresivo</option>
@@ -418,10 +492,10 @@ tr:last-child td{border-bottom:none}
       </div>
       <div class="r2">
         <div class="fi"><label>BARRA LONG.</label><select id="cr_bl">
-          <option value="4">#4 (1/2")</option><option value="5" selected>#5 (5/8")</option>
-          <option value="6">#6 (3/4")</option><option value="8">#8 (1")</option></select></div>
+          <option value="4">#4</option><option value="5" selected>#5</option>
+          <option value="6">#6</option><option value="8">#8</option></select></div>
         <div class="fi"><label>ESTRIBO</label><select id="cr_be">
-          <option value="3" selected>#3 (3/8")</option><option value="4">#4 (1/2")</option></select></div>
+          <option value="3" selected>#3</option><option value="4">#4</option></select></div>
       </div>
       <div class="r2">
         <div class="fi"><label>N° BARRAS LONG.</label><input id="cr_nb" type="number" min="4" placeholder="4"></div>
@@ -445,7 +519,6 @@ tr:last-child td{border-bottom:none}
         <div class="l">QQ TOTAL (c/7%) · 45.36 kg/qq</div></div>
     </div><div id="cr_wn" class="wb" style="display:none"></div></div>
   </div>
-  <!-- T/L -->
   <div id="sp-tl" class="sp">
     <div class="fb fb-y"><lbl>📐 T/L — 2 GRUPOS ESTRIBOS</lbl>
       <div class="f">Est.alma: 2(W<sub>u,a</sub>+H<sub>u,a</sub>)/100+cola<br>Est.ala: 2(W<sub>u,f</sub>+H<sub>u,f</sub>)/100+cola</div></div>
@@ -482,19 +555,17 @@ tr:last-child td{border-bottom:none}
     <div id="res-tl" class="rb"><h4>✅ COLUMNA T/L</h4><div class="rg">
       <div class="ri"><div class="v" id="tl_vol">—</div><div class="l">CONCRETO</div><div class="u">m³</div></div>
       <div class="ri"><div class="v" id="tl_cem">—</div><div class="l">CEMENTO</div><div class="u">sacos</div></div>
-      <div class="ri"><div class="v" style="color:var(--st)" id="tl_la">—</div><div class="l">L est. ALMA</div><div class="u">m</div></div>
-      <div class="ri"><div class="v" style="color:var(--st)" id="tl_lf">—</div><div class="l">L est. ALA</div><div class="u">m</div></div>
+      <div class="ri"><div class="v" style="color:var(--st)" id="tl_la">—</div><div class="l">L est.ALMA</div><div class="u">m</div></div>
+      <div class="ri"><div class="v" style="color:var(--st)" id="tl_lf">—</div><div class="l">L est.ALA</div><div class="u">m</div></div>
       <div class="ri"><div class="v" id="tl_ke">—</div><div class="l">Acero est.</div><div class="u">kg</div></div>
       <div class="ri"><div class="v" id="tl_kl">—</div><div class="l">Acero long.</div><div class="u">kg</div></div>
       <div class="ri full" style="background:rgba(192,200,216,.05);border-color:var(--st)">
-        <div class="v" style="color:var(--st);font-size:22px" id="tl_qq">—</div><div class="l">QQ TOTAL (c/7%)</div></div>
+        <div class="v" style="color:var(--st);font-size:22px" id="tl_qq">—</div><div class="l">QQ TOTAL</div></div>
     </div></div>
   </div>
-  <!-- CILÍNDRICA -->
   <div id="sp-ci" class="sp">
-    <div class="fb fb-y"><lbl>📐 ESPIRAL CONTINUA — ACI§18.7.5.4</lbl>
-      <div class="f">C<sub>v</sub>=π×D<sub>u</sub>/100 | N<sub>v</sub>=⌈H_rec/paso⌉<br>
-      ρs_mín=0.45(Ag/Ac−1)×f'c/fyt</div></div>
+    <div class="fb fb-y"><lbl>📐 ESPIRAL — ACI 318 §18.7.5.4 / REP</lbl>
+      <div class="f">C<sub>v</sub>=π×D<sub>u</sub>/100 | N<sub>v</sub>=⌈H_rec/paso⌉<br>ρs_mín=0.45(Ag/Ac−1)×f'c/fyt</div></div>
     <div class="card"><h4 class="hy">GEOMETRÍA</h4>
       <div class="r2">
         <div class="fi"><label>DIÁM. D (cm)</label><input id="ci_d" type="number" min="20" placeholder="40"></div>
@@ -518,7 +589,7 @@ tr:last-child td{border-bottom:none}
       <div class="fi"><label>f'c</label><select id="ci_fc">
         <option value="210" selected>210</option><option value="245">245</option><option value="280">280</option></select></div>
     </div>
-    <button class="btn by" onclick="calcColCi()">⚡ CALCULAR CILÍNDRICA</button>
+    <button class="btn by" onclick="calcColCi()">⚡ CALCULAR</button>
     <div id="res-ci" class="rb"><h4>✅ COLUMNA CILÍNDRICA</h4><div class="rg">
       <div class="ri"><div class="v" id="ci_vol">—</div><div class="l">CONCRETO</div><div class="u">m³</div></div>
       <div class="ri"><div class="v" id="ci_cem">—</div><div class="l">CEMENTO</div><div class="u">sacos</div></div>
@@ -527,7 +598,7 @@ tr:last-child td{border-bottom:none}
       <div class="ri"><div class="v" id="ci_ke">—</div><div class="l">Acero esp.</div><div class="u">kg</div></div>
       <div class="ri"><div class="v" id="ci_kl">—</div><div class="l">Acero long.</div><div class="u">kg</div></div>
       <div class="ri full" style="background:rgba(192,200,216,.05);border-color:var(--st)">
-        <div class="v" style="color:var(--st);font-size:22px" id="ci_qq">—</div><div class="l">QQ TOTAL (c/7%)</div></div>
+        <div class="v" style="color:var(--st);font-size:22px" id="ci_qq">—</div><div class="l">QQ TOTAL</div></div>
     </div><div id="ci_wn" class="wb ok" style="display:none"></div></div>
   </div>
 </div>
@@ -535,10 +606,10 @@ tr:last-child td{border-bottom:none}
 <!-- ═══ VIGA SÍSMICA ═══ -->
 <div id="tab-vis" class="pg">
   <div class="sh"><div class="si si-v">〰️</div><div><h2 class="cv">VIGA SÍSMICA</h2><p>ACI 318-19 §18.6 · REP/SPIA</p></div></div>
-  <div class="chip chip-v">〰️ Pórtico especial — ACI 318-19 §18.6</div>
-  <div class="fb fb-v"><lbl>📐 VIGA SÍSMICA</lbl>
+  <div class="chip chip-v">〰️ Pórtico especial — ACI 318-19 §18.6 / REP</div>
+  <div class="fb fb-v"><lbl>📐 VIGA SÍSMICA — ACI §18.6 / REP</lbl>
     <div class="f">d=h−rec−ϕ<sub>est</sub>/2−ϕ<sub>lon</sub>/2 <span class="v">[m]</span><br>
-    lo=2h | s<sub>conf</sub>=min(d/4,6ϕ,15cm)<br>s<sub>cen</sub>=min(d/2,30cm)</div></div>
+    lo=2h | s<sub>conf</sub>=min(d/4,6ϕ,15cm) | s<sub>cen</sub>=min(d/2,30cm)</div></div>
   <div class="card"><h4 class="hv">GEOMETRÍA</h4>
     <div class="r2">
       <div class="fi"><label>BASE b (cm)</label><input id="vs_b" type="number" min="20" placeholder="25"></div>
@@ -549,10 +620,10 @@ tr:last-child td{border-bottom:none}
       <div class="fi"><label>N° VIGAS</label><input id="vs_n" type="number" min="1" placeholder="4"></div>
     </div>
     <div class="r2">
-      <div class="fi"><label>RECUBRIMIENTO</label><select id="vs_rec">
+      <div class="fi"><label>RECUBRIMIENTO — ACI §20.6.1</label><select id="vs_rec">
         <option value="4" selected>4.0cm — Exterior</option>
         <option value="2.5">2.5cm — Interior</option>
-        <option value="5">5.0cm</option>
+        <option value="5">5.0cm — Agresivo</option>
         <option value="7.5">7.5cm — Mar/Suelo</option></select></div>
       <div class="fi"><label>f'c</label><select id="vs_fc">
         <option value="210" selected>210</option><option value="245">245</option><option value="280">280</option></select></div>
@@ -569,16 +640,16 @@ tr:last-child td{border-bottom:none}
       <div class="fi"><label>BARRAS SUP.</label><input id="vs_ns" type="number" min="2" placeholder="3"></div>
       <div class="fi"><label>BARRAS INF.</label><input id="vs_ni" type="number" min="2" placeholder="2"></div>
     </div>
-    <div class="fi"><label>GANCHO EST.</label><select id="vs_g">
-      <option value="6" selected>135°–6ϕ Sísmico</option>
-      <option value="8">135°–8ϕ Alta sism.</option></select></div>
+    <div class="fi"><label>GANCHO EST. — ACI §25.3</label><select id="vs_g">
+      <option value="6" selected>135°–6ϕ Sísmico (REP/ACI)</option>
+      <option value="8">135°–8ϕ Alta sismicidad</option></select></div>
   </div>
   <button class="btn bv" onclick="calcVS()">〰️ CALCULAR VIGA SÍSMICA</button>
   <div id="res-vs" class="rb"><h4>✅ VIGA SÍSMICA</h4><div class="rg">
     <div class="ri"><div class="v" style="color:var(--vg)" id="vs_d">—</div><div class="l">d efectivo</div><div class="u">m</div></div>
     <div class="ri"><div class="v" style="color:var(--vg)" id="vs_lo">—</div><div class="l">lo conf.</div><div class="u">m</div></div>
     <div class="ri"><div class="v" style="color:var(--vg)" id="vs_sc">—</div><div class="l">s conf.</div><div class="u">cm</div></div>
-    <div class="ri"><div class="v" style="color:var(--vg)" id="vs_ne">—</div><div class="l">Est. conf.</div><div class="u">und</div></div>
+    <div class="ri"><div class="v" style="color:var(--vg)" id="vs_ne">—</div><div class="l">Est.conf.</div><div class="u">und</div></div>
     <div class="ri"><div class="v" id="vs_vol">—</div><div class="l">CONCRETO</div><div class="u">m³</div></div>
     <div class="ri"><div class="v" id="vs_cem">—</div><div class="l">CEMENTO</div><div class="u">sacos</div></div>
     <div class="ri"><div class="v" id="vs_ke">—</div><div class="l">Acero est.</div><div class="u">kg</div></div>
@@ -591,10 +662,10 @@ tr:last-child td{border-bottom:none}
 
 <!-- ═══ VIGA AMARRE ═══ -->
 <div id="tab-ama" class="pg">
-  <div class="sh"><div class="si si-a">🔗</div><div><h2 class="ca">VIGA DE AMARRE</h2><p>SOLERA · PERIMETRAL · REP/INADEH</p></div></div>
-  <div class="chip chip-a">🔗 Mín.20×20cm · 2#4 sup+inf · #3@20cm</div>
-  <div class="fb fb-a"><lbl>📐 VIGA AMARRE</lbl>
-    <div class="f">Traslape si L&gt;9.15m (30pies INADEH)<br>
+  <div class="sh"><div class="si si-a">🔗</div><div><h2 class="ca">VIGA DE AMARRE</h2><p>SOLERA · PERIMETRAL · REP/SPIA</p></div></div>
+  <div class="chip chip-a">🔗 Mín. 20×20cm · 2#4 sup+inf · #3@20cm — REP/SPIA</div>
+  <div class="fb fb-a"><lbl>📐 VIGA AMARRE — REP/SPIA / ACI 318</lbl>
+    <div class="f">Traslape si L&gt;9.15m (30 pies — Largo comercial Panamá)<br>
     N_est=⌈L/sep⌉+1 | qq=(kg×<span class="g">1.07</span>)/<span class="g">45.36</span></div></div>
   <div class="card"><h4 class="ha">GEOMETRÍA</h4>
     <div class="r2">
@@ -615,8 +686,9 @@ tr:last-child td{border-bottom:none}
     </div>
     <div class="r2">
       <div class="fi"><label>SEP. ESTRIBOS (cm)</label><input id="am_sep" type="number" min="10" value="20"></div>
-      <div class="fi"><label>RECUBRIMIENTO</label><select id="am_rec">
-        <option value="4" selected>4.0cm</option><option value="5">5.0cm</option><option value="7.5">7.5cm</option></select></div>
+      <div class="fi"><label>RECUBRIMIENTO — ACI §20.6.1</label><select id="am_rec">
+        <option value="4" selected>4.0cm — Exterior</option>
+        <option value="5">5.0cm</option><option value="7.5">7.5cm — Suelo</option></select></div>
     </div></div>
   <button class="btn bg2" onclick="calcAM()">🔗 CALCULAR AMARRE</button>
   <div id="res-am" class="rb"><h4>✅ VIGA AMARRE</h4><div class="rg">
@@ -641,8 +713,8 @@ tr:last-child td{border-bottom:none}
     <button class="stab ss"    onclick="SA('ae-p',this)">📋 PLANILLA</button>
   </div>
   <div id="ae-e" class="sp on">
-    <div class="fb fb-s"><lbl>📐 ESTRIBOS — INADEH/ACI§25.3</lbl>
-      <div class="f">Cola: <span class="a">6ϕ</span>(#3–#5) | <span class="a">12ϕ</span>(#6–#8)<br>
+    <div class="fb fb-s"><lbl>📐 ESTRIBOS — ACI 318 §25.3 / REP</lbl>
+      <div class="f">Cola: <span class="a">6ϕ</span>(#3–#5) | <span class="a">12ϕ</span>(#6–#8) — ACI §25.3.2<br>
       qq=(m×N×peso×<span class="s">1.07</span>)/<span class="s">45.36</span></div></div>
     <div class="card"><h4 class="hs">GEOMETRÍA</h4>
       <div class="r2">
@@ -650,15 +722,16 @@ tr:last-child td{border-bottom:none}
         <div class="fi"><label>ALTO (cm)</label><input id="e_h" type="number" min="10" placeholder="50"></div>
       </div>
       <div class="r2">
-        <div class="fi"><label>RECUBRIMIENTO</label><select id="e_r">
-          <option value="2.5">2.5cm</option><option value="4" selected>4.0cm</option>
-          <option value="5">5.0cm</option><option value="7.5">7.5cm</option></select></div>
+        <div class="fi"><label>RECUBRIMIENTO — ACI §20.6.1</label><select id="e_r">
+          <option value="2.5">2.5cm — Interior</option><option value="4" selected>4.0cm — Exterior</option>
+          <option value="5">5.0cm</option><option value="7.5">7.5cm — Suelo</option></select></div>
         <div class="fi"><label>ESTRIBO</label><select id="e_d">
           <option value="3" selected>#3</option><option value="4">#4</option></select></div>
       </div>
-      <div class="fi"><label>GANCHO</label><select id="e_g">
+      <div class="fi"><label>GANCHO — ACI §25.3</label><select id="e_g">
         <option value="6" selected>135°–6ϕ Sísmico</option>
-        <option value="8">135°–8ϕ</option><option value="4">180°–4ϕ</option></select></div>
+        <option value="8">135°–8ϕ Alta sism.</option>
+        <option value="4">180°–4ϕ Estándar</option></select></div>
     </div>
     <div class="card"><h4 class="hs">ZONAS</h4>
       <div id="zl"><div class="zr">
@@ -682,14 +755,16 @@ tr:last-child td{border-bottom:none}
     </div></div>
   </div>
   <div id="ae-b" class="sp">
-    <div class="fb fb-s"><lbl>📐 BARRAS — 9.15m LONG. COMERCIAL (INADEH)</lbl>
-      <div class="f">Traslape=40×ϕ (ACI 318) | Cola 90°: <span class="a">6ϕ</span>(#3–#5)/<span class="a">12ϕ</span>(#6–#8)</div></div>
+    <div class="fb fb-s"><lbl>📐 BARRAS — REP/SPIA / ACI 318</lbl>
+      <div class="f">Traslape=40×ϕ (COPANIT/ACI §25.5.1)<br>
+      Long. comercial Panamá: <span class="s">9.15m (30 pies)</span><br>
+      Cola 90°: <span class="a">6ϕ</span>(#3–#5) | <span class="a">12ϕ</span>(#6–#8) — ACI §25.3.2</div></div>
     <div class="card"><h4 class="hs">PARÁMETROS</h4>
       <div class="r2">
         <div class="fi"><label>LONG. (m)</label><input id="b_l" type="number" min="0.1" step="0.1" placeholder="3.0"></div>
         <div class="fi"><label>N° BARRAS</label><input id="b_n" type="number" min="1" placeholder="4"></div>
       </div>
-      <div class="fi"><label>DIÁMETRO — Grado 60</label><select id="b_d">
+      <div class="fi"><label>DIÁMETRO — Grado 60 / COPANIT 153-78</label><select id="b_d">
         <option value="3">#3 · 9.5mm · 0.560kg/m · 40ϕ=38cm</option>
         <option value="4">#4 · 12.7mm · 0.994kg/m · 40ϕ=51cm</option>
         <option value="5" selected>#5 · 15.9mm · 1.552kg/m · 40ϕ=64cm</option>
@@ -697,13 +772,13 @@ tr:last-child td{border-bottom:none}
         <option value="8">#8 · 25.4mm · 3.973kg/m · 40ϕ=102cm</option></select></div>
       <div class="r2">
         <div class="fi"><label>TRASLAPE</label><select id="b_tt" onchange="$('b_tm').style.display=this.value==='m'?'block':'none'">
-          <option value="a">Auto 40×ϕ ACI</option><option value="m">Manual (cm)</option></select></div>
+          <option value="a">Auto 40×ϕ COPANIT/ACI</option><option value="m">Manual (cm)</option></select></div>
         <div class="fi" id="b_tm" style="display:none"><label>CM</label>
           <input id="b_tcm" type="number" min="0" placeholder="60"></div>
       </div>
-      <div class="fi"><label>GANCHO ACI§25.3</label><select id="b_g">
-        <option value="12" selected>12ϕ — 90° std (#3–#5)</option>
-        <option value="12b">12ϕ — 90° std (#6–#8) cola larga</option>
+      <div class="fi"><label>GANCHO — ACI §25.3</label><select id="b_g">
+        <option value="12" selected>12ϕ — 90° estándar (#3–#5)</option>
+        <option value="12b">12ϕ — 90° estándar (#6–#8) cola larga</option>
         <option value="0">Sin gancho</option>
         <option value="6">6ϕ — 180°</option></select></div>
     </div>
@@ -727,15 +802,18 @@ tr:last-child td{border-bottom:none}
         <td class="tst" id="pl-kg">—</td><td class="tst" id="pl-qq" style="font-weight:700">—</td>
       </tr></tfoot>
     </table></div>
-    <div class="tw"><table><caption>CONSTANTES — GRADO 60 · INADEH · PANAMÁ</caption>
-      <thead><tr><th>BARRA</th><th>mm</th><th>kg/m</th><th>40ϕ cm</th><th>Cola 90°</th></tr></thead>
+    <div class="tw"><table><caption>CONSTANTES — GRADO 60 · COPANIT 153-78 · PANAMÁ</caption>
+      <thead><tr><th>BARRA</th><th>mm</th><th>kg/m</th><th>40ϕ cm</th><th>Cola 90° ACI §25.3</th></tr></thead>
       <tbody>
         <tr><td class="tl">#3(3/8")</td><td>9.5</td><td class="tst">0.560</td><td>38</td><td>6ϕ=5.7cm</td></tr>
         <tr><td class="tl">#4(1/2")</td><td>12.7</td><td class="tst">0.994</td><td>51</td><td>6ϕ=7.6cm</td></tr>
         <tr><td class="tl">#5(5/8")</td><td>15.9</td><td class="tst">1.552</td><td>64</td><td>6ϕ=9.5cm</td></tr>
         <tr><td class="tl">#6(3/4")</td><td>19.1</td><td class="tst">2.235</td><td>76</td><td class="tok">12ϕ=22.9cm</td></tr>
+        <tr><td class="tl">#7(7/8")</td><td>22.2</td><td class="tst">3.042</td><td>89</td><td class="tok">12ϕ=26.6cm</td></tr>
         <tr><td class="tl">#8(1")</td><td>25.4</td><td class="tst">3.973</td><td>102</td><td class="tok">12ϕ=30.5cm</td></tr>
       </tbody></table></div>
+    <div class="wb inf">ℹ️ Long. comercial Panamá: <b>9.15m (30 pies)</b><br>
+    Cola gancho 90°: <b>6ϕ</b> #3–#5 | <b>12ϕ</b> #6–#8 — ACI §25.3.2 / COPANIT</div><br>
     <button class="bpdf" onclick="exportPlan()">📄 EXPORTAR PLANILLA PDF</button>
   </div>
 </div>
@@ -743,12 +821,12 @@ tr:last-child td{border-bottom:none}
 <!-- ═══ ESCALERA ═══ -->
 <div id="tab-esc" class="pg">
   <div class="sh"><div class="si si-e">🪜</div><div><h2 class="ce">ESCALERA — LOSA INCLINADA</h2><p>SECCIÓN LONGITUDINAL · ACERO · DIAGRAMA</p></div></div>
-  <div class="chip chip-e">🪜 ACI 318 · INADEH · ES09 Ganchos 90°/135°</div>
-  <div class="fb fb-e"><lbl>📐 GEOMETRÍA Y REFUERZO — INADEH</lbl>
-    <div class="f">L<sub>incl</sub>=√(H²+L<sub>horiz</sub>²) | α=arctan(H/L<sub>h</sub>)<br>
+  <div class="chip chip-e">🪜 ACI 318 · COPANIT · ES09 Ganchos 90°/135°</div>
+  <div class="fb fb-e"><lbl>📐 GEOMETRÍA Y REFUERZO — ACI 318 / REP</lbl>
+    <div class="f">L<sub>incl</sub>=√(H²+L<sub>h</sub>²) | α=arctan(H/L<sub>h</sub>)<br>
     t<sub>losa</sub>=max(⌈L<sub>i</sub>/20⌉,10) <span class="e">[cm]</span><br>
-    Long.inf: N barras @15cm | Trans: 1/escalón<br>
-    ES09: 90°inf · 135°sup | qq=(kg×<span class="g">1.07</span>)/<span class="g">45.36</span></div></div>
+    Long.inf: N barras @15cm | ES09: 90°inf/135°sup<br>
+    qq=(kg×<span class="g">1.07</span>)/<span class="g">45.36</span></div></div>
   <div class="card"><h4 class="he">PARÁMETROS</h4>
     <div class="r2">
       <div class="fi"><label>ALTURA TOTAL (cm)</label><input id="E_H" type="number" min="80" step="1" placeholder="280" oninput="liveEsc()"></div>
@@ -772,22 +850,19 @@ tr:last-child td{border-bottom:none}
       <div class="fi"><label>GANCHO</label><select id="E_bg">
         <option value="3" selected>#3</option><option value="4">#4</option></select></div>
     </div></div>
-  <!-- LIVE GEO -->
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:12px">
     <div class="ri"><div class="v" style="color:var(--esc);font-size:14px" id="e_incl">—</div><div class="l">L INCLINADA</div><div class="u">m</div></div>
     <div class="ri"><div class="v" style="color:var(--esc);font-size:14px" id="e_alpha">—</div><div class="l">ÁNGULO α</div><div class="u">°</div></div>
     <div class="ri"><div class="v" style="color:var(--esc);font-size:14px" id="e_tlosa">—</div><div class="l">t LOSA</div><div class="u">cm</div></div>
   </div>
-  <!-- DIAGRAM -->
-  <div class="iw" style="border-color:rgba(232,121,249,.3)">
+  <div class="iso-outer" style="border-color:rgba(232,121,249,.3)">
     <h4 style="color:var(--esc)">🔥 DIAGRAMA DE REFUERZO — SECCIÓN LONGITUDINAL</h4>
-    <canvas id="diagCanvas" height="220"></canvas>
-    <div class="legend" style="margin-top:8px">
+    <canvas id="diagCanvas" height="200"></canvas>
+    <div class="legend">
       <div class="leg"><div class="leg-d" style="background:#f97316"></div>Long. inf.</div>
       <div class="leg"><div class="leg-d" style="background:#38bdf8"></div>Transversal</div>
       <div class="leg"><div class="leg-d" style="background:#fb7185"></div>Superior</div>
       <div class="leg"><div class="leg-d" style="background:#4ade80"></div>ES09</div>
-      <div class="leg"><div class="leg-d" style="background:rgba(167,139,250,.6)"></div>Concreto</div>
     </div>
   </div>
   <button class="btn be" onclick="calcEsc()">🪜 CALCULAR ESCALERA</button>
@@ -795,7 +870,7 @@ tr:last-child td{border-bottom:none}
     <h4>✅ ESCALERA — TABLA DE ACERO</h4>
     <div class="rg" id="esc_sum" style="margin-bottom:12px"></div>
     <div class="tw"><table>
-      <thead><tr><th>TIPO DE REFUERZO</th><th>DIÁM.</th><th>LONG.</th><th>NOTAS</th></tr></thead>
+      <thead><tr><th>TIPO REFUERZO</th><th>DIÁM.</th><th>LONG.</th><th>NOTAS</th></tr></thead>
       <tbody id="esc_tbl"></tbody>
       <tfoot><tr class="trow-tot" id="esc_tot" style="display:none">
         <td id="et_l">TOTAL</td><td id="et_d">—</td><td id="et_m">—</td><td>Suma total</td>
@@ -806,23 +881,71 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
-<!-- ═══ RESUMEN ═══ -->
+<!-- ═══ RESUMEN MEJORADO ═══ -->
 <div id="tab-res" class="pg">
-  <div class="sh"><div class="si si-y">📊</div><div><h2 class="cy">RESUMEN DEL PROYECTO</h2><p>3D · CANTIDADES · ACERO · ANÁLISIS</p></div></div>
-  <div class="iw"><h4>🏗️ VISTA ISOMÉTRICA — ESTRUCTURA</h4>
-    <canvas id="isoCanvas" height="230"></canvas>
-    <p style="font-size:10px;color:var(--dim);margin-top:5px;font-family:'Share Tech Mono'">↺ Se actualiza con datos de columnas</p></div>
-  <div class="cw"><h4>📈 DISTRIBUCIÓN DE MATERIALES</h4><canvas id="matChart" height="180"></canvas></div>
-  <div class="tw"><table><caption>RESUMEN — CONCRETO Y MORTERO</caption>
-    <thead><tr><th>MÓDULO</th><th>CEMENTO</th><th>ARENA</th><th>GRAVA</th></tr></thead>
-    <tbody id="tb-body"><tr><td colspan="4" style="color:var(--dim);text-align:center;padding:12px">Calcula módulos</td></tr></tbody>
-    <tfoot id="tb-foot" style="display:none"><tr style="background:rgba(240,165,0,.05)">
-      <td class="tl">TOTAL</td><td class="tt" id="t-c">—</td><td class="tt" id="t-a">—</td><td class="tt" id="t-g">—</td>
-    </tr></tfoot></table></div>
-  <div class="tw" id="ta-wrap" style="display:none"><table><caption>RESUMEN — ACERO DE REFUERZO</caption>
-    <thead><tr><th>MÓDULO</th><th>kg</th><th>qq</th><th>TIPO</th></tr></thead>
-    <tbody id="ta-body"></tbody></table></div>
-  <div class="concl"><h4>🔍 CONCLUSIONES — REP/INADEH/ACI 318</h4>
+  <div class="sh"><div class="si si-y">📊</div><div><h2 class="cy">RESUMEN DEL PROYECTO</h2><p>3D INTERACTIVO · MEMORIA · ACERO · ANÁLISIS</p></div></div>
+
+  <!-- ISO 3D MEJORADO CON DRAG -->
+  <div class="iso-outer">
+    <h4>🏗️ ESTRUCTURA 3D — ARRASTRA PARA GIRAR</h4>
+    <p class="iso-hint">👆 Touch/drag para rotar · Muestra módulos calculados</p>
+    <canvas id="isoCanvas" height="260"></canvas>
+    <div class="legend">
+      <div class="leg"><div class="leg-d" style="background:rgba(240,165,0,.9)"></div>Columna</div>
+      <div class="leg"><div class="leg-d" style="background:var(--ped)"></div>Pedestal</div>
+      <div class="leg"><div class="leg-d" style="background:rgba(90,60,0,.9)"></div>Zapata</div>
+      <div class="leg"><div class="leg-d" style="background:var(--vg)"></div>Viga sísmica</div>
+      <div class="leg"><div class="leg-d" style="background:var(--am)"></div>V. amarre</div>
+      <div class="leg"><div class="leg-d" style="background:var(--vc)"></div>V. cimen.</div>
+    </div>
+  </div>
+
+  <!-- TOTALES EJECUTIVOS -->
+  <div class="sum-section">
+    <h4>📋 MEMORIA DE CANTIDADES — RESUMEN EJECUTIVO</h4>
+    <div id="sum-exec">
+      <p style="color:var(--dim);font-size:12px;text-align:center;padding:10px">Calcula módulos para ver resumen</p>
+    </div>
+  </div>
+
+  <!-- TOTALES GLOBALES -->
+  <div class="sum-total" id="sum-totals" style="display:none">
+    <div class="st-item"><div class="v" id="st-vol">—</div><div class="l">CONCRETO TOTAL</div><div class="u">m³</div></div>
+    <div class="st-item"><div class="v" id="st-kg">—</div><div class="l">ACERO TOTAL</div><div class="u">kg</div></div>
+    <div class="st-item"><div class="v" style="font-size:24px" id="st-qq">—</div><div class="l">QUINTALES TOTAL</div><div class="u">qq</div></div>
+  </div>
+
+  <!-- DONUT ACERO -->
+  <div class="sum-section" id="donut-section" style="display:none">
+    <h4>🔩 DISTRIBUCIÓN DE ACERO POR MÓDULO</h4>
+    <div class="donut-wrap">
+      <canvas id="donutChart" width="130" height="130"></canvas>
+      <div class="donut-legend" id="donut-legend"></div>
+    </div>
+  </div>
+
+  <!-- CHART MATERIALES -->
+  <div class="cw"><h4>📈 DISTRIBUCIÓN CEMENTO · ARENA · GRAVA</h4>
+    <canvas id="matChart" height="170"></canvas></div>
+
+  <!-- TABLA ACERO CONSOLIDADA -->
+  <div class="tw" id="ta-wrap" style="display:none">
+    <table><caption>RESUMEN — ACERO DE REFUERZO POR MÓDULO</caption>
+      <thead><tr><th>MÓDULO</th><th>kg acero</th><th>qq (c/7%)</th><th>TIPO</th></tr></thead>
+      <tbody id="ta-body"></tbody>
+      <tfoot id="ta-foot" style="display:none">
+        <tr style="background:rgba(240,165,0,.07)">
+          <td class="tl">TOTAL ACERO</td>
+          <td class="tt" id="ta-kg-tot">—</td>
+          <td class="tt" id="ta-qq-tot">—</td>
+          <td>—</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <!-- CONCLUSIONES -->
+  <div class="concl"><h4>🔍 CONCLUSIONES Y RECOMENDACIONES — ACI 318 / REP/SPIA</h4>
     <div id="concl-items"><div class="ci"><div class="cd"></div>
       <p style="color:var(--dim)">Calcula módulos para generar conclusiones.</p></div></div></div>
   <div class="div"></div>
@@ -834,7 +957,7 @@ tr:last-child td{border-bottom:none}
 
 <script>
 /* ════════════════════════════════════
-   CONSTANTES — INADEH/ACI 318/COPANIT
+   CONSTANTES — ACI 318/REP/SPIA/COPANIT
    ════════════════════════════════════ */
 const BR={
   3:{lb:'#3(3/8")',d:9.5, w:0.560,t40:0.38, cola6:0.057,cola12:0.114},
@@ -844,14 +967,15 @@ const BR={
   7:{lb:'#7(7/8")',d:22.2,w:3.042,t40:0.888,cola6:0.133,cola12:0.266},
   8:{lb:'#8(1")',  d:25.4,w:3.973,t40:1.016,cola6:0.152,cola12:0.305}
 };
-const L_COM=9.15; // Long. comercial Panamá (INADEH)
+const L_COM=9.15; // largo comercial Panamá (30 pies)
 const DOS={
   175:{c:6.5,a:0.52,g:0.78,w:190,r:'1:2.5:3.8'},
   210:{c:7.0,a:0.56,g:0.84,w:185,r:'1:2.0:3.0'},
   245:{c:7.5,a:0.50,g:0.75,w:180,r:'1:1.8:2.7'},
   280:{c:8.0,a:0.48,g:0.72,w:175,r:'1:1.6:2.4'}
 };
-const S={};const PI=[];let RE=null; // estado escalera
+const S={};const PI=[];let RE=null;
+let donutChart=null,chartInst=null;
 
 /* UTILS */
 const $=id=>document.getElementById(id);
@@ -866,14 +990,15 @@ function lEst(wu,hu,gf,dn){
   return +(2*(wu+hu)/100+2*cola).toFixed(3);
 }
 
-/* ════ NAVIGATION ════ */
+/* NAVIGATION */
 function T(id,btn){
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   $('tab-'+id).classList.add('on');btn.classList.add('on');
-  if(id==='res')buildRes();if(id==='ace')buildPlan();
+  if(id==='res'){buildRes();}
+  if(id==='ace')buildPlan();
   if(id==='esc'){liveEsc();if(RE)drawDiag(RE);}
-  if(id==='zap')drawZapDiag(null);
+  if(id==='zap')drawZapDiag(S.zap||null);
 }
 function S2(id,btn){
   ['sp-cr','sp-tl','sp-ci'].forEach(i=>$(i).classList.remove('on'));
@@ -887,7 +1012,7 @@ function SA(id,btn){
   if(id==='ae-p')buildPlan();
 }
 
-/* ════ CONCRETO ════ */
+/* CONCRETO */
 function calcC(){
   const a=gv('c_area'),e=gv('c_esp');if(!a||!e)return;
   const fc=+$('c_fc').value,d=DOS[fc],vol=+(a*e/100).toFixed(3);
@@ -897,8 +1022,6 @@ function calcC(){
   sv('cg',S.con.gra);sv('cw',S.con.agua);sv('cdos',d.r);
   $('res-c').classList.add('show');toast('CONCRETO ✓');
 }
-
-/* ════ MUROS ════ */
 function calcM(){
   const a=gv('m_area');if(!a)return;
   const t=+$('m_bloque').value,den={8:16.5,12:12.5,15:12.5,20:12.5}[t];
@@ -907,8 +1030,6 @@ function calcM(){
   sv('mb',bl);sv('mc',c);sv('ma',ar);sv('mw',w);
   $('res-m').classList.add('show');toast('MUROS ✓');
 }
-
-/* ════ PISOS ════ */
 function calcP(){
   const a=gv('p_area');if(!a)return;
   const sel=$('p_lado').value;let lado=sel==='c'?gv('p_custom'):+sel;if(!lado)return;
@@ -918,60 +1039,41 @@ function calcP(){
   $('res-p').classList.add('show');toast('PISOS ✓');
 }
 
-/* ════ ZAPATAS ════ */
+/* ZAPATAS */
 function calcZap(){
   const B=gv('z_b'),L=gv('z_l'),H=gv('z_h'),nZ=gv('z_n'),sep=gv('z_sep')||15;
   if(!B||!L||!H||!nZ)return;
   const rec=+$('z_rec').value,fc=+$('z_fc').value,bd=+$('z_bd').value;
   const d=DOS[fc];
-
-  // Longitud útil por barra (cada dirección)
-  const lb_x=+((B/100)-2*(rec/100)).toFixed(3); // m
+  const lb_x=+((B/100)-2*(rec/100)).toFixed(3);
   const lb_y=+((L/100)-2*(rec/100)).toFixed(3);
-
-  // N° barras por dirección (basado en separación)
   const nb_x=Math.floor((B-2*rec)/sep)+1;
   const nb_y=Math.floor((L-2*rec)/sep)+1;
-
-  // Total por zapata (A/D = ambas direcciones)
-  const m_x=+(nb_x*lb_x).toFixed(3);
-  const m_y=+(nb_y*lb_y).toFixed(3);
-  const m_zap=+(m_x+m_y).toFixed(3);
-
-  // Total proyecto
-  const m_tot=+(m_zap*nZ).toFixed(2);
-  const kg_tot=toKg(m_tot,bd);
-  const qq=toQQ(kg_tot);
-
-  // Volumen concreto
-  const vol=+((B/100)*(L/100)*(H/100)*nZ).toFixed(3);
-  const cem=+(vol*d.c).toFixed(1);
-
-  S.zap={m:'ZAPATAS',B,L,H,nZ,rec,fc,bd,lb_x,lb_y,nb_x,nb_y,m_x,m_y,m_zap,m_tot,kg_tot,qq,vol,cem};
-
-  // Tabla estilo documento
-  $('z_tbl_wrap').innerHTML=`
-  <table><caption>DESARROLLO DE CÁLCULO — ZAPATA ${fmt(B/100,2)}×${fmt(L/100,2)} m</caption>
+  const m_x=+(nb_x*lb_x).toFixed(3),m_y=+(nb_y*lb_y).toFixed(3);
+  const m_zap=+(m_x+m_y).toFixed(3),m_tot=+(m_zap*nZ).toFixed(2);
+  const kg_tot=toKg(m_tot,bd),qq=toQQ(kg_tot);
+  const vol=+((B/100)*(L/100)*(H/100)*nZ).toFixed(3),cem=+(vol*d.c).toFixed(1);
+  S.zap={m:'ZAPATAS',B,L,H,nZ,rec,fc,bd,lb_x,lb_y,nb_x,nb_y,m_x,m_y,m_zap,m_tot,
+    kg_tot,qq,vol,cem,ke:kg_tot,kl:0};
+  $('z_tbl_wrap').innerHTML=`<table><caption>DESARROLLO DE CÁLCULO — ZAPATA ${fmt(B/100,2)}×${fmt(L/100,2)}m — ACI 318 §20.6.1.3</caption>
     <thead><tr><th>PARÁMETRO</th><th>VALOR</th><th>UNIDAD</th></tr></thead>
     <tbody>
       <tr><td class="tl">Ancho B</td><td>${fmt(B/100,2)}</td><td>m</td></tr>
       <tr><td class="tl">Largo L</td><td>${fmt(L/100,2)}</td><td>m</td></tr>
-      <tr><td class="tl">Recubrimiento c/lado</td><td>${fmt(rec/100,3)}</td><td>m (${rec}cm — INADEH)</td></tr>
+      <tr><td class="tl">Recubrimiento c/lado</td><td>${fmt(rec/100,3)}</td><td>m (${rec}cm — ACI §20.6.1.3)</td></tr>
       <tr><td class="tl">L barra dir. X</td><td>${fmt(B/100,2)}−${fmt(rec/100,3)}−${fmt(rec/100,3)} = <b>${lb_x}</b></td><td>m</td></tr>
       <tr><td class="tl">L barra dir. Y</td><td>${fmt(L/100,2)}−${fmt(rec/100,3)}−${fmt(rec/100,3)} = <b>${lb_y}</b></td><td>m</td></tr>
-      <tr><td class="tl">N° barras dir. X (A/D)</td><td>${nb_x} barras @${sep}cm</td><td>und</td></tr>
-      <tr><td class="tl">N° barras dir. Y (A/D)</td><td>${nb_y} barras @${sep}cm</td><td>und</td></tr>
+      <tr><td class="tl">N° barras dir. X @${sep}cm</td><td>${nb_x}</td><td>und</td></tr>
+      <tr><td class="tl">N° barras dir. Y @${sep}cm</td><td>${nb_y}</td><td>und</td></tr>
       <tr><td class="tl">Acero X/zapata</td><td>${nb_x} × ${lb_x} = ${m_x}</td><td>m</td></tr>
       <tr><td class="tl">Acero Y/zapata</td><td>${nb_y} × ${lb_y} = ${m_y}</td><td>m</td></tr>
-      <tr><td class="tl">Total A/D por zapata</td><td>${m_x} + ${m_y} = <b>${m_zap}</b></td><td>m</td></tr>
-      <tr><td class="tl">N° zapatas en proyecto</td><td>${nZ}</td><td>und</td></tr>
+      <tr><td class="tl">Total A/D por zapata</td><td>${m_x}+${m_y} = <b>${m_zap}</b></td><td>m</td></tr>
+      <tr><td class="tl">N° zapatas proyecto</td><td>${nZ}</td><td>und</td></tr>
     </tbody>
     <tfoot><tr class="trow-tot">
       <td>TOTAL ${BR[bd].lb} — Zapatas (${nZ} und)</td>
-      <td>${nZ} × ${m_zap} = <b>${m_tot}</b></td><td>m</td>
-    </tr></tfoot>
-  </table>`;
-
+      <td>${nZ}×${m_zap} = <b>${m_tot}</b></td><td>m</td>
+    </tr></tfoot></table>`;
   $('z_sum').innerHTML=`
     <div class="ri"><div class="v" style="color:var(--zap)">${m_tot}</div><div class="l">METROS TOTALES</div><div class="u">m lineales</div></div>
     <div class="ri"><div class="v" style="color:var(--zap)">${kg_tot}</div><div class="l">PESO ACERO</div><div class="u">kg</div></div>
@@ -980,166 +1082,137 @@ function calcZap(){
     <div class="ri full" style="background:rgba(251,191,36,.06);border-color:var(--zap)">
       <div class="v" style="color:var(--zap);font-size:22px">${qq}</div>
       <div class="l">QUINTALES ACERO (c/7% desp.) · 45.36 kg/qq</div></div>`;
-
   const wn=$('z_wn');let ws=[];
-  if(rec<7.5)ws.push('⚠️ Recubrimiento <7.5cm — INADEH exige mín. 7.5cm para contacto con suelo');
-  if(H/100<0.25)ws.push('⚠️ Altura zapata <25cm — Verificar capacidad de carga y punzonamiento');
-  ws.push(`✅ L_barra = ${fmt(B/100,2)} − 2×${fmt(rec/100,3)} = ${lb_x}m — Fórmula INADEH confirmada`);
-  wn.innerHTML=ws.join('<br>');wn.style.display='block';
-  wn.className=rec<7.5?'wb':'wb ok';
-
+  if(rec<7.5)ws.push('⚠️ Recubrimiento <7.5cm — ACI 318 §20.6.1.3 exige mín. 7.5cm contacto suelo');
+  ws.push(`✅ L_barra = ${fmt(B/100,2)} − 2×${fmt(rec/100,3)} = ${lb_x}m — ACI 318 §25.4.1`);
+  wn.innerHTML=ws.join('<br>');wn.style.display='block';wn.className=rec<7.5?'wb':'wb ok';
   $('res-z').classList.add('show');
   addPI('ZAPATAS',BR[bd].lb,nb_x*nZ+nb_y*nZ,m_tot,kg_tot,qq);
-  drawZapDiag(S.zap);
-  toast('ZAPATA ✓');
+  drawZapDiag(S.zap);toast('ZAPATA ✓');
 }
 
-/* ════ ZAPATA DIAGRAM ════ */
-function drawZapDiag(r){
-  const cv=$('zapCanvas');if(!cv)return;
-  cv.width=cv.offsetWidth||300;cv.height=200;
-  const ctx=cv.getContext('2d');
-  ctx.clearRect(0,0,cv.width,cv.height);
-
-  const B_=r?r.B:75,L_=r?r.L:75,rec_=r?r.rec:7.5;
-  const nb_x=r?r.nb_x:4,nb_y=r?r.nb_y:4;
-  const bd=r?r.bd:4;
-
-  const margin=20;
-  const sc=Math.min((cv.width-2*margin)/Math.max(B_,1),(cv.height-2*margin)/Math.max(L_,1))*0.85;
-  const ox=cv.width/2-B_*sc/2,oy=cv.height/2-L_*sc/2;
-
-  // Background zapata
-  ctx.fillStyle='rgba(167,139,250,0.08)';
-  ctx.strokeStyle='rgba(167,139,250,0.5)';ctx.lineWidth=1.5;
-  ctx.beginPath();ctx.rect(ox,oy,B_*sc,L_*sc);ctx.fill();ctx.stroke();
-
-  // Recubrimiento
-  ctx.strokeStyle='rgba(251,191,36,0.25)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
-  ctx.beginPath();ctx.rect(ox+rec_*sc,oy+rec_*sc,(B_-2*rec_)*sc,(L_-2*rec_)*sc);ctx.stroke();
-  ctx.setLineDash([]);
-
-  // Barras dir X (horizontal en planta)
-  if(r){
-    const spx=(L_-2*rec_)/(nb_y-1||1);
-    for(let i=0;i<nb_y;i++){
-      const y_=oy+rec_*sc+i*spx*sc;
-      ctx.beginPath();ctx.moveTo(ox+rec_*sc,y_);ctx.lineTo(ox+(B_-rec_)*sc,y_);
-      ctx.strokeStyle='rgba(251,191,36,0.85)';ctx.lineWidth=2;ctx.stroke();
-      // End dots
-      ctx.beginPath();ctx.arc(ox+rec_*sc,y_,3,0,Math.PI*2);ctx.fillStyle='rgba(251,191,36,0.9)';ctx.fill();
-      ctx.beginPath();ctx.arc(ox+(B_-rec_)*sc,y_,3,0,Math.PI*2);ctx.fill();
-    }
-    // Barras dir Y (vertical en planta)
-    const spy=(B_-2*rec_)/(nb_x-1||1);
-    for(let i=0;i<nb_x;i++){
-      const x_=ox+rec_*sc+i*spy*sc;
-      ctx.beginPath();ctx.moveTo(x_,oy+rec_*sc);ctx.lineTo(x_,oy+(L_-rec_)*sc);
-      ctx.strokeStyle='rgba(0,201,255,0.75)';ctx.lineWidth=1.5;ctx.stroke();
-    }
-  }
-
-  // Dimension labels
-  ctx.fillStyle='rgba(200,200,220,.8)';ctx.font='10px Share Tech Mono';
-  ctx.fillText(`B=${fmt(B_/100,2)}m`,ox+2,oy-5);
-  ctx.save();ctx.translate(ox-14,oy+L_*sc/2);ctx.rotate(-Math.PI/2);
-  ctx.fillText(`L=${fmt(L_/100,2)}m`,0,0);ctx.restore();
-  if(r){
-    ctx.fillStyle='rgba(251,191,36,.8)';
-    ctx.fillText(`${nb_y} barras @${Math.round((L_-2*rec_)/(nb_y-1||1))}cm`,ox+3,oy+L_*sc+13);
-    ctx.fillStyle='rgba(0,201,255,.8)';
-    ctx.fillText(`${nb_x} barras`,ox+B_*sc-60,oy-5);
-  }
-  // Rec label
-  ctx.fillStyle='rgba(251,191,36,.5)';ctx.font='9px Share Tech Mono';
-  ctx.fillText(`rec=${rec_}cm`,ox+rec_*sc+2,oy+rec_*sc-3);
+/* VIGA DE CIMENTACIÓN */
+function calcVCim(){
+  const b=gv('vc_b'),h=gv('vc_h'),L=gv('vc_L'),nv=gv('vc_nv')||1;
+  if(!b||!h||!L)return;
+  const rec=+$('vc_rec').value,fc=+$('vc_fc').value;
+  const bl=+$('vc_bl').value,be=+$('vc_be').value,gf=+$('vc_g').value;
+  const ns=gv('vc_ns')||3,ni=gv('vc_ni')||3,sep=gv('vc_sep')||20;
+  const d=DOS[fc];
+  // Barras longitudinales: traslape si L > 9.15m
+  const nTras=L>L_COM?Math.ceil(L/L_COM)-1:0;
+  const cola_lon=(bl>=6)?BR[bl].cola12:BR[bl].cola6;
+  const lb_lon=+(L+nTras*BR[bl].t40+2*cola_lon).toFixed(3);
+  const n_lon=ns+ni;
+  const m_lon=+(lb_lon*n_lon*nv).toFixed(2);
+  const kg_lon=toKg(m_lon,bl);
+  // Estribos
+  const wu=b-2*rec,hu=h-2*rec;
+  if(wu<=0||hu<=0){toast('⚠️ RECUBRIMIENTO > SECCIÓN');return;}
+  const le=lEst(wu,hu,gf,be);
+  const ne=Math.ceil(L/(sep/100))+1;
+  const m_est=+(le*ne*nv).toFixed(2);
+  const kg_est=toKg(m_est,be);
+  const vol=+(b/100*h/100*L*nv).toFixed(3),cem=+(vol*d.c).toFixed(1);
+  const kg_tot=+(+kg_lon+ +kg_est).toFixed(2);
+  const qq=toQQ(kg_tot);
+  S.vcim={m:'V.CIMENTACIÓN',b,h,L,nv,rec,fc,bl,be,ns,ni,ne,le,lb_lon,n_lon,
+    m_lon,m_est,kg_lon,kg_est,kg_tot,qq,vol,cem,ke:kg_est,kl:kg_lon};
+  $('vc_tbl_wrap').innerHTML=`<table><caption>DESARROLLO — VIGA CIMENTACIÓN ${fmt(b/100,2)}×${fmt(h/100,2)}m · L=${fmt(L,2)}m — ACI 318 / REP</caption>
+    <thead><tr><th>ELEMENTO</th><th>#BARRAS</th><th>L/BARRA (m)</th><th>SUBTOTAL</th><th>×${nv} vigas</th></tr></thead>
+    <tbody>
+      <tr><td class="tl" style="color:var(--vc)">Long. Sup. ${BR[bl].lb}</td><td>${ns}</td>
+        <td>${lb_lon}<br><span style="font-size:9px;color:var(--dim)">${fmt(L,2)}+${nTras?nTras+'×'+fmt(BR[bl].t40,3)+'(traslape)':0}+2×${fmt(cola_lon,3)}(ganchos)</span></td>
+        <td>${fmt(lb_lon*ns*nv,2)} m</td><td class="tvc2">${fmt(lb_lon*ns*nv,2)} m</td></tr>
+      <tr><td class="tl" style="color:var(--vc)">Long. Inf. ${BR[bl].lb}</td><td>${ni}</td>
+        <td>${lb_lon}</td>
+        <td>${fmt(lb_lon*ni*nv,2)} m</td><td class="tvc2">${fmt(lb_lon*ni*nv,2)} m</td></tr>
+      <tr><td class="tl" style="color:var(--st)">Estribos ${BR[be].lb}</td><td>${ne} est.</td>
+        <td>${le}<br><span style="font-size:9px;color:var(--dim)">2(${wu}+${hu})/100+2×colas | @${sep}cm</span></td>
+        <td>${fmt(le*ne*nv,2)} m</td><td class="tst">${fmt(le*ne*nv,2)} m</td></tr>
+    </tbody>
+    <tfoot><tr class="trow-tot">
+      <td>TOTAL acero</td><td>—</td><td>—</td>
+      <td>${fmt(+(lb_lon*n_lon*nv).toFixed(2)++(le*ne*nv).toFixed(2),2)} m</td>
+      <td style="color:var(--vc)">${qq} qq</td>
+    </tr></tfoot></table>`;
+  $('vc_sum').innerHTML=`
+    <div class="ri"><div class="v" style="color:var(--vc)">${m_lon}</div><div class="l">LONG. TOTAL</div><div class="u">m · ${BR[bl].lb}</div></div>
+    <div class="ri"><div class="v" style="color:var(--st)">${m_est}</div><div class="l">ESTRIBOS</div><div class="u">m · ${BR[be].lb}</div></div>
+    <div class="ri"><div class="v">${vol}</div><div class="l">CONCRETO</div><div class="u">m³</div></div>
+    <div class="ri"><div class="v">${cem}</div><div class="l">CEMENTO</div><div class="u">sacos</div></div>
+    <div class="ri full" style="background:rgba(6,182,212,.06);border-color:var(--vc)">
+      <div class="v" style="color:var(--vc);font-size:22px">${qq}</div>
+      <div class="l">QUINTALES ACERO TOTAL (c/7% desp.) · 45.36 kg/qq</div></div>`;
+  const wn=$('vc_wn');let ws=[];
+  if(rec<7.5)ws.push('⚠️ Rec.<7.5cm — ACI 318 §20.6.1.3 exige mín.7.5cm contacto suelo');
+  if(b<25||h<30)ws.push('⚠️ Sección mín. recomendada 25×30cm para viga de cimentación — REP/SPIA');
+  if(nTras>0)ws.push(`ℹ️ L=${fmt(L,2)}m > 9.15m → ${nTras} traslape(s) de ${(BR[bl].t40*100).toFixed(0)}cm (40×ϕ) incluidos — COPANIT`);
+  ws.push(`✅ Rec.=${rec}cm (contacto suelo) | s_est=${sep}cm | Gancho ${gf===4?'180°':'135°'}`);
+  wn.innerHTML=ws.join('<br>');wn.style.display='block';wn.className=(rec<7.5||b<25)?'wb':'wb ok';
+  $('res-vc').classList.add('show');
+  addPI('V.CIMENTACIÓN',BR[bl].lb,n_lon*nv,m_lon,kg_lon,toQQ(kg_lon));
+  addPI('VC.ESTRIBOS',BR[be].lb,ne*nv,m_est,kg_est,toQQ(kg_est));
+  toast('V.CIMENTACIÓN ✓');
 }
 
-/* ════ PEDESTALES ════ */
+/* PEDESTALES */
 function calcPed(){
   const b=gv('pd_b'),h=gv('pd_h'),H=gv('pd_H'),nP=gv('pd_n'),nb=gv('pd_nb'),sep=gv('pd_sep')||15;
   if(!b||!h||!H||!nP||!nb)return;
   const rec=+$('pd_rec').value,fc=+$('pd_fc').value;
   const bl=+$('pd_bl').value,be=+$('pd_be').value,gf=+$('pd_g').value;
   const d=DOS[fc];
-
-  // Acero longitudinal: H + gancho 90° + doblez (ACI §25.3)
   const cola_lon=(bl>=6)?BR[bl].cola12:BR[bl].cola6;
-  const L_long=+(H+cola_lon+0.08).toFixed(3); // H + gancho + doblez 8cm estándar
+  const L_long=+(H+cola_lon+0.08).toFixed(3);
   const m_long=+(nb*L_long).toFixed(3);
   const kg_long=toKg(m_long,bl);
-
-  // Estribos
   const wu=b-2*rec,hu_e=h-2*rec;
   if(wu<=0||hu_e<=0){toast('⚠️ RECUBRIMIENTO > SECCIÓN');return;}
   const le=lEst(wu,hu_e,gf,be);
   const nEst=Math.ceil(H/(sep/100));
   const m_est=+(le*nEst).toFixed(3);
   const kg_est=toKg(m_est,be);
-
-  // Totales por pedestal y proyecto
-  const m_zap_p=m_long+m_est;
   const m_tot_long=+(m_long*nP).toFixed(2);
   const m_tot_est=+(m_est*nP).toFixed(2);
-  const kg_tot=toKg(m_tot_long,bl)+toKg(m_tot_est,be);
+  const kg_tot=+(toKg(m_tot_long,bl)+ +toKg(m_tot_est,be)).toFixed(2);
   const qq=toQQ(kg_tot);
-
-  const vol=+(b/100*h/100*H*nP).toFixed(3);
-  const cem=+(vol*d.c).toFixed(1);
-
+  const vol=+(b/100*h/100*H*nP).toFixed(3),cem=+(vol*d.c).toFixed(1);
   S.ped={m:'PEDESTALES',b,h,H,nP,nb,rec,fc,bl,be,L_long,le,nEst,
-    m_long,m_est,m_tot_long,m_tot_est,kg_long,kg_est,kg_tot,qq,vol,cem};
-
-  // Tabla estilo documento
-  $('pd_tbl_wrap').innerHTML=`
-  <table><caption>DESARROLLO DE CÁLCULO — PEDESTAL ${fmt(b/100,2)}×${fmt(h/100,2)} m · H=${H}m</caption>
-    <thead><tr><th>ELEMENTO</th><th>#BARRAS</th><th>L/BARRA (m)</th><th>SUBTOTAL (m)</th><th>×${nP} ped.</th></tr></thead>
+    m_long,m_est,m_tot_long,m_tot_est,kg_long,kg_est,kg_tot,qq,vol,cem,ke:kg_est*nP,kl:kg_long*nP};
+  $('pd_tbl_wrap').innerHTML=`<table><caption>DESARROLLO — PEDESTAL ${fmt(b/100,2)}×${fmt(h/100,2)}m · H=${H}m — ACI 318 / REP</caption>
+    <thead><tr><th>ELEMENTO</th><th>#BARRAS</th><th>L/BARRA (m)</th><th>SUBTOTAL</th><th>×${nP} ped.</th></tr></thead>
     <tbody>
-      <tr>
-        <td class="tl" style="color:var(--ped)">Long. ${BR[bl].lb}</td>
-        <td>${nb}</td>
-        <td>${L_long}<br><span style="font-size:9px;color:var(--dim)">${H}(vert)+${fmt(cola_lon,2)}(gancho)+0.08(doblez)</span></td>
-        <td>${m_long}</td>
-        <td class="tp2">${fmt(m_tot_long)} m</td>
-      </tr>
-      <tr>
-        <td class="tl" style="color:var(--st)">Estribos ${BR[be].lb}</td>
-        <td>${nEst} est.</td>
-        <td>${le}<br><span style="font-size:9px;color:var(--dim)">4×(${wu}−${h-2*rec})/100+colas</span></td>
-        <td>${m_est}</td>
-        <td class="tst">${fmt(m_tot_est)} m</td>
-      </tr>
+      <tr><td class="tl" style="color:var(--ped)">Long. ${BR[bl].lb}</td><td>${nb}</td>
+        <td>${L_long}<br><span style="font-size:9px;color:var(--dim)">${H}(vert)+${fmt(cola_lon,3)}(gancho)+0.08(doblez)</span></td>
+        <td>${m_long}</td><td class="tp2">${m_tot_long} m</td></tr>
+      <tr><td class="tl" style="color:var(--st)">Estribos ${BR[be].lb}</td><td>${nEst} est.</td>
+        <td>${le}</td><td>${m_est}</td><td class="tst">${m_tot_est} m</td></tr>
     </tbody>
     <tfoot><tr class="trow-tot">
-      <td>TOTAL ${BR[bl].lb}+${BR[be].lb} (${nP} pedestales)</td>
-      <td>—</td><td>—</td>
-      <td>${fmt(m_zap_p,3)} m/ped</td>
-      <td>${fmt(+(m_tot_long+m_tot_est).toFixed(2))} m</td>
-    </tr></tfoot>
-  </table>`;
-
+      <td>TOTAL (${nP} ped.)</td><td>—</td><td>—</td>
+      <td>${fmt(+(m_long+m_est).toFixed(3),3)} m/ped</td>
+      <td>${fmt(+(+m_tot_long+ +m_tot_est).toFixed(2))} m</td>
+    </tr></tfoot></table>`;
   $('pd_sum').innerHTML=`
     <div class="ri"><div class="v" style="color:var(--ped)">${m_tot_long}</div><div class="l">LONG. TOTAL</div><div class="u">m · ${BR[bl].lb}</div></div>
-    <div class="ri"><div class="v" style="color:var(--st)">${m_tot_est}</div><div class="l">ESTRIBOS TOTAL</div><div class="u">m · ${BR[be].lb}</div></div>
+    <div class="ri"><div class="v" style="color:var(--st)">${m_tot_est}</div><div class="l">ESTRIBOS</div><div class="u">m · ${BR[be].lb}</div></div>
     <div class="ri"><div class="v">${vol}</div><div class="l">CONCRETO</div><div class="u">m³</div></div>
     <div class="ri"><div class="v">${cem}</div><div class="l">CEMENTO</div><div class="u">sacos</div></div>
     <div class="ri full" style="background:rgba(251,146,60,.06);border-color:var(--ped)">
       <div class="v" style="color:var(--ped);font-size:22px">${qq}</div>
-      <div class="l">QUINTALES ACERO TOTAL (c/7% desp.) · 45.36 kg/qq</div></div>`;
-
-  const wn=$('pd_wn');let ws=[];
-  ws.push(`✅ L_barra=${L_long}m = ${H}m(vert)+${fmt(cola_lon,2)}m(gancho)+0.08m(doblez) — INADEH/ACI §25.3`);
-  ws.push(`ℹ️ L_estribo=${le}m = 2(${wu}+${h-2*rec})/100+2×colas${be>=6?'(12ϕ)':'(6ϕ)'} — N_est=${nEst}@${sep}cm`);
-  if(bl>=6)ws.push(`ℹ️ ${BR[bl].lb}: cola gancho = 12ϕ = ${fmt(BR[bl].cola12*100,1)}cm — ACI §25.3.2`);
-  wn.innerHTML=ws.join('<br>');wn.style.display='block';wn.className='wb ok';
-
+      <div class="l">QUINTALES ACERO TOTAL (c/7% desp.)</div></div>`;
+  const wn=$('pd_wn');
+  wn.innerHTML=`✅ L_barra=${L_long}m = ${H}m+${fmt(cola_lon,3)}m(gancho)+0.08m(doblez) — ACI §25.3<br>
+  ℹ️ L_estribo=${le}m | N_est=${nEst}@${sep}cm${bl>=6?` | ${BR[bl].lb}: cola=12ϕ=${fmt(BR[bl].cola12*100,1)}cm — ACI §25.3.2`:''}`;
+  wn.style.display='block';wn.className='wb ok';
   $('res-pd').classList.add('show');
-  addPI('PEDESTALES',BR[bl].lb,nb*nP,m_tot_long,kg_long*nP,toQQ(kg_long*nP));
-  addPI('PED.ESTRIBOS',BR[be].lb,nEst*nP,m_tot_est,kg_est*nP,toQQ(kg_est*nP));
+  addPI('PEDESTALES',BR[bl].lb,nb*nP,m_tot_long,toKg(m_tot_long,bl),toQQ(toKg(m_tot_long,bl)));
+  addPI('PED.EST.',BR[be].lb,nEst*nP,m_tot_est,toKg(m_tot_est,be),toQQ(toKg(m_tot_est,be)));
   toast('PEDESTAL ✓');
 }
 
-/* ════ COLUMNAS ════ */
+/* COLUMNAS */
 function calcColR(){
   const b=gv('cr_b'),h=gv('cr_h'),L=gv('cr_L'),n=gv('cr_n'),nb=gv('cr_nb')||4;
   if(!b||!h||!L||!n)return;
@@ -1218,12 +1291,12 @@ function calcColCi(){
   S.colCi={m:'COL CILÍND.',D,L,n,vol,cem,ke,kl,qq:q,Du,Cv,Nv,Lt};
   sv('ci_vol',vol);sv('ci_cem',cem);sv('ci_nv',Nv);sv('ci_lt',Lt);
   sv('ci_ke',ke);sv('ci_kl',kl);sv('ci_qq',q);
-  $('ci_wn').innerHTML=`✅ ρs_mín=${rhoMin} | ${Nv} vueltas · Grado 60 fyt=4200 kg/cm²`;
+  $('ci_wn').innerHTML=`✅ ρs_mín ACI §18.7.5.4=${rhoMin} | ${Nv} vueltas | fyt=4200kg/cm² Grado 60 COPANIT`;
   $('ci_wn').style.display='block';
   $('res-ci').classList.add('show');addPI('COL CILÍND.',BR[be].lb,Nv*n,Lt*n,ke+kl,q);toast('CILÍNDRICA ✓');
 }
 
-/* ════ VIGA SÍSMICA ════ */
+/* VIGA SÍSMICA */
 function calcVS(){
   const b=gv('vs_b'),h=gv('vs_h'),L=gv('vs_L'),n=gv('vs_n');
   if(!b||!h||!L||!n)return;
@@ -1249,14 +1322,14 @@ function calcVS(){
   sv('vs_d',dEf.toFixed(3));sv('vs_lo',lo);sv('vs_sc',sc);sv('vs_ne',Nec);
   sv('vs_vol',vol);sv('vs_cem',cem);sv('vs_ke',ke);sv('vs_kl',kl);sv('vs_qq',q);
   const wn=$('vs_wn');let ws=[];
-  if(L/h<4)ws.push('⚠️ L/h<4 — Verificar viga corta ACI§18.6.1');
-  if(b<20)ws.push('⚠️ b<20cm — Mín. ACI§18.6.2.1');
+  if(L/h<4)ws.push('⚠️ L/h<4 — Verificar ACI §18.6.1');
+  if(b<20)ws.push('⚠️ b<20cm — Mín. ACI §18.6.2.1');
   if(ws.length){wn.innerHTML=ws.join('<br>');wn.style.display='block';wn.className='wb';}
-  else{wn.innerHTML='✅ Geometría dentro de ACI 318-19 §18.6';wn.style.display='block';wn.className='wb ok';}
+  else{wn.innerHTML='✅ Geometría dentro de ACI 318-19 §18.6 / REP/SPIA';wn.style.display='block';wn.className='wb ok';}
   $('res-vs').classList.add('show');addPI('VIGA SÍSMICA',BR[be].lb,nEst,le*nEst,ke+kl,q);toast('VIGA SÍS. ✓');
 }
 
-/* ════ VIGA AMARRE ════ */
+/* VIGA AMARRE */
 function calcAM(){
   const b=gv('am_b'),h=gv('am_h'),L=gv('am_L');if(!b||!h||!L)return;
   const fc=+$('am_fc').value,bl=+$('am_bl').value,nb=+$('am_nb').value;
@@ -1275,14 +1348,14 @@ function calcAM(){
   sv('am_vol',vol);sv('am_cem',cem);sv('am_lb',lb);sv('am_ne',ne);
   sv('am_kl',kl);sv('am_ke',ke);sv('am_qq',q);
   const wn=$('am_wn');let ws=[];
-  if(b<20||h<20)ws.push('⚠️ Sección mín. 20×20cm — INADEH');
-  if(nTras>0)ws.push(`ℹ️ L>${L_COM}m → ${nTras} traslape(s) de ${(BR[bl].t40*100).toFixed(0)}cm incluidos`);
+  if(b<20||h<20)ws.push('⚠️ Sección mín. 20×20cm — REP/SPIA');
+  if(nTras>0)ws.push(`ℹ️ L>${L_COM}m → ${nTras} traslape(s) de ${(BR[bl].t40*100).toFixed(0)}cm — COPANIT §25.5.1`);
   if(ws.length){wn.innerHTML=ws.join('<br>');wn.style.display='block';}
-  else{wn.innerHTML='✅ Parámetros dentro de REP/INADEH';wn.style.display='block';wn.className='wb ok';}
+  else{wn.innerHTML='✅ Sección y refuerzo dentro de REP/SPIA';wn.style.display='block';wn.className='wb ok';}
   $('res-am').classList.add('show');addPI('VIGA AMARRE',BR[bl].lb,nb,lb,kl+ke,q);toast('AMARRE ✓');
 }
 
-/* ════ ACERO ════ */
+/* ACERO */
 let zc=1;
 function addZ(){
   zc++;const div=document.createElement('div');div.className='zr';
@@ -1303,7 +1376,6 @@ function calcEst(){
   let nt=0;document.querySelectorAll('#zl .zc').forEach(el=>{const c=+el.value||0;if(c>0)nt+=c;});
   if(nt===0){toast('⚠️ INGRESA ZONA');return;}
   const mt=+(lp*nt).toFixed(2),kg=toKg(mt,dn),q=toQQ(kg);
-  S.est={diam:BR[dn].lb,dn,lp,nt,mt,kg,qq:q};
   sv('e_lp',lp);sv('e_nt',nt);sv('e_mt',mt);sv('e_kg',kg);sv('e_qq',q);
   $('res-e').classList.add('show');addPI('ESTRIBOS',BR[dn].lb,nt,mt,kg,q);toast('ESTRIBOS ✓');
 }
@@ -1316,16 +1388,15 @@ function calcBar(){
   else if(gStr==='6')gan=2*BR[dn].cola6;
   const lb=+(l+tras+gan).toFixed(3),lt=+(lb*n).toFixed(2);
   const kg=toKg(lt,dn),q=toQQ(kg);
-  S.bar={diam:BR[dn].lb,dn,n,tras,lb,lt,kg,qq:q};
   sv('b_lb',lb);sv('b_tr',fmt(tras));sv('b_lt',lt);sv('b_kg',kg);sv('b_qq',q);
   const wn=$('b_wn');let ws=[];
-  if(l>L_COM)ws.push(`ℹ️ L=${fmt(l)}m > 9.15m (INADEH) → traslape incluido`);
-  if(dn>=6)ws.push(`ℹ️ ${BR[dn].lb}: cola=12ϕ=${fmt(BR[dn].cola12*100,1)}cm — ACI §25.3`);
+  if(l>L_COM)ws.push(`ℹ️ L=${fmt(l)}m > 9.15m (30 pies) → traslape de ${(BR[dn].t40*100).toFixed(0)}cm — COPANIT`);
+  if(dn>=6)ws.push(`ℹ️ ${BR[dn].lb}: cola=12ϕ=${fmt(BR[dn].cola12*100,1)}cm — ACI §25.3.2`);
   if(ws.length){wn.innerHTML=ws.join('<br>');wn.style.display='block';}else wn.style.display='none';
   $('res-b').classList.add('show');addPI('BARRAS LONG.',BR[dn].lb,n,lt,kg,q);toast('BARRAS ✓');
 }
 
-/* ════ ESCALERA ════ */
+/* ESCALERA */
 function liveEsc(){
   const H=gv('E_H'),N=gv('E_N'),hu=gv('E_hu');
   if(!H||!N||!hu)return;
@@ -1342,12 +1413,11 @@ function calcEsc(){
   const rec=2.5,Lh=N*hu,Li=Math.sqrt(H*H+Lh*Lh),alpha=Math.atan(H/Lh);
   const tl=Math.max(Math.ceil(Li/20),10);
   const nL=Math.floor((an-2*rec)/15)+1;
-  const cola_L=BR[bl].cola6;
-  const L_bL=+(Li/100+2*cola_L).toFixed(3);
+  const L_bL=+(Li/100+2*BR[bl].cola6).toFixed(3);
   const L_tot_L=+(nL*L_bL).toFixed(2);
   const nT=N+5,L_bT=+(an/100-2*rec/100+0.16).toFixed(3);
   const L_tot_T=+(nT*L_bT).toFixed(2);
-  const nS=Math.ceil(an/25)+1,L_tot_S=+(nS*(Li/100*0.30+Li/100*0.25)).toFixed(2);
+  const nS=Math.ceil(an/25)+1,L_tot_S=+(nS*(Li/100*0.55)).toFixed(2);
   const L_gES09=+(2*(hu/100)+2*(co/100)+0.20).toFixed(3);
   const L_tot_G=+(N*L_gES09).toFixed(2);
   const area_malla=+((an/100)*(Li/100)).toFixed(2);
@@ -1361,111 +1431,40 @@ function calcEsc(){
     nL,L_bL,L_tot_L,nT,L_bT,L_tot_T,nS,L_tot_S,L_gES09,L_tot_G,
     area_malla,vol_cp,kg_L,kg_T,kg_S,kg_G,kg_tot,qq,m_tot};
   sv('e_incl',fmt(Li/100));sv('e_alpha',fmt(RE.alphaDeg,1));sv('e_tlosa',tl);
-
   $('esc_tbl').innerHTML=`
     <tr><td class="tl" style="color:#f97316">Acero Longitudinal</td><td>${BR[bl].lb}</td>
-        <td>${L_tot_L}m</td><td style="font-size:10px">${nL} barras × ${L_bL}m, ganchos 90°</td></tr>
-    <tr><td class="tl" style="color:#38bdf8">Acero Transversal/Varios</td><td>${BR[bt].lb}</td>
-        <td>${L_tot_T}m</td><td style="font-size:10px">${nT} barras × ${L_bT}m</td></tr>
-    <tr><td class="tl" style="color:#fb7185">Acero Superior (Rep.)</td><td>${BR[bt].lb}</td>
-        <td>${L_tot_S}m</td><td style="font-size:10px">${nS} barras, zonas 30%+25%</td></tr>
+        <td>${L_tot_L}m</td><td style="font-size:10px">${nL}barras×${L_bL}m, ganchos 90°</td></tr>
+    <tr><td class="tl" style="color:#38bdf8">Acero Transversal</td><td>${BR[bt].lb}</td>
+        <td>${L_tot_T}m</td><td style="font-size:10px">${nT}barras×${L_bT}m</td></tr>
+    <tr><td class="tl" style="color:#fb7185">Acero Superior</td><td>${BR[bt].lb}</td>
+        <td>${L_tot_S}m</td><td style="font-size:10px">${nS}barras, repartición temp.</td></tr>
     <tr><td class="tl" style="color:#4ade80">Ganchos ES09</td><td>${BR[bg].lb}</td>
-        <td>${L_tot_G}m</td><td style="font-size:10px">90°inf/135°sup · ${L_gES09}m/und</td></tr>
+        <td>${L_tot_G}m</td><td style="font-size:10px">90°inf/135°sup·${L_gES09}m/und</td></tr>
     <tr><td class="tl">Malla electrosoldada</td><td>45×150×150mm</td>
         <td>${area_malla}m²</td><td style="font-size:10px">Zona estética</td></tr>
     <tr><td class="tl">Concreto pobre</td><td>f'c=${fc}</td>
         <td>${vol_cp}m³</td><td style="font-size:10px">Relleno escalones</td></tr>`;
-  $('et_l').textContent=`TOTAL ${BR[bl].lb} escalera`;
-  $('et_d').textContent=BR[bl].lb;
-  $('et_m').textContent=`${m_tot} m`;
-  $('esc_tot').style.display='';
-
+  $('et_l').textContent=`TOTAL ${BR[bl].lb}`;$('et_d').textContent=BR[bl].lb;
+  $('et_m').textContent=`${m_tot} m`;$('esc_tot').style.display='';
   $('esc_sum').innerHTML=`
-    <div class="ri"><div class="v" style="color:#f97316;font-size:14px">${L_tot_L}m</div><div class="l">LONG. INF.</div><div class="u">${kg_L}kg</div></div>
+    <div class="ri"><div class="v" style="color:#f97316;font-size:14px">${L_tot_L}m</div><div class="l">LONG.INF.</div><div class="u">${kg_L}kg</div></div>
     <div class="ri"><div class="v" style="color:#38bdf8;font-size:14px">${L_tot_T}m</div><div class="l">TRANSV.</div><div class="u">${kg_T}kg</div></div>
     <div class="ri"><div class="v" style="color:#fb7185;font-size:14px">${L_tot_S}m</div><div class="l">SUPERIOR</div><div class="u">${kg_S}kg</div></div>
     <div class="ri"><div class="v" style="color:#4ade80;font-size:14px">${L_tot_G}m</div><div class="l">ES09</div><div class="u">${kg_G}kg</div></div>
     <div class="ri"><div class="v">${kg_tot}</div><div class="l">ACERO TOTAL</div><div class="u">kg (c/7%)</div></div>
     <div class="ri" style="background:rgba(232,121,249,.08);border-color:var(--esc)">
       <div class="v" style="color:var(--esc);font-size:22px">${qq}</div><div class="l">QUINTALES</div></div>`;
-
   const wn=$('esc_wn');let ws=[];
-  if(RE.alphaDeg>40)ws.push('⚠️ α>40° — Escarpada, verificar normativa');
-  ws.push(`✅ Doblez 90°inf/135°sup | t_losa=${tl}cm | α=${fmt(RE.alphaDeg,1)}°`);
+  if(RE.alphaDeg>40)ws.push('⚠️ α>40° — Pendiente escarpada, verificar normativa local');
+  ws.push(`✅ ES09: 90°inf/135°sup | t_losa=${tl}cm | α=${fmt(RE.alphaDeg,1)}° — ACI 318 / REP`);
   wn.innerHTML=ws.join('<br>');wn.style.display='block';wn.className=RE.alphaDeg>40?'wb':'wb ok';
-
   $('res-esc').style.display='block';
   S.esc={m:'ESCALERA',vol:vol_cp,cem:0,are:0,gra:0,ke:kg_G+kg_T+kg_S,kl:kg_L,qq};
   addPI('ESCALERA',BR[bl].lb,nL,m_tot,kg_tot,qq);
   drawDiag(RE);toast('ESCALERA ✓');
 }
 
-/* ════ DIAGRAM ESCALERA ════ */
-function drawDiag(r){
-  const cv=$('diagCanvas');if(!cv)return;
-  cv.width=cv.offsetWidth||300;cv.height=220;
-  const ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);
-  ctx.strokeStyle='rgba(0,100,200,0.06)';ctx.lineWidth=.5;
-  for(let x=0;x<cv.width;x+=18){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,cv.height);ctx.stroke();}
-  for(let y=0;y<cv.height;y+=18){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(cv.width,y);ctx.stroke();}
-  const H_=r?r.H:(gv('E_H')||200),N_=r?r.N:(gv('E_N')||12);
-  const hu_=r?r.hu:(gv('E_hu')||28),co_=r?r.co:(H_/N_),tl_=r?r.tl:10;
-  const Lh_=N_*hu_,Li_=Math.sqrt(H_*H_+Lh_*Lh_),alpha_=Math.atan(H_/Lh_);
-  const margin=35,W=cv.width-2*margin,Hc=cv.height-2*margin;
-  const sc=Math.min(W/Math.max(Lh_,1),Hc/Math.max(H_,1))*0.82;
-  const ox=margin+8,oy=cv.height-margin-5;
-  const px=(x,y)=>({x:ox+x*sc,y:oy-y*sc});
-  const sinA=Math.sin(alpha_),cosA=Math.cos(alpha_);
-  const nx=-sinA,ny=cosA,slabT=tl_/100;
-  ctx.beginPath();
-  ctx.moveTo(px(0,0).x,px(0,0).y);
-  ctx.lineTo(px(Lh_/100,H_/100).x,px(Lh_/100,H_/100).y);
-  ctx.lineTo(px(Lh_/100,H_/100).x+nx*slabT*sc*80,px(Lh_/100,H_/100).y-ny*slabT*sc*80);
-  ctx.lineTo(px(0,0).x+nx*slabT*sc*80,px(0,0).y-ny*slabT*sc*80);
-  ctx.closePath();ctx.fillStyle='rgba(167,139,250,0.09)';
-  ctx.strokeStyle='rgba(167,139,250,0.3)';ctx.lineWidth=1;ctx.fill();ctx.stroke();
-  ctx.beginPath();let cx0=0,cy0=0;ctx.moveTo(px(cx0,cy0).x,px(cx0,cy0).y);
-  for(let i=0;i<N_;i++){cx0+=hu_/100;ctx.lineTo(px(cx0,cy0).x,px(cx0,cy0).y);cy0+=co_/100;ctx.lineTo(px(cx0,cy0).x,px(cx0,cy0).y);}
-  ctx.strokeStyle='rgba(167,139,250,0.65)';ctx.lineWidth=1.5;ctx.stroke();
-  if(r){
-    for(let b=0;b<Math.min(3,r.nL);b++){
-      const frac=b/(Math.max(r.nL-1,1));const bOff=(0.025+frac*0.025)*sc*100;
-      ctx.beginPath();
-      ctx.moveTo(px(0,0).x+nx*bOff,px(0,0).y-ny*bOff);
-      ctx.lineTo(px(Lh_/100,H_/100).x+nx*bOff,px(Lh_/100,H_/100).y-ny*bOff);
-      ctx.strokeStyle=`rgba(249,115,22,${0.9-frac*0.2})`;ctx.lineWidth=2;ctx.stroke();
-    }
-    const nTshow=Math.min(N_,18);
-    for(let i=0;i<nTshow;i++){
-      const frac=(i+0.5)/nTshow;const bx=frac*Lh_/100,by=frac*H_/100;
-      const p=px(bx,by);ctx.beginPath();ctx.arc(p.x+nx*30,p.y-ny*30,2.5,0,Math.PI*2);
-      ctx.fillStyle='rgba(56,189,248,0.8)';ctx.fill();
-    }
-    ctx.beginPath();cx0=0;cy0=0;
-    for(let i=0;i<Math.min(N_,18);i++){
-      const p0=px(cx0,cy0),p1=px(cx0+hu_/100,cy0),p2=px(cx0+hu_/100,cy0+co_/100);
-      ctx.beginPath();ctx.moveTo(p0.x+3,p0.y-3);ctx.lineTo(p1.x+3,p1.y-3);ctx.lineTo(p2.x+3,p2.y-3);
-      ctx.strokeStyle='rgba(74,222,128,0.7)';ctx.lineWidth=1.5;ctx.stroke();
-      cx0+=hu_/100;cy0+=co_/100;
-    }
-  }
-  ctx.setLineDash([3,3]);ctx.strokeStyle='rgba(90,120,160,0.5)';ctx.lineWidth=.8;
-  ctx.beginPath();ctx.moveTo(ox-12,oy);ctx.lineTo(ox-12,oy-H_*sc);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(ox,oy+12);ctx.lineTo(ox+Lh_*sc,oy+12);ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.fillStyle='rgba(120,160,200,.9)';ctx.font='9px Share Tech Mono';
-  ctx.save();ctx.translate(ox-24,oy-H_*sc/2);ctx.rotate(-Math.PI/2);
-  ctx.fillText(`H=${fmt(H_/100,2)}m`,0,0);ctx.restore();
-  ctx.fillText(`L=${fmt(Lh_/100,2)}m`,ox+Lh_*sc/2-18,oy+22);
-  ctx.beginPath();ctx.arc(ox,oy,24,-( Math.PI/2-alpha_+Math.PI/2),-Math.PI/2,false);
-  ctx.strokeStyle='rgba(240,165,0,.6)';ctx.lineWidth=1.2;ctx.stroke();
-  ctx.fillStyle='rgba(240,165,0,.8)';ctx.font='8px Share Tech Mono';
-  ctx.fillText(`α=${fmt(alpha_*180/Math.PI,0)}°`,ox+10,oy-9);
-  ctx.fillStyle='rgba(255,255,255,.4)';ctx.font='9px Share Tech Mono';
-  ctx.fillText(`N=${N_} escalones | t=${tl_}cm`,ox+2,oy-3);
-}
-
-/* ════ PLANILLA ════ */
+/* PLANILLA */
 function addPI(elem,diam,n,m,kg,q){
   const idx=PI.findIndex(i=>i.e===elem);
   const o={e:elem,d:diam,n:Math.round(n),m:+parseFloat(m).toFixed(2),kg:+parseFloat(kg).toFixed(2),q:+parseFloat(q).toFixed(3)};
@@ -1482,90 +1481,396 @@ function buildPlan(){
   sv('pl-kg',fmt(tk)+' kg');sv('pl-qq',fmt(tq,3)+' qq');foot.style.display='';
 }
 
-/* ════ RESUMEN ════ */
-function buildRes(){buildTabR();buildConcl();drawISO();buildChart();}
-function buildTabR(){
-  const items=[S.con,S.mur,S.zap,S.ped,S.colR,S.colTL,S.colCi,S.vs,S.am,S.esc].filter(Boolean);
-  const body=$('tb-body'),foot=$('tb-foot');
-  if(!items.length){body.innerHTML='<tr><td colspan="4" style="color:var(--dim);text-align:center;padding:12px">Calcula módulos</td></tr>';foot.style.display='none';return;}
-  let tc=0,ta=0,tg=0;body.innerHTML='';
-  items.forEach(it=>{const c=it.cem||0,a=it.are||0,g=it.gra||0;tc+=c;ta+=a;tg+=g;
-    body.innerHTML+=`<tr><td class="tl">${it.m}</td><td class="tok">${c} sac</td>
-      <td>${a?a+' m³':'—'}</td><td>${g?g+' m³':'—'}</td></tr>`;});
-  sv('t-c',fmt(tc,1)+' sac');sv('t-a',fmt(ta)+' m³');sv('t-g',fmt(tg)+' m³');foot.style.display='';
-  const aceros=[S.zap,S.ped,S.colR,S.colTL,S.colCi,S.vs,S.am,S.esc].filter(Boolean);
-  if(aceros.length||PI.length){
-    $('ta-wrap').style.display='';const ab=$('ta-body');ab.innerHTML='';
-    aceros.forEach(it=>{
-      ab.innerHTML+=`<tr><td class="tl">${it.m}</td>
-        <td class="tok">${fmt(+(it.ke||0)+(it.kl||0)+(it.kg_tot||0))}</td>
-        <td class="tst">${it.qq||'—'}</td><td>Est.+Long.</td></tr>`;});
-    PI.forEach(it=>{ab.innerHTML+=`<tr><td class="tl">${it.e}</td>
-      <td class="tok">${it.kg}</td><td class="tst">${it.q}</td><td>${it.d}</td></tr>`;});
+/* ════ RESUMEN MEJORADO ════ */
+function buildRes(){buildExecSummary();buildAceroTable();buildConcl();drawISO();buildChart();buildDonut();}
+
+function buildExecSummary(){
+  const modulos=[
+    {d:S.con,   color:'var(--ac)',  icon:'🏗️'},
+    {d:S.mur,   color:'#7dd3fc',   icon:'🧱'},
+    {d:S.zap,   color:'var(--zap)',icon:'⬛'},
+    {d:S.vcim,  color:'var(--vc)', icon:'🔶'},
+    {d:S.ped,   color:'var(--ped)',icon:'🔩'},
+    {d:S.colR,  color:'var(--ac)', icon:'🏛️'},
+    {d:S.colTL, color:'var(--st)', icon:'┤'},
+    {d:S.colCi, color:'var(--st)', icon:'○'},
+    {d:S.vs,    color:'var(--vg)', icon:'〰️'},
+    {d:S.am,    color:'var(--am)', icon:'🔗'},
+    {d:RE?{m:'ESCALERA',vol:RE.vol_cp,cem:0,are:0,gra:0,ke:RE.kg_G,kl:RE.kg_L,qq:RE.qq}:null,color:'var(--esc)',icon:'🪜'}
+  ].filter(i=>i.d);
+
+  if(!modulos.length){
+    $('sum-exec').innerHTML='<p style="color:var(--dim);font-size:12px;text-align:center;padding:10px">Calcula módulos</p>';
+    $('sum-totals').style.display='none';return;
   }
+
+  let html='';let totalVol=0,totalKg=0,totalQQ=0;
+  modulos.forEach(({d,color,icon})=>{
+    const vol=d.vol||0;
+    const kg=+(+(d.ke||0)+ +(d.kl||0)+ +(d.kg_tot||0)).toFixed(2);
+    const qq=d.qq||0;
+    totalVol+=vol;totalKg+=kg;totalQQ+=qq;
+    html+=`<div class="sum-row">
+      <span class="sr-mod" style="color:${color}">${icon} ${d.m}</span>
+      <div class="sr-vals">
+        ${vol?`<div class="sr-val"><div class="v" style="color:var(--ac2)">${fmt(vol)}</div><div class="u">m³</div></div>`:''}
+        ${kg?`<div class="sr-val"><div class="v" style="color:var(--ok)">${fmt(kg)}</div><div class="u">kg</div></div>`:''}
+        ${qq?`<div class="sr-val"><div class="v" style="color:${color};font-size:16px">${fmt(qq,3)}</div><div class="u">qq</div></div>`:''}
+      </div>
+    </div>`;
+  });
+  $('sum-exec').innerHTML=html;
+  sv('st-vol',fmt(totalVol));
+  sv('st-kg',fmt(totalKg));
+  sv('st-qq',fmt(totalQQ,3));
+  $('sum-totals').style.display='grid';
 }
+
+function buildAceroTable(){
+  const aceros=[S.zap,S.vcim,S.ped,S.colR,S.colTL,S.colCi,S.vs,S.am,
+    RE?{m:'ESCALERA',ke:RE.kg_G+RE.kg_T+RE.kg_S,kl:RE.kg_L,qq:RE.qq}:null].filter(Boolean);
+  if(!aceros.length&&!PI.length){$('ta-wrap').style.display='none';return;}
+  $('ta-wrap').style.display='';
+  const ab=$('ta-body');ab.innerHTML='';
+  let tkA=0,tqA=0;
+  aceros.forEach(it=>{
+    const kg=+(+(it.ke||0)+ +(it.kl||0)+ +(it.kg_tot||0)).toFixed(2);
+    const qq=+(it.qq||0);
+    tkA+=kg;tqA+=qq;
+    ab.innerHTML+=`<tr><td class="tl">${it.m}</td>
+      <td class="tok">${fmt(kg)}</td><td class="tst">${fmt(qq,3)}</td>
+      <td style="font-size:10px">Est.+Long.</td></tr>`;
+  });
+  PI.forEach(it=>{
+    ab.innerHTML+=`<tr><td class="tl">${it.e}</td>
+      <td class="tok">${it.kg}</td><td class="tst">${it.q}</td>
+      <td style="font-size:10px">${it.d}</td></tr>`;
+    tkA+=it.kg;tqA+=it.q;
+  });
+  sv('ta-kg-tot',fmt(tkA)+' kg');sv('ta-qq-tot',fmt(tqA,3)+' qq');
+  $('ta-foot').style.display='';
+}
+
+function buildDonut(){
+  const items=[
+    {m:S.zap,   label:'Zapatas',    color:'#fbbf24'},
+    {m:S.vcim,  label:'V.Cimen.',   color:'#06b6d4'},
+    {m:S.ped,   label:'Pedestales', color:'#fb923c'},
+    {m:S.colR,  label:'Columnas',   color:'#f0a500'},
+    {m:S.vs,    label:'V.Sísmica',  color:'#a78bfa'},
+    {m:S.am,    label:'V.Amarre',   color:'#34d399'},
+    {m:RE?{ke:RE.kg_G,kl:RE.kg_L}:null,label:'Escalera',color:'#e879f9'}
+  ].filter(i=>i.m);
+
+  if(!items.length){$('donut-section').style.display='none';return;}
+  $('donut-section').style.display='block';
+
+  const vals=items.map(i=>+(+(i.m.ke||0)+ +(i.m.kl||0)+ +(i.m.kg_tot||0)).toFixed(2));
+  const labels=items.map(i=>i.label);
+  const colors=items.map(i=>i.color);
+  const total=vals.reduce((a,b)=>a+b,0);
+
+  if(donutChart)donutChart.destroy();
+  const ctx=$('donutChart');if(!ctx)return;
+  donutChart=new Chart(ctx.getContext('2d'),{
+    type:'doughnut',
+    data:{labels,datasets:[{data:vals,backgroundColor:colors,borderColor:'#060e1c',borderWidth:2}]},
+    options:{responsive:false,plugins:{legend:{display:false}},cutout:'65%'}
+  });
+
+  $('donut-legend').innerHTML=items.map((it,i)=>`
+    <div class="dl-item">
+      <div class="dl-dot" style="background:${it.color}"></div>
+      <span>${it.label}</span>
+      <strong>${fmt(vals[i])}kg (${total>0?fmt(vals[i]/total*100,0):0}%)</strong>
+    </div>`).join('');
+}
+
 function buildConcl(){
   const box=$('concl-items');const it=[];
   if(S.con)it.push(`Concreto: <b>${fmt(S.con.vol)} m³</b> · f'c=${S.con.fc} kg/cm² · <b>${S.con.cem} sacos</b>`);
-  if(S.zap)it.push(`Zapatas ${S.zap.B}×${S.zap.L}cm: L_barra=${S.zap.lb_x}m · Total: <b>${S.zap.m_tot}m = ${S.zap.qq} qq</b>`);
-  if(S.ped)it.push(`Pedestales: L_long=${S.ped.L_long}m · est.=${S.ped.le}m · <b>${S.ped.qq} qq</b>`);
+  if(S.zap)it.push(`Zapatas ${S.zap.B}×${S.zap.L}cm: L_barra=${S.zap.lb_x}m · <b>${S.zap.m_tot}m = ${S.zap.qq} qq</b> — ACI §20.6.1.3`);
+  if(S.vcim)it.push(`V.Cimentación ${S.vcim.b}×${S.vcim.h}cm · L=${fmt(S.vcim.L,2)}m · rec=${S.vcim.rec}cm · <b>${S.vcim.qq} qq</b>`);
+  if(S.ped)it.push(`Pedestales: L_long=${S.ped.L_long}m · <b>${S.ped.qq} qq</b> — ACI §25.3`);
   if(S.colR)it.push(`Col ${S.colR.b}×${S.colR.h}cm: s_conf=${S.colR.sc}cm · <b>${S.colR.qq} qq</b>`);
-  if(S.vs)it.push(`Viga sísmica: s_conf=${S.vs.sc}cm · lo=${S.vs.lo}m · <b>${S.vs.qq} qq</b>`);
-  if(S.am)it.push(`Viga amarre ${S.am.b}×${S.am.h}cm · L=${fmt(S.am.L)}m · <b>${S.am.qq} qq</b>`);
-  if(RE)it.push(`Escalera: N=${RE.N} esc. · α=${fmt(RE.alphaDeg,1)}° · t=${RE.tl}cm · <b>${RE.qq} qq</b>`);
-  it.push('📌 Rec. INADEH: interior≥2.5cm · exterior≥4.0cm · suelo≥7.5cm');
-  it.push('📌 Cola 90°: 6ϕ(#3–#5) | 12ϕ(#6–#8) · Traslape mín. 40×ϕ · Long. comercial 9.15m');
-  it.push('📌 +7% acero · +10–15% concreto · +5% bloques · Validar con ing. colegiado REP/SPIA');
+  if(S.vs)it.push(`Viga sísmica: s_conf=${S.vs.sc}cm · lo=${S.vs.lo}m · <b>${S.vs.qq} qq</b> — ACI §18.6`);
+  if(S.am)it.push(`Viga amarre: <b>${S.am.qq} qq</b> — REP/SPIA`);
+  if(RE)it.push(`Escalera: N=${RE.N} · α=${fmt(RE.alphaDeg,1)}° · t=${RE.tl}cm · <b>${RE.qq} qq</b>`);
+  it.push('📌 Recubrimientos ACI §20.6.1: interior≥2.5cm · exterior≥4.0cm · suelo/cimentación≥7.5cm');
+  it.push('📌 Cola gancho 90°: 6ϕ(#3–#5) | 12ϕ(#6–#8) — ACI §25.3.2');
+  it.push('📌 Traslape mín. 40×ϕ — COPANIT/ACI §25.5.1 · Long. comercial Panamá: 9.15m (30 pies)');
+  it.push('📌 +7% acero · +10–15% concreto · +5% bloques · Validar con ing. estructural colegiado — REP/SPIA');
   box.innerHTML=it.map(i=>`<div class="ci"><div class="cd"></div><p>${i}</p></div>`).join('');
 }
 
-/* ════ ISO 3D ════ */
-let isoA=0,isoAF=null;
-function drawISO(){
+/* ════ ISO 3D MEJORADO CON DRAG/TOUCH ════ */
+let isoAngle=0.5,isoPitch=0.4,isDragging=false,lastX=0,lastY=0,isoAF=null;
+
+function setupISODrag(){
   const cv=$('isoCanvas');if(!cv)return;
-  cv.width=cv.offsetWidth||300;cv.height=230;
-  const ctx=cv.getContext('2d');
-  const nCol=S.colR?.n||S.colCi?.n||4;
-  const h=S.colR?.L||S.colCi?.L||3;
-  const s=S.colR?Math.max(S.colR.b,S.colR.h)/100:(S.colCi?.D||30)/100;
-  const cols=Math.ceil(Math.sqrt(nCol)),rows=Math.ceil(nCol/cols),sp=3.5;
-  if(isoAF)cancelAnimationFrame(isoAF);
-  function frame(){isoA+=0.007;ctx.clearRect(0,0,cv.width,cv.height);drawSc(ctx,cv.width,cv.height,isoA,cols,rows,sp,h,s);isoAF=requestAnimationFrame(frame);}
-  frame();
-}
-function ip(x,y,z,a,sc,ox,oy){return{x:ox+(x*Math.cos(a)-y*Math.sin(a))*sc,y:oy+((x*Math.sin(a)+y*Math.cos(a))*.5-z)*sc};}
-function dbx(ctx,x,y,z,w,d,h,a,sc,ox,oy,cl){
-  const p=[[x,y,z],[x+w,y,z],[x+w,y+d,z],[x,y+d,z],[x,y,z+h],[x+w,y,z+h],[x+w,y+d,z+h],[x,y+d,z+h]].map(pt=>ip(pt[0],pt[1],pt[2],a,sc,ox,oy));
-  [[4,5,6,7,cl[0]],[1,2,6,5,cl[1]],[0,1,5,4,cl[2]]].forEach(f=>{const c=f.pop();ctx.beginPath();f.forEach((i,j)=>j?ctx.lineTo(p[i].x,p[i].y):ctx.moveTo(p[i].x,p[i].y));ctx.closePath();ctx.fillStyle=c;ctx.fill();ctx.strokeStyle=cl[3];ctx.lineWidth=.5;ctx.stroke();});
-}
-function drawSc(ctx,W,H,a,cols,rows,sp,colH,colS){
-  const sc=28,ox=W/2,oy=H*.75;
-  ctx.strokeStyle='rgba(0,100,200,0.1)';ctx.lineWidth=.5;
-  for(let i=-1;i<=cols+1;i++){const p1=ip(-sp*.5+i*sp,-sp*.5,0,a,sc,ox,oy),p2=ip(-sp*.5+i*sp,rows*sp+sp*.5,0,a,sc,ox,oy);ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();}
-  for(let j=-1;j<=rows+1;j++){const p1=ip(-sp*.5,j*sp-sp*.5,0,a,sc,ox,oy),p2=ip(cols*sp+sp*.5,j*sp-sp*.5,0,a,sc,ox,oy);ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();}
-  let dr=0;
-  for(let r=0;r<rows;r++){for(let c=0;c<cols;c++){if(dr>=cols*rows)break;
-    const bx=c*sp-colS/2,by=r*sp-colS/2,zap=colS*2;
-    // Zapata
-    dbx(ctx,bx-zap*.5,by-zap*.5,-.6,colS+zap,colS+zap,.5,a,sc,ox,oy,['#3a2800','#1e1400','#2a1c00','#5a3c00']);
-    // Pedestal
-    if(S.ped)dbx(ctx,bx-colS*.3,by-colS*.3,-.1,colS*1.6,colS*1.6,S.ped.H||0.4,a,sc,ox,oy,['rgba(251,146,60,.4)','rgba(200,100,20,.5)','rgba(180,80,10,.6)','rgba(120,60,10,.3)']);
-    // Columna
-    dbx(ctx,bx,by,0,colS,colS,colH,a,sc,ox,oy,['rgba(240,165,0,.7)','rgba(180,110,0,.85)','rgba(160,90,0,.9)','rgba(100,60,0,.4)']);
-    // Vigas
-    if(S.vs&&c<cols-1)dbx(ctx,bx+colS,by+colS*.3,colH-.3,sp-colS,colS*.6,.22,a,sc,ox,oy,['rgba(167,139,250,.5)','rgba(120,100,200,.6)','rgba(100,80,180,.7)','rgba(80,60,150,.3)']);
-    if(S.am&&r<rows-1)dbx(ctx,bx+colS*.3,by+colS,0,colS*.6,sp-colS,colH-.3,a,sc,ox,oy,['rgba(52,211,153,.4)','rgba(30,160,110,.5)','rgba(20,140,100,.6)','rgba(10,100,80,.3)']);
-    dr++;}}
-  ctx.font='9px Share Tech Mono';
-  [['rgba(240,165,0,.9)','■ COLUMNA'],['rgba(251,146,60,.8)','■ PEDESTAL'],
-   ['rgba(90,60,0,.9)','■ ZAPATA'],['rgba(167,139,250,.8)','■ VIGA SÍS.']].forEach(([col,txt],i)=>{ctx.fillStyle=col;ctx.fillText(txt,7,H-48+i*12);});
+  // Mouse
+  cv.addEventListener('mousedown',e=>{isDragging=true;lastX=e.clientX;lastY=e.clientY;});
+  window.addEventListener('mousemove',e=>{
+    if(!isDragging)return;
+    isoAngle+=(e.clientX-lastX)*0.01;
+    isoPitch+=(e.clientY-lastY)*0.005;
+    isoPitch=Math.max(-0.8,Math.min(0.8,isoPitch));
+    lastX=e.clientX;lastY=e.clientY;
+  });
+  window.addEventListener('mouseup',()=>isDragging=false);
+  // Touch
+  cv.addEventListener('touchstart',e=>{isDragging=true;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;e.preventDefault();},{passive:false});
+  cv.addEventListener('touchmove',e=>{
+    if(!isDragging)return;
+    isoAngle+=(e.touches[0].clientX-lastX)*0.012;
+    isoPitch+=(e.touches[0].clientY-lastY)*0.006;
+    isoPitch=Math.max(-0.8,Math.min(0.8,isoPitch));
+    lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;
+    e.preventDefault();
+  },{passive:false});
+  cv.addEventListener('touchend',()=>isDragging=false);
 }
 
-/* ════ CHART ════ */
-let chartInst=null;
+function drawISO(){
+  const cv=$('isoCanvas');if(!cv)return;
+  cv.width=cv.offsetWidth||300;cv.height=260;
+  const ctx=cv.getContext('2d');
+  const nCol=S.colR?.n||S.colCi?.n||4;
+  const colH=S.colR?.L||S.colCi?.L||3;
+  const colS=S.colR?Math.max(S.colR.b,S.colR.h)/100:(S.colCi?.D||30)/100;
+  const pedH=S.ped?.H||0;
+  const zapS=S.zap?(Math.max(S.zap.B,S.zap.L)/100):colS*2.5;
+  const cols=Math.ceil(Math.sqrt(nCol)),rows=Math.ceil(nCol/cols),sp=3.8;
+
+  if(isoAF)cancelAnimationFrame(isoAF);
+
+  function frame(){
+    if(!isDragging)isoAngle+=0.005;
+    ctx.clearRect(0,0,cv.width,cv.height);
+    drawScene3D(ctx,cv.width,cv.height,isoAngle,isoPitch,cols,rows,sp,colH,colS,pedH,zapS);
+    isoAF=requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+function ip3(x,y,z,ang,pit,sc,ox,oy){
+  // Rotate around Y axis (ang), then pitch (pit)
+  const rx=x*Math.cos(ang)-y*Math.sin(ang);
+  const ry=x*Math.sin(ang)+y*Math.cos(ang);
+  const rz=z;
+  // Pitch
+  const py2=ry*Math.cos(pit)-rz*Math.sin(pit);
+  const pz2=ry*Math.sin(pit)+rz*Math.cos(pit);
+  return{x:ox+rx*sc,y:oy-pz2*sc};
+}
+
+function drawBox3D(ctx,x,y,z,w,d,h,ang,pit,sc,ox,oy,top,right,left,edge){
+  const pts=[[x,y,z],[x+w,y,z],[x+w,y+d,z],[x,y+d,z],
+             [x,y,z+h],[x+w,y,z+h],[x+w,y+d,z+h],[x,y+d,z+h]]
+    .map(p=>ip3(p[0],p[1],p[2],ang,pit,sc,ox,oy));
+  const faces=[
+    {v:[4,5,6,7],c:top},
+    {v:[1,2,6,5],c:right},
+    {v:[0,1,5,4],c:left}
+  ];
+  faces.forEach(({v,c})=>{
+    if(!c)return;
+    ctx.beginPath();v.forEach((i,j)=>j?ctx.lineTo(pts[i].x,pts[i].y):ctx.moveTo(pts[i].x,pts[i].y));
+    ctx.closePath();ctx.fillStyle=c;ctx.fill();
+    ctx.strokeStyle=edge||'rgba(0,0,0,.3)';ctx.lineWidth=.5;ctx.stroke();
+  });
+}
+
+function drawScene3D(ctx,W,H,ang,pit,cols,rows,sp,colH,colS,pedH,zapS){
+  const sc=26,ox=W/2,oy=H*.72;
+
+  // Grid floor
+  ctx.strokeStyle='rgba(0,100,200,0.1)';ctx.lineWidth=.4;
+  for(let i=-1;i<=cols+1;i++){
+    const p1=ip3(-sp*.5+i*sp,-sp*.5,0,ang,pit,sc,ox,oy);
+    const p2=ip3(-sp*.5+i*sp,rows*sp+sp*.5,0,ang,pit,sc,ox,oy);
+    ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();
+  }
+  for(let j=-1;j<=rows+1;j++){
+    const p1=ip3(-sp*.5,j*sp-sp*.5,0,ang,pit,sc,ox,oy);
+    const p2=ip3(cols*sp+sp*.5,j*sp-sp*.5,0,ang,pit,sc,ox,oy);
+    ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();
+  }
+
+  let dr=0;
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      if(dr>=cols*rows)break;
+      const bx=c*sp-colS/2,by=r*sp-colS/2;
+
+      // ZAPATA (si calculada)
+      if(S.zap){
+        const zw=zapS,zd=zapS,zh=0.5;
+        drawBox3D(ctx,bx-zw/2,by-zd/2,-zh,zw,zd,zh,ang,pit,sc,ox,oy,
+          '#3d2600','#251800','#2d1e00','#4a3000');
+      } else {
+        drawBox3D(ctx,bx-colS*.8,by-colS*.8,-0.35,colS*2.6,colS*2.6,0.35,ang,pit,sc,ox,oy,
+          '#3a2800','#1e1400','#2a1c00','#5a3c00');
+      }
+
+      // PEDESTAL (si calculado)
+      if(pedH>0){
+        const pw=colS*1.5,pd=colS*1.5;
+        drawBox3D(ctx,bx-pw/2+colS/2-pw/2,by-pd/2+colS/2-pd/2,0,pw,pd,pedH,ang,pit,sc,ox,oy,
+          'rgba(251,146,60,.55)','rgba(200,100,20,.65)','rgba(180,80,10,.7)','rgba(120,50,0,.3)');
+      }
+
+      // COLUMNA
+      const cBase=pedH>0?pedH:0;
+      drawBox3D(ctx,bx,by,cBase,colS,colS,colH,ang,pit,sc,ox,oy,
+        'rgba(250,175,0,.85)','rgba(200,120,0,.9)','rgba(170,90,0,.95)','rgba(80,40,0,.4)');
+
+      // VIGA CIMENTACIÓN (perimetral bajo nivel, si calculada)
+      if(S.vcim&&c<cols-1){
+        const vcH=S.vcim.h/100,vcB=S.vcim.b/100;
+        drawBox3D(ctx,bx+colS,by+colS*.3,-(vcH+0.1),sp-colS,vcB,vcH,ang,pit,sc,ox,oy,
+          'rgba(6,182,212,.55)','rgba(0,140,170,.65)','rgba(0,120,150,.7)','rgba(0,80,100,.3)');
+      }
+
+      // VIGA SÍSMICA
+      if(S.vs&&c<cols-1){
+        const vH=0.3,vD=colS*.6;
+        drawBox3D(ctx,bx+colS,by+colS*.3,colH-vH,sp-colS,vD,vH,ang,pit,sc,ox,oy,
+          'rgba(167,139,250,.6)','rgba(120,100,200,.7)','rgba(100,80,180,.8)','rgba(60,40,120,.3)');
+      }
+
+      // VIGA AMARRE
+      if(S.am&&r<rows-1){
+        const aH=0.2,aW=colS*.6;
+        drawBox3D(ctx,bx+colS*.3,by+colS,cBase,aW,sp-colS,aH,ang,pit,sc,ox,oy,
+          'rgba(52,211,153,.5)','rgba(30,160,110,.6)','rgba(20,140,100,.7)','rgba(10,90,60,.3)');
+      }
+      dr++;
+    }
+  }
+
+  // Labels
+  ctx.font='9px Share Tech Mono';
+  const lbls=[
+    ['rgba(250,175,0,.9)','■ COLUMNA'],
+    ['rgba(251,146,60,.8)',pedH>0?'■ PEDESTAL':''],
+    ['rgba(90,50,0,.9)','■ ZAPATA'],
+    ['rgba(167,139,250,.8)','■ VIGA SÍS.'],
+    ['rgba(52,211,153,.7)','■ V.AMARRE'],
+    ['rgba(6,182,212,.8)',S.vcim?'■ V.CIMEN.':'']
+  ].filter(l=>l[1]);
+  lbls.forEach(([col,txt],i)=>{ctx.fillStyle=col;ctx.fillText(txt,8,H-50+i*13);});
+}
+
+/* DIAGRAM ESCALERA */
+function drawDiag(r){
+  const cv=$('diagCanvas');if(!cv)return;
+  cv.width=cv.offsetWidth||300;cv.height=200;
+  const ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.strokeStyle='rgba(0,100,200,0.05)';ctx.lineWidth=.5;
+  for(let x=0;x<cv.width;x+=18){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,cv.height);ctx.stroke();}
+  for(let y=0;y<cv.height;y+=18){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(cv.width,y);ctx.stroke();}
+  const H_=r?r.H:(gv('E_H')||200),N_=r?r.N:(gv('E_N')||12);
+  const hu_=r?r.hu:(gv('E_hu')||28),co_=r?r.co:(H_/N_),tl_=r?r.tl:10;
+  const Lh_=N_*hu_,Li_=Math.sqrt(H_*H_+Lh_*Lh_),alpha_=Math.atan(H_/Lh_);
+  const m=35,W=cv.width-2*m,Hc=cv.height-2*m;
+  const sc=Math.min(W/Math.max(Lh_,1),Hc/Math.max(H_,1))*0.82;
+  const ox=m+8,oy=cv.height-m-5;
+  const px=(x,y)=>({x:ox+x*sc,y:oy-y*sc});
+  const sA=Math.sin(alpha_),cA=Math.cos(alpha_),nx=-sA,ny=cA;
+  const slabT=tl_/100;
+  ctx.beginPath();
+  ctx.moveTo(px(0,0).x,px(0,0).y);
+  ctx.lineTo(px(Lh_/100,H_/100).x,px(Lh_/100,H_/100).y);
+  ctx.lineTo(px(Lh_/100,H_/100).x+nx*slabT*sc*80,px(Lh_/100,H_/100).y-ny*slabT*sc*80);
+  ctx.lineTo(px(0,0).x+nx*slabT*sc*80,px(0,0).y-ny*slabT*sc*80);
+  ctx.closePath();ctx.fillStyle='rgba(167,139,250,0.08)';
+  ctx.strokeStyle='rgba(167,139,250,0.3)';ctx.lineWidth=1;ctx.fill();ctx.stroke();
+  ctx.beginPath();let cx0=0,cy0=0;ctx.moveTo(px(cx0,cy0).x,px(cx0,cy0).y);
+  for(let i=0;i<N_;i++){cx0+=hu_/100;ctx.lineTo(px(cx0,cy0).x,px(cx0,cy0).y);cy0+=co_/100;ctx.lineTo(px(cx0,cy0).x,px(cx0,cy0).y);}
+  ctx.strokeStyle='rgba(167,139,250,0.6)';ctx.lineWidth=1.5;ctx.stroke();
+  if(r){
+    for(let b=0;b<Math.min(3,r.nL);b++){
+      const frac=b/(Math.max(r.nL-1,1));const bOff=(0.025+frac*0.025)*sc*100;
+      ctx.beginPath();
+      ctx.moveTo(px(0,0).x+nx*bOff,px(0,0).y-ny*bOff);
+      ctx.lineTo(px(Lh_/100,H_/100).x+nx*bOff,px(Lh_/100,H_/100).y-ny*bOff);
+      ctx.strokeStyle=`rgba(249,115,22,${0.9-frac*0.2})`;ctx.lineWidth=2;ctx.stroke();
+    }
+    cx0=0;cy0=0;
+    for(let i=0;i<Math.min(N_,18);i++){
+      const p0=px(cx0,cy0),p1=px(cx0+hu_/100,cy0),p2=px(cx0+hu_/100,cy0+co_/100);
+      ctx.beginPath();ctx.moveTo(p0.x+2,p0.y-2);ctx.lineTo(p1.x+2,p1.y-2);ctx.lineTo(p2.x+2,p2.y-2);
+      ctx.strokeStyle='rgba(74,222,128,0.7)';ctx.lineWidth=1.5;ctx.stroke();
+      const nTshow=Math.min(N_,18);
+      const frac=(i+0.5)/nTshow;const bx=frac*Lh_/100,by=frac*H_/100;
+      const p=px(bx,by);ctx.beginPath();ctx.arc(p.x+nx*28,p.y-ny*28,2.5,0,Math.PI*2);
+      ctx.fillStyle='rgba(56,189,248,0.8)';ctx.fill();
+      cx0+=hu_/100;cy0+=co_/100;
+    }
+  }
+  ctx.setLineDash([3,3]);ctx.strokeStyle='rgba(90,120,160,0.45)';ctx.lineWidth=.8;
+  ctx.beginPath();ctx.moveTo(ox-10,oy);ctx.lineTo(ox-10,oy-H_*sc);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(ox,oy+10);ctx.lineTo(ox+Lh_*sc,oy+10);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='rgba(120,160,200,.9)';ctx.font='9px Share Tech Mono';
+  ctx.save();ctx.translate(ox-22,oy-H_*sc/2);ctx.rotate(-Math.PI/2);ctx.fillText(`H=${fmt(H_/100,2)}m`,0,0);ctx.restore();
+  ctx.fillText(`L=${fmt(Lh_/100,2)}m`,ox+Lh_*sc/2-16,oy+21);
+  ctx.beginPath();ctx.arc(ox,oy,22,-( Math.PI/2-alpha_+Math.PI/2),-Math.PI/2,false);
+  ctx.strokeStyle='rgba(240,165,0,.6)';ctx.lineWidth=1.2;ctx.stroke();
+  ctx.fillStyle='rgba(240,165,0,.8)';ctx.font='8px Share Tech Mono';
+  ctx.fillText(`α=${fmt(alpha_*180/Math.PI,0)}°`,ox+9,oy-8);
+  ctx.fillStyle='rgba(255,255,255,.4)';ctx.font='9px Share Tech Mono';
+  ctx.fillText(`N=${N_} | t=${tl_}cm`,ox+2,oy-3);
+}
+
+/* ZAPATA DIAGRAM */
+function drawZapDiag(r){
+  const cv=$('zapCanvas');if(!cv)return;
+  cv.width=cv.offsetWidth||300;cv.height=190;
+  const ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);
+  const B_=r?r.B:75,L_=r?r.L:75,rec_=r?r.rec:7.5;
+  const nb_x=r?r.nb_x:4,nb_y=r?r.nb_y:4,bd=r?r.bd:4;
+  const margin=22;
+  const sc=Math.min((cv.width-2*margin)/Math.max(B_,1),(cv.height-2*margin)/Math.max(L_,1))*0.85;
+  const ox=cv.width/2-B_*sc/2,oy=cv.height/2-L_*sc/2;
+  ctx.fillStyle='rgba(167,139,250,0.07)';ctx.strokeStyle='rgba(167,139,250,0.4)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.rect(ox,oy,B_*sc,L_*sc);ctx.fill();ctx.stroke();
+  ctx.strokeStyle='rgba(251,191,36,0.2)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+  ctx.beginPath();ctx.rect(ox+rec_*sc,oy+rec_*sc,(B_-2*rec_)*sc,(L_-2*rec_)*sc);ctx.stroke();ctx.setLineDash([]);
+  if(r){
+    const spx=(L_-2*rec_)/(Math.max(nb_y-1,1));
+    for(let i=0;i<nb_y;i++){
+      const y_=oy+rec_*sc+i*spx*sc;
+      ctx.beginPath();ctx.moveTo(ox+rec_*sc,y_);ctx.lineTo(ox+(B_-rec_)*sc,y_);
+      ctx.strokeStyle='rgba(251,191,36,0.85)';ctx.lineWidth=2;ctx.stroke();
+      [ox+rec_*sc,ox+(B_-rec_)*sc].forEach(x=>{ctx.beginPath();ctx.arc(x,y_,3,0,Math.PI*2);ctx.fillStyle='rgba(251,191,36,.9)';ctx.fill();});
+    }
+    const spy=(B_-2*rec_)/(Math.max(nb_x-1,1));
+    for(let i=0;i<nb_x;i++){
+      const x_=ox+rec_*sc+i*spy*sc;
+      ctx.beginPath();ctx.moveTo(x_,oy+rec_*sc);ctx.lineTo(x_,oy+(L_-rec_)*sc);
+      ctx.strokeStyle='rgba(0,201,255,0.7)';ctx.lineWidth=1.5;ctx.stroke();
+    }
+  }
+  ctx.fillStyle='rgba(200,200,220,.8)';ctx.font='10px Share Tech Mono';
+  ctx.fillText(`B=${fmt(B_/100,2)}m`,ox+2,oy-5);
+  ctx.save();ctx.translate(ox-13,oy+L_*sc/2);ctx.rotate(-Math.PI/2);
+  ctx.fillText(`L=${fmt(L_/100,2)}m`,0,0);ctx.restore();
+  if(r){
+    ctx.fillStyle='rgba(251,191,36,.7)';
+    ctx.fillText(`${nb_y} barras dir.X`,ox+3,oy+L_*sc+12);
+    ctx.fillStyle='rgba(0,201,255,.7)';
+    ctx.fillText(`${nb_x} barras dir.Y`,ox+B_*sc-68,oy-5);
+    ctx.fillStyle='rgba(251,191,36,.5)';ctx.font='9px Share Tech Mono';
+    ctx.fillText(`rec=${rec_}cm — ACI §20.6.1.3`,ox+rec_*sc+2,oy+rec_*sc-3);
+  }
+}
+
+/* CHART */
 function buildChart(){
   const labels=[],cems=[],ares=[],gras=[];
-  [S.con,S.mur,S.zap,S.colR,S.vs,S.am].filter(Boolean).forEach(it=>{
+  [S.con,S.mur,S.zap,S.vcim,S.colR,S.vs,S.am].filter(Boolean).forEach(it=>{
     labels.push((it.m||'').substring(0,8));
     cems.push(it.cem||0);ares.push(+(it.are||0).toFixed(2));gras.push(+(it.gra||0).toFixed(2));
   });
@@ -1577,22 +1882,25 @@ function buildChart(){
       {label:'Cemento (sacos)',data:cems,backgroundColor:'rgba(240,165,0,.7)',borderColor:'#f0a500',borderWidth:1},
       {label:'Arena (m³)',data:ares,backgroundColor:'rgba(0,201,255,.4)',borderColor:'#00c9ff',borderWidth:1},
       {label:'Grava (m³)',data:gras,backgroundColor:'rgba(0,229,160,.4)',borderColor:'#00e5a0',borderWidth:1}]},
-    options:{responsive:true,plugins:{legend:{labels:{color:'#7a95b0',font:{family:'Rajdhani',size:9}}}},
-      scales:{x:{ticks:{color:'#7a95b0',font:{size:9}},grid:{color:'rgba(26,58,96,.4)'}},
-              y:{ticks:{color:'#7a95b0',font:{family:'Share Tech Mono',size:8}},grid:{color:'rgba(26,58,96,.4)'}}}}
+    options:{responsive:true,
+      plugins:{legend:{labels:{color:'#7a95b0',font:{family:'Rajdhani',size:9}}}},
+      scales:{
+        x:{ticks:{color:'#7a95b0',font:{size:9}},grid:{color:'rgba(26,58,96,.4)'}},
+        y:{ticks:{color:'#7a95b0',font:{family:'Share Tech Mono',size:8}},grid:{color:'rgba(26,58,96,.4)'}}
+      }}
   });
 }
 
-/* ════ PDF PLANILLA ════ */
+/* PDF PLANILLA */
 function exportPlan(){
   if(!PI.length){toast('⚠️ NADA QUE EXPORTAR');return;}
   const{jsPDF}=window.jspdf;const doc=new jsPDF();
-  doc.setFillColor(10,30,58);doc.rect(0,0,210,26,'F');
+  doc.setFillColor(10,30,58);doc.rect(0,0,210,28,'F');
   doc.setTextColor(240,165,0);doc.setFontSize(14);doc.setFont('helvetica','bold');
-  doc.text('PLANILLA DE HIERRO — STRUCTURAPRO v3.3',14,11);
+  doc.text('PLANILLA DE HIERRO — STRUCTURAPRO v3.4',14,11);
   doc.setFontSize(7.5);doc.setFont('helvetica','normal');doc.setTextColor(150,180,210);
-  doc.text('ACI 318-19 · INADEH · REP/SPIA · COPANIT · Grado 60 · Panamá | '+new Date().toLocaleString('es'),14,17);
-  doc.text('Cola 90°: 6ϕ(#3–#5) | 12ϕ(#6–#8) · Traslape 40ϕ · Long.com. 9.15m · Factor 45.36kg/qq',14,22);
+  doc.text('ACI 318-19 · REP/SPIA · COPANIT 153-78 · Grado 60 · Panamá | '+new Date().toLocaleString('es'),14,17);
+  doc.text('Cola 90°: 6ϕ(#3–#5)|12ϕ(#6–#8) · Traslape 40ϕ · Long.com.9.15m · 45.36kg/qq',14,23);
   const tk=PI.reduce((a,b)=>a+b.kg,0),tq=PI.reduce((a,b)=>a+b.q,0);
   doc.autoTable({startY:30,head:[['ELEMENTO','DIÁM.','N°','METROS','PESO (kg)','QUINTALES']],
     body:PI.map(i=>[i.e,i.d,i.n,i.m+' m',i.kg+' kg',i.q+' qq']),
@@ -1601,7 +1909,7 @@ function exportPlan(){
     footStyles:{fillColor:[20,50,90],textColor:[240,165,0],fontStyle:'bold'},
     alternateRowStyles:{fillColor:[240,245,255]},margin:{left:10,right:10}});
   let y=doc.lastAutoTable.finalY+8;
-  doc.autoTable({startY:y,head:[['BARRA','mm','kg/m','40ϕ cm','Cola 90°']],
+  doc.autoTable({startY:y,head:[['BARRA','mm','kg/m','40ϕ cm','Cola 90° ACI §25.3']],
     body:[['#3(3/8")','9.5','0.560','38','6ϕ=5.7cm'],['#4(1/2")','12.7','0.994','51','6ϕ=7.6cm'],
       ['#5(5/8")','15.9','1.552','64','6ϕ=9.5cm'],['#6(3/4")','19.1','2.235','76','12ϕ=22.9cm'],
       ['#7(7/8")','22.2','3.042','89','12ϕ=26.6cm'],['#8(1")','25.4','3.973','102','12ϕ=30.5cm']],
@@ -1609,31 +1917,32 @@ function exportPlan(){
     alternateRowStyles:{fillColor:[240,245,255]},margin:{left:10,right:10}});
   y=doc.lastAutoTable.finalY+7;
   doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(60,80,110);
-  ['• Acero Grado 60, fy=4200 kg/cm² — COPANIT 153-78/INADEH.',
-   '• L_barra zapata = Lado − 2×rec (7.5cm contacto suelo mín. INADEH).',
-   '• L_long pedestal = H + gancho 90° + doblez — ACI §25.3.',
+  ['• Acero Grado 60, fy=4200 kg/cm² — COPANIT 153-78.',
+   '• L_barra zapata = Lado − 2×rec. Rec. mín. 7.5cm contacto suelo — ACI §20.6.1.3.',
+   '• L_long pedestal = H + gancho + doblez — ACI §25.3.',
+   '• Traslape mín. 40×ϕ — COPANIT/ACI §25.5.1.',
+   '• Long. comercial Panamá: 9.15m (30 pies).',
    '• Factor qq: 45.36 kg = 1 quintal — Norma comercial Panamá.',
    '• Documento orientativo — validar con ing. estructural colegiado REP/SPIA.'
   ].forEach(n=>{doc.text(n,12,y,{maxWidth:186});y+=4.5;});
   const pgs=doc.internal.getNumberOfPages();
   for(let i=1;i<=pgs;i++){doc.setPage(i);doc.setFillColor(10,30,58);doc.rect(0,285,210,12,'F');
     doc.setTextColor(100,130,160);doc.setFontSize(7);
-    doc.text('STRUCTURAPRO v3.3 · Planilla de Hierro · INADEH · ACI 318 · Panamá',14,292);
+    doc.text('STRUCTURAPRO v3.4 · ACI 318-19 · REP/SPIA · COPANIT · Planilla de Hierro · Panamá',14,292);
     doc.text(`Pág. ${i}/${pgs}`,196,292,{align:'right'});}
-  doc.save('StructuraPro_v3.3_Planilla.pdf');toast('PLANILLA PDF ✓');
+  doc.save('StructuraPro_v3.4_Planilla.pdf');toast('PLANILLA PDF ✓');
 }
 
-/* ════ PDF ESCALERA ════ */
+/* PDF ESCALERA */
 function exportEscPDF(){
   if(!RE){toast('⚠️ CALCULA PRIMERO');return;}
   const{jsPDF}=window.jspdf;const doc=new jsPDF();
   doc.setFillColor(86,28,139);doc.rect(0,0,210,26,'F');
   doc.setTextColor(232,121,249);doc.setFontSize(14);doc.setFont('helvetica','bold');
-  doc.text('STRUCTURAPRO · MÓDULO ESCALERA v3.3',14,11);
+  doc.text('STRUCTURAPRO v3.4 · MÓDULO ESCALERA',14,11);
   doc.setFontSize(7.5);doc.setFont('helvetica','normal');doc.setTextColor(220,180,240);
-  doc.text('Sección Longitudinal · ACI 318 · INADEH · Ganchos 90°inf/135°sup · Panamá',14,17);
-  doc.text('Generado: '+new Date().toLocaleString('es'),14,23);
-  let y=30;
+  doc.text('Sección Longitudinal · ACI 318 · REP/SPIA · ES09 90°inf/135°sup | '+new Date().toLocaleString('es'),14,18);
+  let y=28;
   doc.autoTable({startY:y,head:[['PARÁMETRO','VALOR','UNIDAD']],
     body:[['Altura total',fmt(RE.H),'cm'],['N° escalones',RE.N,'und'],
       ['Huella',fmt(RE.hu),'cm'],['Contrahuella',fmt(RE.co,1),'cm'],['Ancho',fmt(RE.an),'cm'],
@@ -1642,13 +1951,13 @@ function exportEscPDF(){
     alternateRowStyles:{fillColor:[245,240,255]},margin:{left:10,right:10}});
   y=doc.lastAutoTable.finalY+8;
   doc.autoTable({startY:y,head:[['TIPO DE REFUERZO','DIÁM.','LONG. TOTAL','NOTAS']],
-    body:[['Acero Longitudinal',BR[RE.bl].lb,RE.L_tot_L+' m',`${RE.nL} barras × ${RE.L_bL}m, ganchos 90°`],
-      ['Acero Transversal',BR[RE.bt].lb,RE.L_tot_T+' m',`${RE.nT} barras × ${RE.L_bT}m`],
+    body:[['Acero Longitudinal',BR[RE.bl].lb,RE.L_tot_L+' m',`${RE.nL}barras×${RE.L_bL}m`],
+      ['Acero Transversal',BR[RE.bt].lb,RE.L_tot_T+' m','1 por escalón + descansos'],
       ['Acero Superior',BR[RE.bt].lb,RE.L_tot_S+' m','Repartición temperatura'],
-      ['Ganchos ES09',BR[RE.bg].lb,RE.L_tot_G+' m',`90°inf/135°sup · ${RE.L_gES09}m/und`],
+      ['Ganchos ES09',BR[RE.bg].lb,RE.L_tot_G+' m','90°inf/135°sup — ACI 318/REP'],
       ['Malla electrosoldada','45×150×150mm',RE.area_malla+' m²','Zona estética'],
       ['Concreto pobre','f\'c='+RE.fc,RE.vol_cp+' m³','Relleno escalones']],
-    foot:[[`TOTAL ${BR[RE.bl].lb}`,BR[RE.bl].lb,RE.m_tot+' m','Suma total longitudinal']],
+    foot:[[`TOTAL ${BR[RE.bl].lb}`,BR[RE.bl].lb,RE.m_tot+' m','']],
     styles:{font:'courier',fontSize:8},headStyles:{fillColor:[86,28,139],textColor:[232,121,249]},
     footStyles:{fillColor:[50,20,80],textColor:[232,121,249],fontStyle:'bold'},
     alternateRowStyles:{fillColor:[245,240,255]},margin:{left:10,right:10}});
@@ -1663,19 +1972,19 @@ function exportEscPDF(){
   const pgs=doc.internal.getNumberOfPages();
   for(let i=1;i<=pgs;i++){doc.setPage(i);doc.setFillColor(50,10,80);doc.rect(0,285,210,12,'F');
     doc.setTextColor(180,130,210);doc.setFontSize(7);
-    doc.text('STRUCTURAPRO v3.3 · Módulo Escalera · INADEH · ACI 318 · Panamá',14,292);
+    doc.text('STRUCTURAPRO v3.4 · Módulo Escalera · ACI 318 · REP/SPIA · Panamá',14,292);
     doc.text(`Pág. ${i}/${pgs}`,196,292,{align:'right'});}
-  doc.save(`StructuraPro_v3.3_Escalera_N${RE.N}_H${RE.H}cm.pdf`);toast('PDF ESCALERA ✓');
+  doc.save(`StructuraPro_v3.4_Escalera_N${RE.N}_H${RE.H}cm.pdf`);toast('PDF ESCALERA ✓');
 }
 
-/* ════ PDF COMPLETO ════ */
+/* PDF COMPLETO */
 function exportPDF(){
   const{jsPDF}=window.jspdf;const doc=new jsPDF();
   doc.setFillColor(10,30,58);doc.rect(0,0,210,30,'F');
   doc.setTextColor(240,165,0);doc.setFontSize(15);doc.setFont('helvetica','bold');
-  doc.text('STRUCTURAPRO v3.3',14,11);
+  doc.text('STRUCTURAPRO v3.4',14,11);
   doc.setFontSize(7.5);doc.setFont('helvetica','normal');doc.setTextColor(150,180,210);
-  doc.text('ESTIMADOR ESTRUCTURAL COMPLETO · ACI 318-19 · INADEH · REP/SPIA · COPANIT · Panamá',14,18);
+  doc.text('ESTIMADOR ESTRUCTURAL COMPLETO · ACI 318-19 · REP/SPIA · COPANIT · Panamá',14,18);
   doc.text('Generado: '+new Date().toLocaleString('es'),14,25);
   let y=33;
   function sec(t,rgb){if(y>235){doc.addPage();y=20;}doc.setFillColor(20,50,90);doc.rect(10,y-4,190,7,'F');
@@ -1686,31 +1995,32 @@ function exportPDF(){
       headStyles:{fillColor:[10,30,58],textColor:[240,165,0]},
       alternateRowStyles:{fillColor:[240,245,255]},margin:{left:10,right:10}});
     y=doc.lastAutoTable.finalY+8;}
-
-  if(S.con){sec('CONCRETO');tbl(['PARAM','VALOR','UNIDAD'],[['Área',S.con.a,'m²'],['Espesor',S.con.e,'cm'],["f'c",S.con.fc,'kg/cm²'],['Volumen',fmt(S.con.vol),'m³'],['Cemento',S.con.cem,'sacos'],['Arena',S.con.are,'m³']]);}
-  if(S.zap){sec('ZAPATAS',[251,191,36]);
-    tbl(['PARÁMETRO','VALOR','UNIDAD'],[
-      ['B × L',`${S.zap.B} × ${S.zap.L}`,'cm'],['Altura',S.zap.H,'cm'],
-      ['Recubrimiento',S.zap.rec,'cm (INADEH)'],
-      ['L barra dir.X',`${S.zap.B/100}-2×${S.zap.rec/100}=${S.zap.lb_x}`,'m'],
-      ['L barra dir.Y',`${S.zap.L/100}-2×${S.zap.rec/100}=${S.zap.lb_y}`,'m'],
-      ['N° barras X/Y',`${S.zap.nb_x} / ${S.zap.nb_y}`,'A/D'],
-      ['Total/zapata',S.zap.m_zap,'m'],['N° zapatas',S.zap.nZ,'und'],
-      ['TOTAL acero',`${S.zap.nZ}×${S.zap.m_zap}=${S.zap.m_tot}`,'m'],
-      ['Quintales',S.zap.qq,'qq (c/7% desp.)']]);}
-  if(S.ped){sec('PEDESTALES',[251,146,60]);
-    tbl(['ELEMENTO','#BARRAS','L/BARRA','TOTAL','×'+S.ped.nP+' ped.'],[
-      ['Long. '+BR[S.ped.bl].lb,S.ped.nb,S.ped.L_long+' m',fmt(S.ped.m_long,3)+' m',fmt(S.ped.m_tot_long)+' m'],
-      ['Estribos '+BR[S.ped.be].lb,S.ped.nEst+' est.',S.ped.le+' m',fmt(S.ped.m_est,3)+' m',fmt(S.ped.m_tot_est)+' m'],
-      ['TOTAL qq','','','',S.ped.qq+' qq']]);}
-  if(S.colR){sec('COLUMNAS CUAD/RECT');
-    tbl(['PARAM','VALOR','UNIDAD'],[['b×h',`${S.colR.b}×${S.colR.h}`,'cm'],['L',S.colR.L,'m'],['s conf.',S.colR.sc,'cm'],['TOTAL qq',S.colR.qq,'qq']]);}
-  if(S.vs){sec('VIGA SÍSMICA',[167,139,250]);
-    tbl(['PARAM','VALOR','UNIDAD'],[['b×h',`${S.vs.b}×${S.vs.h}`,'cm'],['d ef.',S.vs.dEf.toFixed(3),'m'],['lo',S.vs.lo,'m'],['s conf.',S.vs.sc,'cm'],['TOTAL qq',S.vs.qq,'qq']]);}
-  if(S.am){sec('VIGA AMARRE',[52,211,153]);
-    tbl(['PARAM','VALOR','UNIDAD'],[['b×h',`${S.am.b}×${S.am.h}`,'cm'],['L',fmt(S.am.L),'m'],['N est.',S.am.ne,'und'],['TOTAL qq',S.am.qq,'qq']]);}
-  if(RE){sec('ESCALERA',[232,121,249]);
-    tbl(['PARAM','VALOR','UNIDAD'],[['N escalones',RE.N,'und'],['α',fmt(RE.alphaDeg,1),'°'],['t losa',RE.tl,'cm'],['TOTAL qq',RE.qq,'qq']]);}
+  if(S.con){sec('CONCRETO');tbl(['PARAM','VALOR','UNIDAD'],
+    [['Área',S.con.a,'m²'],['Espesor',S.con.e,'cm'],["f'c",S.con.fc,'kg/cm²'],
+     ['Volumen',fmt(S.con.vol),'m³'],['Cemento',S.con.cem,'sacos']]);}
+  if(S.zap){sec('ZAPATAS',[251,191,36]);tbl(['PARÁMETRO','VALOR','UNIDAD'],
+    [['B×L',`${S.zap.B}×${S.zap.L}`,'cm'],['Rec.',S.zap.rec,'cm — ACI §20.6.1.3'],
+     ['L barra X',S.zap.lb_x,'m'],['L barra Y',S.zap.lb_y,'m'],
+     ['N° barras',`${S.zap.nb_x}/${S.zap.nb_y}`,'A/D'],
+     ['Total proyecto',`${S.zap.nZ}×${S.zap.m_zap}=${S.zap.m_tot}`,'m'],
+     ['Quintales',S.zap.qq,'qq']]);}
+  if(S.vcim){sec('VIGA DE CIMENTACIÓN',[6,182,212]);tbl(['ELEM.','N°','L/barra','TOTAL','×vigas'],
+    [['Long.'+BR[S.vcim.bl].lb,S.vcim.n_lon,S.vcim.lb_lon+' m',fmt(S.vcim.m_lon)+' m',fmt(S.vcim.m_lon)+' m'],
+     ['Estribos'+BR[S.vcim.be].lb,S.vcim.ne,S.vcim.le+' m',fmt(S.vcim.m_est)+' m',S.vcim.qq+' qq']]);}
+  if(S.ped){sec('PEDESTALES',[251,146,60]);tbl(['ELEM.','N°','L/barra','TOTAL','×ped.'],
+    [['Long.'+BR[S.ped.bl].lb,S.ped.nb,S.ped.L_long+' m',S.ped.m_long+' m',S.ped.m_tot_long+' m'],
+     ['Est.'+BR[S.ped.be].lb,S.ped.nEst,S.ped.le+' m',S.ped.m_est+' m',S.ped.m_tot_est+' m'],
+     ['TOTAL qq','','','',S.ped.qq+' qq']]);}
+  if(S.colR){sec('COLUMNA CUAD/RECT');tbl(['PARAM','VALOR','UNIDAD'],
+    [['b×h',`${S.colR.b}×${S.colR.h}`,'cm'],['L',S.colR.L,'m'],
+     ['s conf.',S.colR.sc,'cm'],['TOTAL qq',S.colR.qq,'qq']]);}
+  if(S.vs){sec('VIGA SÍSMICA',[167,139,250]);tbl(['PARAM','VALOR','UNIDAD'],
+    [['b×h',`${S.vs.b}×${S.vs.h}`,'cm'],['d ef.',S.vs.dEf.toFixed(3),'m'],
+     ['lo',S.vs.lo,'m'],['s conf.',S.vs.sc,'cm'],['TOTAL qq',S.vs.qq,'qq']]);}
+  if(S.am){sec('VIGA AMARRE',[52,211,153]);tbl(['PARAM','VALOR','UNIDAD'],
+    [['b×h',`${S.am.b}×${S.am.h}`,'cm'],['L',fmt(S.am.L),'m'],['TOTAL qq',S.am.qq,'qq']]);}
+  if(RE){sec('ESCALERA',[232,121,249]);tbl(['PARAM','VALOR','UNIDAD'],
+    [['N',RE.N,'und'],['α',fmt(RE.alphaDeg,1),'°'],['t losa',RE.tl,'cm'],['TOTAL qq',RE.qq,'qq']]);}
   if(PI.length){if(y>200){doc.addPage();y=20;}sec('PLANILLA DE HIERRO CONSOLIDADA');
     const tk=PI.reduce((a,b)=>a+b.kg,0),tq=PI.reduce((a,b)=>a+b.q,0);
     doc.autoTable({startY:y,head:[['ELEMENTO','DIÁM.','N°','METROS','kg','qq']],
@@ -1721,37 +2031,39 @@ function exportPDF(){
       alternateRowStyles:{fillColor:[240,245,255]},margin:{left:10,right:10}});
     y=doc.lastAutoTable.finalY+8;}
   if(y>220){doc.addPage();y=20;}
-  sec('NORMATIVA APLICADA');
+  sec('NORMATIVA APLICADA — ACI 318-19 / REP/SPIA / COPANIT');
   doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(40,50,70);
-  ['• Acero Grado 60, fy=4200 kg/cm² — COPANIT 153-78/INADEH.',
-   '• L_barra zapata = Lado − 2×rec. Recubrimiento mín. 7.5cm suelo — INADEH.',
-   '• L_long pedestal = H + gancho 90° + doblez — ACI §25.3.',
-   '• Cola 90°: 6ϕ(#3–#5) | 12ϕ(#6–#8) — ACI §25.3.2.',
-   '• Traslape mín. 40×ϕ — REP/COPANIT/ACI 318-19 §25.5.1.',
-   '• Long. comercial Panamá: 9.15m (30 pies) — INADEH.',
+  ['• Acero Grado 60, fy=4200 kg/cm² — COPANIT 153-78.',
+   '• Recubrimientos ACI §20.6.1: interior 2.5cm · exterior 4.0cm · suelo/cimentación 7.5cm.',
+   '• L_barra zapata = Lado − 2×rec — ACI §25.4.',
+   '• L_long pedestal = H + gancho + doblez — ACI §25.3.',
+   '• Cola gancho 90°: 6ϕ(#3–#5) | 12ϕ(#6–#8) — ACI §25.3.2.',
+   '• Traslape mín. 40×ϕ — COPANIT/ACI §25.5.1.',
+   '• Long. comercial Panamá: 9.15m (30 pies).',
    '• Zona confinada viga sísmica: lo=2h, s=min(d/4,6ϕ,15cm) — ACI §18.6.4.',
-   '• ρs_mín columna cilíndrica: 0.45(Ag/Ac−1)×f\'c/fyt — ACI §18.7.5.4.',
-   '• Ganchos ES09 escalera: 90°inf / 135°sup — INADEH.',
-   '• Factor qq: 45.36 kg = 1 quintal — Panamá.',
+   '• ρs_mín col. cilíndrica: 0.45(Ag/Ac-1)×f\'c/fyt — ACI §18.7.5.4.',
+   '• V.Cimentación: rec. mín. 7.5cm (contacto suelo) — ACI §20.6.1.3.',
+   '• Ganchos ES09: 90°inf / 135°sup — ACI 318.',
+   '• Factor qq: 45.36 kg = 1 quintal — Norma Panamá.',
    '• Desperdicio: acero 7% · concreto 10–15% · bloques 5%.',
-   '• Reporte orientativo — requiere aprobación ing. estructural colegiado REP/SPIA.'
+   '• Reporte orientativo — validar con ing. estructural colegiado REP/SPIA.'
   ].forEach(n=>{if(y>278){doc.addPage();y=20;}doc.text(n,12,y,{maxWidth:186});y+=4.5;});
   const pgs=doc.internal.getNumberOfPages();
   for(let i=1;i<=pgs;i++){doc.setPage(i);doc.setFillColor(10,30,58);doc.rect(0,285,210,12,'F');
     doc.setTextColor(100,130,160);doc.setFontSize(7);
-    doc.text('STRUCTURAPRO v3.3 · INADEH · ACI 318-19 · REP/SPIA · Estimador Estructural · Panamá',14,292);
+    doc.text('STRUCTURAPRO v3.4 · ACI 318-19 · REP/SPIA · COPANIT · Panamá',14,292);
     doc.text(`Pág. ${i}/${pgs}`,196,292,{align:'right'});}
-  doc.save('StructuraPro_v3.3_Reporte_Completo.pdf');toast('PDF COMPLETO ✓');
+  doc.save('StructuraPro_v3.4_Reporte_Completo.pdf');toast('PDF COMPLETO ✓');
 }
 
-/* ════ TOAST ════ */
+/* TOAST */
 function toast(msg){const t=$('toast');t.textContent='✅ '+msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
 
-/* ════ INIT ════ */
+/* INIT */
 window.addEventListener('load',()=>{
   $('E_H').value=280;$('E_N').value=16;$('E_hu').value=27;$('E_co').value=17.5;$('E_an').value=120;
-  liveEsc();drawISO();drawZapDiag(null);
-  window.addEventListener('resize',()=>{drawISO();if(RE)drawDiag(RE);if(S.zap)drawZapDiag(S.zap);else drawZapDiag(null);});
+  liveEsc();drawZapDiag(null);drawISO();setupISODrag();
+  window.addEventListener('resize',()=>{drawISO();if(RE)drawDiag(RE);drawZapDiag(S.zap||null);});
 });
 </script>
 </body>
