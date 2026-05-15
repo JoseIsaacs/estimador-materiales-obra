@@ -12,6 +12,7 @@ from app import calcular_bloques, seleccionar_tipo_bloque, BLOQUES_POR_M2
 
 # ... (el resto del código sigue igual)
 
+
 def test_calcular_bloques_estandar():
     area, cantidad = calcular_bloques(10, 2.5, 12.5)
     assert area == 25.0
