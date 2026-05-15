@@ -1,16 +1,21 @@
 """
 Pruebas unitarias para app.py
 """
-import sys
 import os
-# Agrega el directorio raíz al path para poder importar app.py
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
+import sys
+import importlib.util
 import pytest
 from unittest.mock import patch
-from app import calcular_bloques, seleccionar_tipo_bloque, BLOQUES_POR_M2
 
-# ... (el resto del código sigue igual)
+# Cargar app.py como módulo directamente desde la ruta del archivo
+ruta_app = os.path.join(os.path.dirname(__file__), '..', 'app.py')
+spec = importlib.util.spec_from_file_location("app", ruta_app)
+app = importlib.util.module_from_spec(spec)
+sys.modules["app"] = app
+spec.loader.exec_module(app)
+
+# Ahora podemos usar las funciones y constantes de app
+from app import calcular_bloques, seleccionar_tipo_bloque, BLOQUES_POR_M2
 
 
 def test_calcular_bloques_estandar():
