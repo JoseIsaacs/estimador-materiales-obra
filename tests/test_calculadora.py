@@ -2,10 +2,15 @@
 Pruebas unitarias para app.py
 """
 import sys
-import io
+import os
+# Agrega el directorio raíz al path para poder importar app.py
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import pytest
 from unittest.mock import patch
 from app import calcular_bloques, seleccionar_tipo_bloque, BLOQUES_POR_M2
+
+# ... (el resto del código sigue igual)
 
 def test_calcular_bloques_estandar():
     area, cantidad = calcular_bloques(10, 2.5, 12.5)
