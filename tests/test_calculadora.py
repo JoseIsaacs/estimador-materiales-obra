@@ -25,4 +25,4 @@ def test_seleccion_tipo_bloque_valido():
 
 def test_constantes_definidas():
     assert len(BLOQUES_POR_M2) == 3
-    assert BLOQUES_POR_M2[1][1] == 12.
+    assert BLOQUES_POR_M2[1][1] == 12.5
