@@ -71,4 +71,4 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         print("\n\nPrograma finalizado por el usuario.")
-        sys.exit(0)
+        sys.exit(00)
