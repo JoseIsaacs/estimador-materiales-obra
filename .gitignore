@@ -36,6 +36,7 @@ wheels/
 # IDE
 .vscode/
 .idea/
+desktop.ini
 *.swp
 *.swo
 *.sublime-project
