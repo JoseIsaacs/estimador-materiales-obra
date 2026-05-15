@@ -1,16 +1,24 @@
-# 🏗️ Sistema de Estimación de Materiales para Obras
+# Estimador de Materiales de Obra 🏗️
 
-Aplicación profesional para cálculo y control de materiales de construcción.
+[![CI/CD](https://github.com/JoseIsaacs/estimador-materiales-obra/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/JoseIsaacs/estimador-materiales-obra/actions)
+[![Licencia MIT](https://img.shields.io/badge/Licencia-MIT-yellow.svg)](LICENSE)
 
-## 📌 Funcionalidades iniciales
-- Cálculo de áreas de muros
-- Estimación de bloques
-- Base para ampliación a concreto, acero y costos
+Herramienta para estimar materiales de construcción basada en normativas panameñas (REP/SPIA, COPANIT) y estándares internacionales (ACI 318-19).
 
-## 🎯 Enfoque
-- Uso educativo
-- Aplicación profesional en obra
-- Escalable a sistema completo
+## Características
+- Interfaz web responsiva con cálculo instantáneo.
+- Versión de consola en Python para scripting.
+- Soporte para diferentes tipos de bloques.
+- Cálculos de concreto, cemento, arena y grava.
 
-## 👷 Autor
-Isaac
+## Cómo usar
+
+### Versión Web
+1. Clona el repositorio.
+2. Abre `index.html` en tu navegador.
+3. Ingresa las dimensiones y selecciona el tipo de bloque.
+4. Haz clic en **Calcular**.
+
+### Versión Consola
+```bash
+python app.py
