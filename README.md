@@ -1,3 +1,7 @@
+![Python Version](https://img.shields.io/badge/python-3.10-blue.svg)
+![Build Status](https://github.com/JoseIsaacs/estimador-materiales-obra/actions/workflows/python-package-conda.yml/badge.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Industry](https://img.shields.io/badge/sector-Construcción-orange.svg)
 # Estimador de Materiales de Obra 🏗️
 
 [![CI/CD](https://github.com/JoseIsaacs/estimador-materiales-obra/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/JoseIsaacs/estimador-materiales-obra/actions)
