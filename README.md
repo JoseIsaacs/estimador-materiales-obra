@@ -2,15 +2,29 @@
 ![Build Status](https://github.com/JoseIsaacs/estimador-materiales-obra/actions/workflows/python-package-conda.yml/badge.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Industry](https://img.shields.io/badge/sector-Construcción-orange.svg)
-# Estimador de Materiales de Obra 🏗️
+# 🏗️ Estimador de Materiales de Obra
 
-[![CI/CD](https://github.com/JoseIsaacs/estimador-materiales-obra/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/JoseIsaacs/estimador-materiales-obra/actions)
-[![Licencia MIT](https://img.shields.io/badge/Licencia-MIT-yellow.svg)](LICENSE)
+Sistema automatizado para el cálculo preciso de materiales de construcción, optimización de inventarios y generación de reportes técnicos.
 
-Herramienta para estimar materiales de construcción basada en normativas panameñas (REP/SPIA, COPANIT) y estándares internacionales (ACI 318-19).
+## 🚀 Capacidades del Proyecto
+- **Cálculo de Estructuras:** Automatización de cómputos métricos para acero, concreto y mampostería.
+- **Gestión de Inventarios:** Control de stock optimizado (basado en el sistema "Tamales Doña Ani").
+- **Reportes Automáticos:** Generación de archivos Excel y carteras en PDF listos para entrega técnica.
+- **Integración con IA:** Análisis de requerimientos mediante modelos avanzados de lenguaje.
 
-## Características
-- Interfaz web responsiva con cálculo instantáneo.
+## 🛠️ Tecnologías
+* **Lenguaje:** Python 3.10
+* **Entorno:** Conda / Miniconda
+* **Automatización:** GitHub Actions (CI/CD)
+* **Librerías clave:** Pandas, Openpyxl, Pytest
+
+## 📋 Cómo funciona
+1. Define las dimensiones de la obra en el archivo de configuración.
+2. Ejecuta el script `portfolio_gen.py` para procesar los cálculos.
+3. Obtén el reporte detallado de materiales en la carpeta de resultados.
+
+---
+*Desarrollado para optimizar procesos de ingeniería y construcción.*
 - Versión de consola en Python para scripting.
 - Soporte para diferentes tipos de bloques.
 - Cálculos de concreto, cemento, arena y grava.
