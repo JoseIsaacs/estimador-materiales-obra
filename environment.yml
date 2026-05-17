@@ -1,6 +1,10 @@
-name: estimador
+name: estimador-env
 channels:
+  - conda-forge
   - defaults
 dependencies:
-  - flake8
+  - python=3.10
+  - pandas
+  - openpyxl
   - pytest
+  - flake8
