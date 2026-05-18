@@ -23,13 +23,13 @@ jobs:
         conda install flake8
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
-    # --- PARTE JAVASCRIPT (ESLint) ---
+    # --- PARTE JAVASCRIPT (Configuración Directa) ---
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
 
-    - name: Install and Run ESLint
+    - name: Run ESLint Inline
       run: |
-        npm install eslint
-        npx eslint js/calculadora.js
+        npm install eslint @eslint/js
+        npx eslint js/calculadora.js --no-config-lookup --rule 'semi: [error, always]' --rule 'no-unused-vars: warn' --env-browser
