@@ -1,8 +1,9 @@
 // eslint.config.js
-module.exports = [
+export default [
     {
+        files: ["js/**/*.js"],
         languageOptions: {
-            sourceType: "script",
+            sourceType: "module",
             globals: {
                 window: "readonly",
                 document: "readonly",
