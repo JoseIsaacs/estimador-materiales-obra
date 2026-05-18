@@ -1,23 +1,34 @@
-// Al inicio de tu js/calculadora.js
-window.onerror = function(msg, url, linenumber) {
-    console.log('Error detectado: ' + msg + ' en línea: ' + linenumber);
-    return true; // Esto evita que la app se congele totalmente
-};
+console.log("Iniciando sistema...");
+
+// Función para cambiar de módulos (Asegúrate de que tus botones tengan estas clases)
+function cambiarModulo(idModulo) {
+    console.log("Cambiando a: " + idModulo);
+    // Ocultar todas las secciones
+    document.querySelectorAll('.modulo-seccion').forEach(sec => {
+        sec.style.display = 'none';
+    });
+    // Mostrar la elegida
+    const target = document.getElementById(idModulo);
+    if (target) target.style.display = 'block';
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("Sistema de módulos iniciado");
-    
-    // Lógica para que los botones de módulos funcionen SIEMPRE
-    const botonesModulos = document.querySelectorAll('.boton-modulo'); 
-    botonesModulos.forEach(boton => {
-        boton.addEventListener('click', () => {
-            console.log("Cambiando a módulo: " + boton.id);
-            // Aquí va tu lógica de ocultar/mostrar secciones
-        });
-    });
+    console.log("DOM Cargado");
 
+    // Configurar botones de módulos manualmente por ID
+    // Ajusta estos IDs a los que tengas en tu HTML
+    const btnLosa = document.getElementById('btn-losa');
+    if(btnLosa) btnLosa.onclick = () => cambiarModulo('seccion-losa');
+
+    const btnZapata = document.getElementById('btn-zapata');
+    if(btnZapata) btnZapata.onclick = () => cambiarModulo('seccion-zapata');
+
+    // Lógica de cálculo ultra-simple para probar
     const form = document.getElementById('form-calculadora');
     if (form) {
-        form.addEventListener('submit', calcularMateriales);
+        form.onsubmit = (e) => {
+            e.preventDefault();
+            alert("Calculando...");
+        };
     }
 });
