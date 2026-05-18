@@ -23,8 +23,9 @@ function calcularMateriales(event) {
   const ancho = parseFloat(document.getElementById('ancho').value);
   const alto = parseFloat(document.getElementById('alto').value);
   const tipoBloque = document.getElementById('tipo-bloque').value;
-  // Si añades un input para espesor, úsalo aquí. Si no, 0.10m por defecto.
-  const espesorLosa = document.getElementById('espesor') ? parseFloat(document.getElementById('espesor').value) : 0.10;
+  // Cambia la línea del espesor por esta:
+const espesorInput = document.getElementById('espesor');
+const espesorLosa = espesorInput ? parseFloat(espesorInput.value) : 0.10;
 
   if (!validarEntradas(largo, ancho, alto)) return;
 
