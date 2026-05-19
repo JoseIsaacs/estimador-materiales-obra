@@ -1,0 +1,1 @@
+módulo escaleras/losa inclinada
