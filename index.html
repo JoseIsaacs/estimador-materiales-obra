@@ -955,5 +955,25 @@ tr:last-child td{border-bottom:none}
 </div>
 <div class="toast" id="toast">✅ OK</div>
 <script src="js/calculadora.js"></script>
+<script>
+  window.onload = function() {
+    alert("Sistema StructuraPro Forzado: ¡El código está vivo!");
+    console.log("Inyectando lógica de navegación...");
+    
+    // Forzar que los botones superiores funcionen por texto
+    const botones = document.querySelectorAll('nav a, .nav-item');
+    botones.forEach(btn => {
+      btn.onclick = function(e) {
+        const modulo = btn.innerText.trim().toUpperCase();
+        alert("Intentando entrar a: " + modulo);
+        
+        // Ocultar todo y mostrar lo que coincida
+        document.querySelectorAll('section, .modulo-seccion').forEach(s => s.style.display = 'none');
+        const seccion = document.getElementById(modulo.replace('.', ''));
+        if(seccion) seccion.style.display = 'block';
+      };
+    });
+  };
+</script>
 </body>
 </html>
