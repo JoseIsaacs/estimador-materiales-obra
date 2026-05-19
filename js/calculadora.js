@@ -1,25 +1,32 @@
-document.addEventListener('DOMContentLoaded', () => {
-    console.log("Motor StructuraPro Activo");
+// js/calculadora.js
+console.log("StructuraPro v3.4 - Cargando módulos...");
 
-    // Seleccionamos todos los enlaces de la barra de navegación superior
-    const enlacesNav = document.querySelectorAll('nav a, .nav-item, [role="tab"]');
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. NAVEGACIÓN (CONCR, MUROS, PISOS...)
+    // Esta función busca cualquier clic en los botones de arriba
+    const navButtons = document.querySelectorAll('nav a, .nav-item, [role="tab"]');
     
-    enlacesNav.forEach(enlace => {
-        enlace.addEventListener('click', (e) => {
-            // Si no quieres que la página recargue, descomenta la siguiente línea:
-            // e.preventDefault(); 
+    navButtons.forEach(btn => {
+        btn.onclick = (e) => {
+            // e.preventDefault(); // Descomenta si no quieres que la URL cambie
+            const modulo = btn.innerText.trim().split(' ')[0]; // Ejemplo: de "🏗 CONCR." saca "CONCR"
+            console.log("Cambiando a módulo: " + modulo);
             
-            const texto = enlace.innerText.trim().toUpperCase();
-            console.log("Navegando a: " + texto);
+            // Ocultar todas las secciones
+            document.querySelectorAll('section, .modulo-seccion').forEach(s => s.style.display = 'none');
             
-            // Lógica simple para mostrar/ocultar secciones
-            document.querySelectorAll('section, .modulo-contenido').forEach(sec => {
-                sec.style.display = 'none';
-            });
-            
-            // Aquí intentamos buscar una sección que se llame igual que el botón
-            const seccionDestino = document.getElementById(texto.toLowerCase());
-            if (seccionDestino) seccionDestino.style.display = 'block';
-        });
+            // Mostrar la sección que coincida (Asegúrate de que tus IDs en el HTML sean iguales)
+            const target = document.getElementById(modulo.toLowerCase());
+            if (target) target.style.display = 'block';
+        };
     });
+
+    // 2. CÁLCULO DE CONCRETO
+    const calcularBtn = document.getElementById('btn-calcular');
+    if (calcularBtn) {
+        calcularBtn.onclick = () => {
+            alert("Calculando materiales...");
+            // Aquí va tu lógica de materiales
+        };
+    }
 });
