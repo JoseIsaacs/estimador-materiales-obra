@@ -1,4 +1,4 @@
- // zapatas.js
+// zapatas.js
 const Zapatas = (function(){
   function leerInputs(){
     const lado = parseFloat(document.getElementById("z_lado").value) || 0;
