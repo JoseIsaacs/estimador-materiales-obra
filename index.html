@@ -985,5 +985,20 @@ tr:last-child td{border-bottom:none}
   document.body.appendChild(script);
 })();
 </script>
+<script>
+function showModule(moduleId) {
+  const modules = ['concreto','muros','pisos'];
+  modules.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.display = (id === moduleId) ? 'block' : 'none';
+  });
+  // Opcional: actualizar estado activo en la barra
+  document.querySelectorAll('.topbar button').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector(`.topbar button[data-target="${moduleId}"]`);
+  if (btn) btn.classList.add('active');
+}
+document.addEventListener('DOMContentLoaded', () => showModule('concreto'));
+</script>
 </body>
 </html>
