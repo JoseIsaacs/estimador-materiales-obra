@@ -956,56 +956,22 @@ tr:last-child td{border-bottom:none}
 <div class="toast" id="toast">✅ OK</div>
 <script src="js/calculadora.js"></script>
 <script>
+<!-- Carga dinámica del módulo de concreto con cache-bust controlable -->
 <script>
-// Esta función se activa sola al cargar la página
-document.addEventListener('DOMContentLoaded', () => {
-    console.log("Conectando botón de cálculo...");
-
-    // Buscamos el botón que dice "CALCULAR"
-    const btnCalcular = document.querySelector('.btn.by'); 
-
-    if (btnCalcular) {
-        btnCalcular.onclick = function(e) {
-            e.preventDefault();
-            ejecutarCalculoConcreto();
-        };
-    }
-});
-
-function ejecutarCalculoConcreto() {
-    // 1. Captura de datos con tus IDs exactos
-    const area = parseFloat(document.getElementById('c_area')?.value);
-    const espesorCm = parseFloat(document.getElementById('c_esp')?.value);
-    const fc = document.getElementById('c_fc')?.value;
-
-    if (!area || !espesorCm) {
-        alert("⚠️ Por favor, ingresa el ÁREA y el ESPESOR.");
-        return;
-    }
-
-    // 2. Cálculos (7% desperdicio)
-    const espesorM = espesorCm / 100;
-    const volumenTotal = (area * espesorM) * 1.07;
-
-    // Dosificación Estructural (210 kg/cm²)
-    const sacos = Math.ceil(volumenTotal * 9.8);
-    const arena = (volumenTotal * 0.45).toFixed(2);
-    const grava = (volumenTotal * 0.65).toFixed(2);
-    const agua = Math.ceil(volumenTotal * 180);
-
-    // 3. Inyectar en los resultados (cv, cc, ca, cg, cw)
-    const ids = { 'cv': volumenTotal.toFixed(2), 'cc': sacos, 'ca': arena, 'cg': grava, 'cw': agua, 'cdos': '1:2:2' };
-
-    for (let id in ids) {
-        const elemento = document.getElementById(id);
-        if (elemento) {
-            elemento.innerText = ids[id];
-            elemento.style.color = "#ffc107"; // Lo ponemos en amarillo para saber que cambió
-        }
-    }
-    
-    console.log("¡Cálculo exitoso!");
-}
+(function loadConcreto() {
+  const base = 'assets/js/concreto.js'; // ruta relativa en tu repo
+  const cacheBuster = '?v=1'; // incrementa a v=2 cuando actualices
+  const script = document.createElement('script');
+  script.src = base + cacheBuster;
+  script.defer = true;
+  script.onload = function () {
+    console.info('Módulo Concreto cargado');
+  };
+  script.onerror = function () {
+    console.error('No se pudo cargar concreto.js');
+  };
+  document.body.appendChild(script);
+})();
 </script>
 </body>
 </html>
