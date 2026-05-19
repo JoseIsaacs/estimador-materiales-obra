@@ -956,57 +956,54 @@ tr:last-child td{border-bottom:none}
 <div class="toast" id="toast">✅ OK</div>
 <script src="js/calculadora.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. NAVEGACIÓN ENTRE MÓDULOS
-    const navLinks = document.querySelectorAll('nav a, .nav-item');
-    navLinks.forEach(link => {
-        link.onclick = (e) => {
-            const moduloNombre = link.innerText.trim().split(' ')[0].toLowerCase().replace('.', '');
-            console.log("Navegando a: " + moduloNombre);
+function calcC() {
+    console.log("Calculando Concreto Estructural...");
 
-            // Ocultar todas las secciones de contenido
-            document.querySelectorAll('section, .modulo-seccion, [role="tabpanel"]').forEach(s => {
-                s.style.display = 'none';
-            });
+    // 1. Obtener valores de tus IDs
+    const area = parseFloat(document.getElementById('c_area').value);
+    const espesorCm = parseFloat(document.getElementById('c_esp').value);
+    const fc = document.getElementById('c_fc').value;
 
-            // Mostrar la sección que corresponde al botón (ej: id="concr", id="muros")
-            const seccion = document.getElementById(moduloNombre);
-            if (seccion) seccion.style.display = 'block';
-        };
-    });
-
-    // 2. LÓGICA DE CÁLCULO (CONCRETO)
-    const btnCalcular = document.querySelector('button.btn-primary, #btn-calcular, .btn-calcular');
-    if (btnCalcular) {
-        btnCalcular.onclick = (e) => {
-            e.preventDefault();
-            // Capturamos los datos de los inputs
-            const l = parseFloat(document.getElementById('largo')?.value) || 0;
-            const a = parseFloat(document.getElementById('ancho')?.value) || 0;
-            const h = parseFloat(document.getElementById('alto')?.value) || 0.10;
-
-            if (l > 0 && a > 0) {
-                const vol = (l * a * h) * 1.07; // +7% de desperdicio (Panamá style)
-                const cemento = Math.ceil(vol * 7); // ~7 sacos por m3
-                
-                // Mostramos el resultado en el cuadro de resultados
-                const resDiv = document.getElementById('resultados');
-                if (resDiv) {
-                    resDiv.innerHTML = `
-                        <div style="background: #1a1a1a; padding: 10px; border-left: 4px solid #ffc107;">
-                            <p>Volumen: <strong>${vol.toFixed(2)} m³</strong></p>
-                            <p>Sacos Cemento: <strong>${cemento} sacos</strong></p>
-                        </div>
-                    `;
-                } else {
-                    alert("Cálculo: " + vol.toFixed(2) + " m3 de concreto.");
-                }
-            } else {
-                alert("Por favor, ingresa Largo y Ancho.");
-            }
-        };
+    // Validación simple
+    if (!area || !espesorCm) {
+        alert("Por favor, ingresa el área y el espesor.");
+        return;
     }
-});
+
+    // 2. Cálculos base (Panamá Style)
+    const espesorM = espesorCm / 100;
+    const volumenNeto = area * espesorM;
+    const volumenTotal = volumenNeto * 1.07; // +7% desperdicio estándar
+
+    // 3. Dosificación según f'c (Proporciones aproximadas para 1m³)
+    // Usaremos la de 210 kg/cm² (1:2:2) como base si no hay otra
+    let cementoPorM3 = 9.8; // sacos
+    let arenaPorM3 = 0.55;  // m³
+    let gravaPorM3 = 0.55;  // m³
+    let aguaPorM3 = 180;    // litros
+
+    if (fc === "210") {
+        cementoPorM3 = 9.8; arenaPorM3 = 0.45; gravaPorM3 = 0.65;
+    } else if (fc === "245") {
+        cementoPorM3 = 10.5; arenaPorM3 = 0.40; gravaPorM3 = 0.70;
+    }
+
+    // 4. Totales finales
+    const totalSacos = Math.ceil(volumenTotal * cementoPorM3);
+    const totalArena = (volumenTotal * arenaPorM3).toFixed(2);
+    const totalGrava = (volumenTotal * gravaPorM3).toFixed(2);
+    const totalAgua = Math.ceil(volumenTotal * aguaPorM3);
+
+    // 5. Inyectar resultados en tus IDs de salida
+    document.getElementById('cv').innerText = volumenTotal.toFixed(2);
+    document.getElementById('cc').innerText = totalSacos;
+    document.getElementById('ca').innerText = totalArena;
+    document.getElementById('cg').innerText = totalGrava;
+    document.getElementById('cw').innerText = totalAgua;
+    document.getElementById('cdos').innerText = (fc === "210") ? "1 : 2 : 2" : "1 : 1.5 : 2";
+
+    console.log("Cálculo finalizado con éxito.");
+}
 </script>
 </body>
 </html>
