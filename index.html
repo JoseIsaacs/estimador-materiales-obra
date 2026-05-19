@@ -206,27 +206,23 @@ tr:last-child td{border-bottom:none}
 </div>
 
 <!-- TABS -->
-<body>
-  <!-- Barra de navegación -->
-  <div class="topbar">
-    <button data-target="concreto" onclick="showModule('concreto')">CONCR.</button>
-    <button data-target="muros" onclick="showModule('muros')">MUROS</button>
-    <button data-target="pisos" onclick="showModule('pisos')">PISOS</button>
-    <button data-target="zapatas" onclick="showModule('zapatas')">ZAPATAS</button>
-    <button data-target="vigas" onclick="showModule('vigas')">VIGAS</button>
-    <button data-target="columnas" onclick="showModule('columnas')">COLUMNAS</button>
-    <button data-target="pedestales" onclick="showModule('pedestales')">PEDEST.</button>
-    <button data-target="escaleras" onclick="showModule('escaleras')">ESCALERAS</button>
-    <button data-target="resumen" onclick="showModule('resumen')">RESUMEN</button>
-  </div>
+<!-- TOPBAR: pegar dentro de <body> antes de las secciones de módulos -->
+<div class="topbar">
+  <button data-target="concreto" onclick="showModule('concreto')">CONCR.</button>
+  <button data-target="muros" onclick="showModule('muros')">MUROS</button>
+  <button data-target="pisos" onclick="showModule('pisos')">PISOS</button>
+  <button data-target="zapatas" onclick="showModule('zapatas')">ZAPATAS</button>
+  <button data-target="vigas" onclick="showModule('vigas')">VIGAS</button>
+  <button data-target="columnas" onclick="showModule('columnas')">COLUMNAS</button>
+  <button data-target="pedestales" onclick="showModule('pedestales')">PEDEST.</button>
+  <button data-target="escaleras" onclick="showModule('escaleras')">ESCALERAS</button>
+  <button data-target="acero" onclick="showModule('acero')">ACERO</button>
+  <button data-target="resumen" onclick="showModule('resumen')">RESUMEN</button>
+</div>
 
   <!-- Secciones de cada módulo -->
   <div id="concreto">…</div>
-  <div id="muros">…</div>
-  <div id="pisos">…</div>
-  <div id="zapatas">…</div>
-  <!-- etc. -->
-</body>
+  <div id="muros 
 
 <div class="tabs">
   <button class="tab on"  onclick="T('con',this)">🏗️ CONCR.</button>
