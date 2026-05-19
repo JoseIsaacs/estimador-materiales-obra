@@ -212,7 +212,8 @@ tr:last-child td{border-bottom:none}
   <button data-target="muros" onclick="showModule('muros')">MUROS</button>
   <button data-target="pisos" onclick="showModule('pisos')">PISOS</button>
   <button data-target="zapatas" onclick="showModule('zapatas')">ZAPATAS</button>
-  <button data-target="vigas" onclick="showModule('vigas')">VIGAS</button>
+  <button data-target="vigas_sismicas" onclick="showModule('vigas_sismicas')">VIGAS SÍSM.</button>
+  <button data-target="vigas_amarre" onclick="showModule('vigas_amarre')">VIGAS AMARRE</button>
   <button data-target="columnas" onclick="showModule('columnas')">COLUMNAS</button>
   <button data-target="pedestales" onclick="showModule('pedestales')">PEDEST.</button>
   <button data-target="escaleras" onclick="showModule('escaleras')">ESCALERAS</button>
@@ -984,46 +985,23 @@ tr:last-child td{border-bottom:none}
 </div>
 <div class="toast" id="toast">✅ OK</div>
 <script src="js/calculadora.js"></script>
+
+<!-- Loader dinámico: pegar justo antes de </body> -->
 <script>
-<!-- Carga dinámica del módulo de concreto con cache-bust controlable -->
-<script>
-(function loadConcreto() {
-  const base = 'assets/js/concreto.js'; // ruta relativa en tu repo
-  const cacheBuster = '?v=1'; // incrementa a v=2 cuando actualices
-  const script = document.createElement('script');
-  script.src = base + cacheBuster;
-  script.defer = true;
-  script.onload = function () {
-    console.info('Módulo Concreto cargado');
-  };
-  script.onerror = function () {
-    console.error('No se pudo cargar concreto.js');
-  };
-  document.body.appendChild(script);
-})();
-</script>
-<script>
-function showModule(moduleId) {
-  const modules = ['concreto','muros','pisos'];
-  modules.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.style.display = (id === moduleId) ? 'block' : 'none';
-  });
-  // Opcional: actualizar estado activo en la barra
-  document.querySelectorAll('.topbar button').forEach(b => b.classList.remove('active'));
-  const btn = document.querySelector(`.topbar button[data-target="${moduleId}"]`);
-  if (btn) btn.classList.add('active');
-}
-document.addEventListener('DOMContentLoaded', () => showModule('concreto'));
-</script>
-<script>
-['concreto','muros','pisos'].forEach(name=>{
-  const script=document.createElement('script');
-  script.src=`js/${name}.js?v=1`;
-  script.defer=true;
-  document.body.appendChild(script);
-});
+  (function(){
+    const modules = [
+      'concreto','muros','pisos','zapatas',
+      'vigas_sismicas','vigas_amarre',
+      'columnas','pedestales','escaleras',
+      'acero','resumen'
+    ];
+    modules.forEach(name=>{
+      const script = document.createElement('script');
+      script.src = `js/${name}.js?v=1`; // cambia a ?v=2 si necesitas forzar cache refresh
+      script.defer = true;
+      document.body.appendChild(script);
+    });
+  })();
 </script>
 </body>
 </html>
