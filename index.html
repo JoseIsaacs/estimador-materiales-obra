@@ -956,24 +956,57 @@ tr:last-child td{border-bottom:none}
 <div class="toast" id="toast">✅ OK</div>
 <script src="js/calculadora.js"></script>
 <script>
-  window.onload = function() {
-    alert("Sistema StructuraPro Forzado: ¡El código está vivo!");
-    console.log("Inyectando lógica de navegación...");
-    
-    // Forzar que los botones superiores funcionen por texto
-    const botones = document.querySelectorAll('nav a, .nav-item');
-    botones.forEach(btn => {
-      btn.onclick = function(e) {
-        const modulo = btn.innerText.trim().toUpperCase();
-        alert("Intentando entrar a: " + modulo);
-        
-        // Ocultar todo y mostrar lo que coincida
-        document.querySelectorAll('section, .modulo-seccion').forEach(s => s.style.display = 'none');
-        const seccion = document.getElementById(modulo.replace('.', ''));
-        if(seccion) seccion.style.display = 'block';
-      };
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. NAVEGACIÓN ENTRE MÓDULOS
+    const navLinks = document.querySelectorAll('nav a, .nav-item');
+    navLinks.forEach(link => {
+        link.onclick = (e) => {
+            const moduloNombre = link.innerText.trim().split(' ')[0].toLowerCase().replace('.', '');
+            console.log("Navegando a: " + moduloNombre);
+
+            // Ocultar todas las secciones de contenido
+            document.querySelectorAll('section, .modulo-seccion, [role="tabpanel"]').forEach(s => {
+                s.style.display = 'none';
+            });
+
+            // Mostrar la sección que corresponde al botón (ej: id="concr", id="muros")
+            const seccion = document.getElementById(moduloNombre);
+            if (seccion) seccion.style.display = 'block';
+        };
     });
-  };
+
+    // 2. LÓGICA DE CÁLCULO (CONCRETO)
+    const btnCalcular = document.querySelector('button.btn-primary, #btn-calcular, .btn-calcular');
+    if (btnCalcular) {
+        btnCalcular.onclick = (e) => {
+            e.preventDefault();
+            // Capturamos los datos de los inputs
+            const l = parseFloat(document.getElementById('largo')?.value) || 0;
+            const a = parseFloat(document.getElementById('ancho')?.value) || 0;
+            const h = parseFloat(document.getElementById('alto')?.value) || 0.10;
+
+            if (l > 0 && a > 0) {
+                const vol = (l * a * h) * 1.07; // +7% de desperdicio (Panamá style)
+                const cemento = Math.ceil(vol * 7); // ~7 sacos por m3
+                
+                // Mostramos el resultado en el cuadro de resultados
+                const resDiv = document.getElementById('resultados');
+                if (resDiv) {
+                    resDiv.innerHTML = `
+                        <div style="background: #1a1a1a; padding: 10px; border-left: 4px solid #ffc107;">
+                            <p>Volumen: <strong>${vol.toFixed(2)} m³</strong></p>
+                            <p>Sacos Cemento: <strong>${cemento} sacos</strong></p>
+                        </div>
+                    `;
+                } else {
+                    alert("Cálculo: " + vol.toFixed(2) + " m3 de concreto.");
+                }
+            } else {
+                alert("Por favor, ingresa Largo y Ancho.");
+            }
+        };
+    }
+});
 </script>
 </body>
 </html>
