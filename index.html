@@ -1022,5 +1022,13 @@ function showModule(moduleId) {
 }
 document.addEventListener('DOMContentLoaded', () => showModule('concreto'));
 </script>
+<script>
+['concreto','muros','pisos'].forEach(name=>{
+  const script=document.createElement('script');
+  script.src=`js/${name}.js?v=1`;
+  script.defer=true;
+  document.body.appendChild(script);
+});
+</script>
 </body>
 </html>
