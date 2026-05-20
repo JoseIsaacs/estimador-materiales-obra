@@ -8,7 +8,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-<script src="js/calculadora.js"></script>
 <style>
 :root{
   --bg:#060e1c;--card:#0f2040;--bdr:#1a3a60;
@@ -221,44 +220,37 @@ tr:last-child td{border-bottom:none}
 </div>
 
 <!-- ═══ CONCRETO ═══ -->
-<div id="concr." class="pg on">
+<div id="con" class="pg on">
   <div class="sh"><div class="si si-y">🏗️</div><div><h2 class="cy">CONCRETO ESTRUCTURAL</h2><p>LOSA · ZAPATA · VIGA</p></div></div>
   <div class="fb fb-y"><lbl>📐 FÓRMULAS ACI 318</lbl>
     <div class="f">V = A × e/100 <span class="a">[m³]</span><br>
     Cemento = V × <span class="a">fc_factor</span> sac | Arena = V × <span class="a">fa</span> m³</div></div>
   <div class="card"><h4 class="hy">PARÁMETROS</h4>
-    <div class="fi"><label>ÁREA (m²)</label><input id="c_area" type="number" step="0.01" />
-<input id="c_esp" type="number" step="0.1" />
-<select id="c_fc">
-  <option value="175">175</option>
-  <option value="210" selected>210</option>
-  <option value="245">245</option>
-  <option value="280">280</option>
-</select>
-
-<button class="btn by">⚡ CALCULAR</button>
-
-<div id="c_error" style="display:none;color:#b00"></div>
-
-<!-- Resultados -->
-<span id="cv">—</span>
-<span id="cc">—</span>
-<span id="ca">—</span>
-<span id="cg">—</span>
-<span id="cw">—</span>
-<span id="cdos">—</span>
-  <div id="res-c" class="rb"><h4>✅ CONCRETO</h4><div class="rg">
-    <div class="ri"><div class="v" id="cv">—</div><div class="l">VOLUMEN</div><div class="u">m³</div></div>
-    <div class="ri"><div class="v" id="cc">—</div><div class="l">CEMENTO</div><div class="u">sacos 50kg</div></div>
-    <div class="ri"><div class="v" id="ca">—</div><div class="l">ARENA</div><div class="u">m³</div></div>
-    <div class="ri"><div class="v" id="cg">—</div><div class="l">GRAVA</div><div class="u">m³</div></div>
-    <div class="ri"><div class="v" id="cw">—</div><div class="l">AGUA</div><div class="u">litros</div></div>
-    <div class="ri"><div class="v" id="cdos">—</div><div class="l">DOSIF. C:A:G</div></div>
-  </div></div>
+    <div class="fi"><label>ÁREA (m²)</label><input id="c_area" type="number" step="0.01" /></div>
+    <div class="fi"><label>ESPESOR (cm)</label><input id="c_esp" type="number" step="0.1" /></div>
+    <div class="fi"><label>f'c (kg/cm²)</label>
+      <select id="c_fc">
+        <option value="175">175</option>
+        <option value="210" selected>210</option>
+        <option value="245">245</option>
+        <option value="280">280</option>
+      </select>
+    </div>
+    <button class="btn by" onclick="calcConcreto()">⚡ CALCULAR</button>
+    <div id="c_error" style="display:none;color:#b00"></div>
+    <div id="res-c" class="rb"><h4>✅ CONCRETO</h4><div class="rg">
+      <div class="ri"><div class="v" id="cv">—</div><div class="l">VOLUMEN</div><div class="u">m³</div></div>
+      <div class="ri"><div class="v" id="cc">—</div><div class="l">CEMENTO</div><div class="u">sacos 50kg</div></div>
+      <div class="ri"><div class="v" id="ca">—</div><div class="l">ARENA</div><div class="u">m³</div></div>
+      <div class="ri"><div class="v" id="cg">—</div><div class="l">GRAVA</div><div class="u">m³</div></div>
+      <div class="ri"><div class="v" id="cw">—</div><div class="l">AGUA</div><div class="u">litros</div></div>
+      <div class="ri"><div class="v" id="cdos">—</div><div class="l">DOSIF. C:A:G</div></div>
+    </div></div>
+  </div>
 </div>
 
 <!-- ═══ MUROS ═══ -->
-<div id="muros" class="pg">
+<div id="mur" class="pg">
   <div class="sh"><div class="si si-y">🧱</div><div><h2 class="cy">MUROS DE BLOQUES</h2><p>MAMPOSTERÍA · MORTERO</p></div></div>
   <div class="fb fb-y"><lbl>📐 FÓRMULAS</lbl>
     <div class="f">Bloques = A × <span class="a">ρ</span> × 1.05 (5% desp.)<br>Cemento = A × <span class="a">0.15</span> sac</div></div>
@@ -279,7 +271,7 @@ tr:last-child td{border-bottom:none}
 </div>
 
 <!-- ═══ PISOS ═══ -->
-<div id="pisos" class="pg">
+<div id="pis" class="pg">
   <div class="sh"><div class="si si-y">🔷</div><div><h2 class="cy">PISOS · BALDOSAS</h2><p>CERÁMICA · PORCELANA</p></div></div>
   <div class="fb fb-y"><lbl>📐 FÓRMULAS</lbl>
     <div class="f">N=(A/A_bald)×<span class="a">1.10</span> | Pega=A×<span class="a">4.5</span>kg</div></div>
@@ -300,7 +292,7 @@ tr:last-child td{border-bottom:none}
 </div>
 
 <!-- ═══ ZAPATAS ═══ -->
-<div id="zapatas" class="pg">
+<div id="zap" class="pg">
   <div class="sh"><div class="si si-z">⬛</div><div><h2 class="cz">ZAPATAS</h2><p>AISLADA · CUADRADA / RECTANGULAR</p></div></div>
   <div class="chip chip-z">⬛ Rec. mín. 7.5cm — ACI 318 §20.6.1.3 (contacto con suelo)</div>
   <div class="fb fb-z"><lbl>📐 FÓRMULAS — ZAPATA ACI 318 / REP</lbl>
@@ -357,7 +349,7 @@ tr:last-child td{border-bottom:none}
 </div>
 
 <!-- ═══ VIGA DE CIMENTACIÓN ═══ -->
-<div id="v.cimen." class="pg">
+<div id="vcim" class="pg">
   <div class="sh"><div class="si si-vc">🔶</div><div><h2 class="cvc">VIGA DE CIMENTACIÓN</h2><p>VIGA DE AMARRE SOBRE TERRENO · REP/SPIA</p></div></div>
   <div class="chip chip-vc">🔶 Rec. mín. 7.5cm — ACI 318 §20.6.1.3 contacto suelo</div>
   <div class="fb fb-vc"><lbl>📐 FÓRMULAS — VIGA CIMENTACIÓN ACI 318 / REP</lbl>
@@ -416,7 +408,7 @@ tr:last-child td{border-bottom:none}
 </div>
 
 <!-- ═══ PEDESTALES ═══ -->
-<div id="pedestal." class="pg">
+<div id="ped" class="pg">
   <div class="sh"><div class="si si-p">🔩</div><div><h2 class="cp">PEDESTALES</h2><p>ACERO LONG. · ESTRIBOS · GANCHOS</p></div></div>
   <div class="chip chip-p">🔩 Rec. 4cm columna exterior — ACI 318 §20.6.1</div>
   <div class="fb fb-p"><lbl>📐 FÓRMULAS — PEDESTAL ACI 318 / REP</lbl>
@@ -471,7 +463,7 @@ tr:last-child td{border-bottom:none}
 </div>
 
 <!-- ═══ COLUMNAS ═══ -->
-<div id="colum." class="pg">
+<div id="col" class="pg">
   <div class="sh"><div class="si si-y">🏛️</div><div><h2 class="cy">COLUMNAS</h2><p>CUAD/RECT · T/L · CILÍNDRICA</p></div></div>
   <div class="stabs">
     <button class="stab on" onclick="S2('cr',this)">▪ CUAD/RECT</button>
@@ -616,7 +608,7 @@ tr:last-child td{border-bottom:none}
 </div>
 
 <!-- ═══ VIGA SÍSMICA ═══ -->
-<div id="v.sis." class="pg">
+<div id="vis" class="pg">
   <div class="sh"><div class="si si-v">〰️</div><div><h2 class="cv">VIGA SÍSMICA</h2><p>ACI 318-19 §18.6 · REP/SPIA</p></div></div>
   <div class="chip chip-v">〰️ Pórtico especial — ACI 318-19 §18.6 / REP</div>
   <div class="fb fb-v"><lbl>📐 VIGA SÍSMICA — ACI §18.6 / REP</lbl>
@@ -673,7 +665,7 @@ tr:last-child td{border-bottom:none}
 </div>
 
 <!-- ═══ VIGA AMARRE ═══ -->
-<div id="amar." class="pg">
+<div id="ama" class="pg">
   <div class="sh"><div class="si si-a">🔗</div><div><h2 class="ca">VIGA DE AMARRE</h2><p>SOLERA · PERIMETRAL · REP/SPIA</p></div></div>
   <div class="chip chip-a">🔗 Mín. 20×20cm · 2#4 sup+inf · #3@20cm — REP/SPIA</div>
   <div class="fb fb-a"><lbl>📐 VIGA AMARRE — REP/SPIA / ACI 318</lbl>
@@ -717,7 +709,7 @@ tr:last-child td{border-bottom:none}
 </div>
 
 <!-- ═══ ACERO ═══ -->
-<div id="acero." class="pg">
+<div id="ace" class="pg">
   <div class="sh"><div class="si si-s">⚙️</div><div><h2 class="cs">PLANILLA DE HIERRO</h2><p>ESTRIBOS · BARRAS · QQ</p></div></div>
   <div class="stabs">
     <button class="stab ss on" onclick="SA('ae-e',this)">🔩 ESTRIBOS</button>
@@ -831,7 +823,7 @@ tr:last-child td{border-bottom:none}
 </div>
 
 <!-- ═══ ESCALERA ═══ -->
-<div id="escal." class="pg">
+<div id="esc" class="pg">
   <div class="sh"><div class="si si-e">🪜</div><div><h2 class="ce">ESCALERA — LOSA INCLINADA</h2><p>SECCIÓN LONGITUDINAL · ACERO · DIAGRAMA</p></div></div>
   <div class="chip chip-e">🪜 ACI 318 · COPANIT · ES09 Ganchos 90°/135°</div>
   <div class="fb fb-e"><lbl>📐 GEOMETRÍA Y REFUERZO — ACI 318 / REP</lbl>
@@ -894,7 +886,7 @@ tr:last-child td{border-bottom:none}
 </div>
 
 <!-- ═══ RESUMEN MEJORADO ═══ -->
-<div id="resum." class="pg">
+<div id="res" class="pg">
   <div class="sh"><div class="si si-y">📊</div><div><h2 class="cy">RESUMEN DEL PROYECTO</h2><p>3D INTERACTIVO · MEMORIA · ACERO · ANÁLISIS</p></div></div>
 
   <!-- ISO 3D MEJORADO CON DRAG -->
@@ -965,25 +957,21 @@ tr:last-child td{border-bottom:none}
   <br><br>
 </div>
 <div class="toast" id="toast">✅ OK</div>
-<script src="js/calculadora.js"></script>
 
-<!-- Loader dinámico: pegar justo antes de </body> -->
-<script>
+<!-- Carga de scripts uno por uno, sin loader dinámico -->
+<script src="js/calculadora.js"></script>
+<script src="js/concreto.js"></script>
+<script src="js/muros.js"></script>
+<script src="js/pisos.js"></script>
+<script src="js/zapatas.js"></script>
 <script src="js/vigas_cimentacion.js"></script>
-  (function(){
-    const modules = [
-      'concreto','muros','pisos','zapatas',
-      'vigas_sismicas','vigas_amarre',
-      'columnas','pedestales','escaleras',
-      'acero','resumen'
-    ];
-    modules.forEach(name=>{
-      const script = document.createElement('script');
-      script.src = `js/${name}.js?v=1`; // cambia a ?v=2 si necesitas forzar cache refresh
-      script.defer = true;
-      document.body.appendChild(script);
-    });
-  })();
-</script>
+<script src="js/vigas_sismicas.js"></script>
+<script src="js/vigas_amarre.js"></script>
+<script src="js/columnas.js"></script>
+<script src="js/pedestales.js"></script>
+<script src="js/escaleras.js"></script>
+<script src="js/acero.js"></script>
+<script src="js/resumen.js"></script>
+
 </body>
 </html>
