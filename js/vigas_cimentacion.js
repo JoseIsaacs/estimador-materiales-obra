@@ -22,7 +22,7 @@ function calcVCim() {
     return;
   }
 
-  // Datos de barras (heredados del global BAR_DATA o definidos aquí)
+  // Datos de barras
   const BAR_DATA = window.BAR_DATA || {
     '3': { diam: 0.953, kgm: 0.560 },
     '4': { diam: 1.27,  kgm: 0.994 },
@@ -37,11 +37,11 @@ function calcVCim() {
     return;
   }
 
-  // ── TRASLAPES (longitud comercial 9.15 m) ─
+  // ── TRASLAPES ────────────────────────────
   const largoComercial = 9.15;
   const nTraslapes = L > largoComercial ? Math.ceil(L / largoComercial) - 1 : 0;
-  const traslape = 40 * barL.diam / 100;   // 40ϕ en m
-  const Lbarra = L + nTraslapes * traslape; // m (sin gancho adicional porque es recta)
+  const traslape = 40 * barL.diam / 100;   // m
+  const Lbarra = L + nTraslapes * traslape; // m
 
   // ── ESTRIBOS ─────────────────────────────
   const bu = b - 2 * rec;
@@ -54,24 +54,23 @@ function calcVCim() {
   const Lest = (2 * (bu + hu) / 100) + 2 * (colaEst / 100); // m
   const Nest = Math.ceil(L * 100 / sep) + 1;
 
-  // ── CÁLCULO DE PESOS ────────────────────
+  // ── PESOS ───────────────────────────────
   const mLong = (ns + ni) * Lbarra * nVigas;
   const mEst = Nest * Lest * nVigas;
   const kgLong = mLong * barL.kgm;
   const kgEst = mEst * barE.kgm;
-  const kgTotal = (kgLong + kgEst) * 1.07;           // +7% desperdicio
+  const kgTotal = (kgLong + kgEst) * 1.07;           // +7%
   const qqTotal = kgTotal / 45.36;
 
   // ── CONCRETO ────────────────────────────
   const volViga = (b / 100) * (h / 100) * L;        // m³ por viga
   const volTotal = volViga * nVigas;
-  // Dosificación según f'c
   let sacosPorM3, arenaPorM3, gravaPorM3, aguaPorM3;
   if (fc === 175) {
     sacosPorM3 = 6.5; arenaPorM3 = 0.55; gravaPorM3 = 0.75; aguaPorM3 = 180;
   } else if (fc === 245) {
     sacosPorM3 = 8.0; arenaPorM3 = 0.50; gravaPorM3 = 0.70; aguaPorM3 = 190;
-  } else { // fc = 210 (default)
+  } else {
     sacosPorM3 = 7.0; arenaPorM3 = 0.53; gravaPorM3 = 0.72; aguaPorM3 = 185;
   }
   const cemento = (volTotal * sacosPorM3).toFixed(1);
@@ -102,7 +101,7 @@ function calcVCim() {
       </tbody></table>`;
   }
 
-  // Resumen concreto
+  // Resumen concreto (con IDs ocultos para resumen.js)
   const vcSum = document.getElementById('vc_sum');
   if (vcSum) {
     vcSum.innerHTML = `
@@ -110,7 +109,12 @@ function calcVCim() {
       <div class="ri"><div class="v">${cemento}</div><div class="l">CEMENTO</div><div class="u">sacos 50kg</div></div>
       <div class="ri"><div class="v">${arena}</div><div class="l">ARENA</div><div class="u">m³</div></div>
       <div class="ri"><div class="v">${grava}</div><div class="l">GRAVA</div><div class="u">m³</div></div>
-      <div class="ri"><div class="v">${agua}</div><div class="l">AGUA</div><div class="u">litros</div></div>`;
+      <div class="ri"><div class="v">${agua}</div><div class="l">AGUA</div><div class="u">litros</div></div>
+      <!-- Datos ocultos para el resumen general -->
+      <span id="vc_ke" style="display:none">${kgEst.toFixed(2)}</span>
+      <span id="vc_kl" style="display:none">${kgLong.toFixed(2)}</span>
+      <span id="vc_vol" style="display:none">${volTotal.toFixed(2)}</span>
+      <span id="vc_cem" style="display:none">${cemento}</span>`;
   }
 
   // Advertencias
