@@ -984,5 +984,21 @@ tr:last-child td{border-bottom:none}
     });
   })();
 </script>
+<script>
+  // Prueba de funciones esenciales
+  setTimeout(function(){
+    if (typeof T !== 'function') {
+      alert('ERROR: La función T (cambio de pestaña) no está definida. Revisa calculadora.js');
+    } else {
+      alert('Función T detectada. Probando cambio a Muros...');
+      try {
+        T('mur', document.querySelector('.tab:nth-child(2)'));
+        alert('Cambio a Muros ejecutado. Si no ves el módulo, hay error en T.');
+      } catch(e) {
+        alert('Error al ejecutar T: ' + e.message);
+      }
+    }
+  }, 1000);
+</script>
 </body>
 </html>
