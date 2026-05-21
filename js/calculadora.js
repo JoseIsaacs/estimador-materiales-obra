@@ -12,6 +12,17 @@ function T(modo, btn) {
   if (btn) btn.classList.add('on');
 }
 
+function actualizarInfoFc(valor) {
+  const info = {
+    '175': '175 kg/cm² — Rellenos, solados. Dosif. 1:3.0:3.8',
+    '210': '210 kg/cm² — Estructural estándar ACI. Dosif. 1:2.5:3.4',
+    '245': '245 kg/cm² — Columnas, vigas. Dosif. 1:2.2:3.0',
+    '280': '280 kg/cm² — Alta resistencia. Dosif. 1:2.0:2.8'
+  };
+  const el = document.getElementById('fc-info');
+  if (el) el.textContent = info[valor] || '';
+}
+
 // Helpers para mostrar/ocultar elementos
 function $(id) { return document.getElementById(id); }
 
