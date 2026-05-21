@@ -970,8 +970,122 @@ tr:last-child td{border-bottom:none}
 <script src="js/columnas.js"></script>
 <script src="js/pedestales.js"></script>
 <script src="js/escaleras.js"></script>
-<script src="js/acero.js?v=2"></script>
-<script src="js/resumen.js"></script>
 
+<script src="js/resumen.js"></script>
+<script>
+// ========== MÓDULO ACERO (INCRUSTADO) ==========
+const BAR_DATA = {
+  '3': { diam: 0.953, kgm: 0.560 },
+  '4': { diam: 1.27,  kgm: 0.994 },
+  '5': { diam: 1.59,  kgm: 1.552 },
+  '6': { diam: 1.91,  kgm: 2.235 },
+  '7': { diam: 2.22,  kgm: 3.042 },
+  '8': { diam: 2.54,  kgm: 3.973 }
+};
+window.BAR_DATA = BAR_DATA;
+
+function addZ() {
+  const zl = document.getElementById('zl');
+  if (!zl) return;
+  const count = zl.querySelectorAll('.zr').length;
+  const div = document.createElement('div');
+  div.className = 'zr';
+  div.innerHTML = '<span class="zl">Z'+(count+1)+'</span>' +
+    '<input type="number" class="zc" min="1" placeholder="n°" style="max-width:58px">' +
+    '<span class="zl">@</span>' +
+    '<input type="number" class="zs" min="1" placeholder="cm" style="max-width:62px">' +
+    '<span class="zl">cm</span>' +
+    '<button class="bdel" onclick="this.parentElement.remove()">×</button>';
+  zl.appendChild(div);
+}
+
+function calcEst() {
+  const ancho = parseFloat(document.getElementById('e_a').value) || 0;
+  const alto  = parseFloat(document.getElementById('e_h').value) || 0;
+  const rec   = parseFloat(document.getElementById('e_r').value);
+  const diamEst = document.getElementById('e_d').value;
+  const gancho = parseInt(document.getElementById('e_g').value);
+
+  if (!ancho || !alto) { toast('Ingrese ancho y alto del estribo'); return; }
+  const bar = BAR_DATA[diamEst];
+  if (!bar) { toast('Diámetro de estribo no válido'); return; }
+
+  const wu = ancho - 2*rec;
+  const hu = alto - 2*rec;
+  if (wu <= 0 || hu <= 0) { toast('Recubrimiento demasiado grande'); return; }
+
+  const colaCm = gancho * bar.diam;
+  const Lp = (2*(wu + hu)/100) + 2*(colaCm/100);
+
+  let Ntotal = 0;
+  document.querySelectorAll('#zl .zr').forEach(z => {
+    const cant = parseInt(z.querySelector('.zc')?.value) || 0;
+    Ntotal += cant;
+  });
+  if (Ntotal <= 0) { toast('Agregue al menos una zona con cantidad de estribos'); return; }
+
+  const metros = Ntotal * Lp;
+  const kg = metros * bar.kgm * 1.07;
+  const qq = kg / 45.36;
+
+  document.getElementById('e_lp').textContent = Lp.toFixed(3);
+  document.getElementById('e_nt').textContent = Ntotal;
+  document.getElementById('e_mt').textContent = metros.toFixed(2);
+  document.getElementById('e_kg').textContent = kg.toFixed(2);
+  document.getElementById('e_qq').textContent = qq.toFixed(2);
+
+  const res = document.getElementById('res-e');
+  if (res) res.classList.add('show');
+  toast('Estribos calculados');
+}
+
+function calcBar() {
+  const L = parseFloat(document.getElementById('b_l').value) || 0;
+  const n = parseInt(document.getElementById('b_n').value) || 0;
+  const diamBar = document.getElementById('b_d').value;
+  const tipoTraslape = document.getElementById('b_tt').value;
+  const traslapeManual = parseFloat(document.getElementById('b_tcm').value) || 0;
+  const ganchoTipo = document.getElementById('b_g').value;
+
+  if (!L || !n) { toast('Ingrese longitud y número de barras'); return; }
+  const bar = BAR_DATA[diamBar];
+  if (!bar) { toast('Diámetro de barra no válido'); return; }
+
+  let ganchoM = 0;
+  if (ganchoTipo !== '0') {
+    const veces = parseInt(ganchoTipo) || 12;
+    ganchoM = (veces * bar.diam) / 100;
+  }
+  const Lbarra = L + ganchoM;
+
+  let traslapeM = 0;
+  const largoComercial = 9.15;
+  if (Lbarra > largoComercial) {
+    const nTraslapes = Math.ceil(Lbarra / largoComercial) - 1;
+    traslapeM = nTraslapes * (tipoTraslape === 'a' ? 40 * bar.diam / 100 : traslapeManual / 100);
+  }
+
+  const Ltotal = Lbarra + traslapeM;
+  const metros = Ltotal * n;
+  const kg = metros * bar.kgm * 1.07;
+  const qq = kg / 45.36;
+
+  document.getElementById('b_lb').textContent = Lbarra.toFixed(2);
+  document.getElementById('b_tr').textContent = traslapeM.toFixed(2);
+  document.getElementById('b_lt').textContent = Ltotal.toFixed(2);
+  document.getElementById('b_kg').textContent = kg.toFixed(2);
+  document.getElementById('b_qq').textContent = qq.toFixed(2);
+
+  const res = document.getElementById('res-b');
+  if (res) res.classList.add('show');
+  
+  const bWn = document.getElementById('b_wn');
+  if (bWn) {
+    bWn.style.display = 'block';
+    bWn.innerHTML = '✅ Barras #' + diamBar + ': ' + n + ' und de ' + Ltotal.toFixed(2) + 'm c/u.';
+  }
+  toast('Barras calculadas');
+}
+</script>
 </body>
 </html>
