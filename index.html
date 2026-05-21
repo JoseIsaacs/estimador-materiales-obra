@@ -759,44 +759,44 @@ tr:last-child td{border-bottom:none}
     </div></div>
   </div>
   <div id="ae-b" class="sp">
-    <div class="fb fb-s"><lbl>📐 BARRAS — REP/SPIA / ACI 318</lbl>
-      <div class="f">Traslape=40×ϕ (COPANIT/ACI §25.5.1)<br>
-      Long. comercial Panamá: <span class="s">9.15m (30 pies)</span><br>
-      Cola 90°: <span class="a">6ϕ</span>(#3–#5) | <span class="a">12ϕ</span>(#6–#8) — ACI §25.3.2</div></div>
-    <div class="card"><h4 class="hs">PARÁMETROS</h4>
-      <div class="r2">
-        <div class="fi"><label>LONG. (m)</label><input id="b_l" type="number" min="0.1" step="0.1" placeholder="3.0"></div>
-        <div class="fi"><label>N° BARRAS</label><input id="b_n" type="number" min="1" placeholder="4"></div>
-      </div>
-      <div class="fi"><label>DIÁMETRO — Grado 60 / COPANIT 153-78</label><select id="b_d">
-        <option value="3">#3 · 9.5mm · 0.560kg/m · 40ϕ=38cm</option>
-        <option value="4">#4 · 12.7mm · 0.994kg/m · 40ϕ=51cm</option>
-        <option value="5" selected>#5 · 15.9mm · 1.552kg/m · 40ϕ=64cm</option>
-        <option value="6">#6 · 19.1mm · 2.235kg/m · 40ϕ=76cm</option>
-        <option value="8">#8 · 25.4mm · 3.973kg/m · 40ϕ=102cm</option></select></div>
-      <div class="r2">
-        <div class="fi"><label>TRASLAPE</label><select id="b_tt" onchange="$('b_tm').style.display=this.value==='m'?'block':'none'">
-          <option value="a">Auto 40×ϕ COPANIT/ACI</option><option value="m">Manual (cm)</option></select></div>
-        <div class="fi" id="b_tm" style="display:none"><label>CM</label>
-          <input id="b_tcm" type="number" min="0" placeholder="60"></div>
-      </div>
-      <div class="fi"><label>GANCHO — ACI §25.3</label><select id="b_g">
-        <option value="12" selected>12ϕ — 90° estándar (#3–#5)</option>
-        <option value="12b">12ϕ — 90° estándar (#6–#8) cola larga</option>
-        <option value="0">Sin gancho</option>
-        <option value="6">6ϕ — 180°</option></select></div>
+  <div class="fb fb-s"><lbl>📐 BARRAS — REP/SPIA / ACI 318</lbl>
+    <div class="f">Traslape=40×ϕ (COPANIT/ACI §25.5.1)<br>
+    Long. comercial Panamá: <span class="s">9.15m (30 pies)</span><br>
+    Cola 90°: <span class="a">6ϕ</span>(#3–#5) | <span class="a">12ϕ</span>(#6–#8) — ACI §25.3.2</div></div>
+  <div class="card"><h4 class="hs">PARÁMETROS</h4>
+    <div class="r2">
+      <div class="fi"><label>LONG. (m)</label><input id="b_l" type="number" min="0.1" step="0.1" placeholder="3.0"></div>
+      <div class="fi"><label>N° BARRAS</label><input id="b_n" type="number" min="1" placeholder="4"></div>
     </div>
-    <button class="btn bs" onclick="alert('Botón funciona'); try { calcEst(); } catch(e) { alert('Error: ' + e.message); }">⚙️ CALCULAR</button>
-    <div id="res-b" class="rb"><h4>✅ BARRAS</h4><div class="rg">
-      <div class="ri"><div class="v" style="color:var(--st)" id="b_lb">—</div><div class="l">L barra</div><div class="u">m</div></div>
-      <div class="ri"><div class="v" style="color:var(--st)" id="b_tr">—</div><div class="l">Traslape</div><div class="u">m</div></div>
-      <div class="ri"><div class="v" style="color:var(--st)" id="b_lt">—</div><div class="l">L total</div><div class="u">m</div></div>
-      <div class="ri"><div class="v" style="color:var(--st)" id="b_kg">—</div><div class="l">PESO</div><div class="u">kg</div></div>
-      <div class="ri full" style="background:rgba(192,200,216,.05);border-color:var(--st)">
-        <div class="v" style="color:var(--st);font-size:22px" id="b_qq">—</div>
-        <div class="l">QQ (c/7%)</div></div>
-    </div><div id="b_wn" class="wb inf" style="display:none"></div></div>
+    <div class="fi"><label>DIÁMETRO — Grado 60 / COPANIT 153-78</label><select id="b_d">
+      <option value="3">#3 · 9.5mm · 0.560kg/m · 40ϕ=38cm</option>
+      <option value="4">#4 · 12.7mm · 0.994kg/m · 40ϕ=51cm</option>
+      <option value="5" selected>#5 · 15.9mm · 1.552kg/m · 40ϕ=64cm</option>
+      <option value="6">#6 · 19.1mm · 2.235kg/m · 40ϕ=76cm</option>
+      <option value="8">#8 · 25.4mm · 3.973kg/m · 40ϕ=102cm</option></select></div>
+    <div class="r2">
+      <div class="fi"><label>TRASLAPE</label><select id="b_tt" onchange="$('b_tm').style.display=this.value==='m'?'block':'none'">
+        <option value="a">Auto 40×ϕ COPANIT/ACI</option><option value="m">Manual (cm)</option></select></div>
+      <div class="fi" id="b_tm" style="display:none"><label>CM</label>
+        <input id="b_tcm" type="number" min="0" placeholder="60"></div>
+    </div>
+    <div class="fi"><label>GANCHO — ACI §25.3</label><select id="b_g">
+      <option value="12" selected>12ϕ — 90° estándar (#3–#5)</option>
+      <option value="12b">12ϕ — 90° estándar (#6–#8) cola larga</option>
+      <option value="0">Sin gancho</option>
+      <option value="6">6ϕ — 180°</option></select></div>
   </div>
+  <button class="btn bs" onclick="calcBar()">⚙️ CALCULAR</button>
+  <div id="res-b" class="rb"><h4>✅ BARRAS</h4><div class="rg">
+    <div class="ri"><div class="v" style="color:var(--st)" id="b_lb">—</div><div class="l">L barra</div><div class="u">m</div></div>
+    <div class="ri"><div class="v" style="color:var(--st)" id="b_tr">—</div><div class="l">Traslape</div><div class="u">m</div></div>
+    <div class="ri"><div class="v" style="color:var(--st)" id="b_lt">—</div><div class="l">L total</div><div class="u">m</div></div>
+    <div class="ri"><div class="v" style="color:var(--st)" id="b_kg">—</div><div class="l">PESO</div><div class="u">kg</div></div>
+    <div class="ri full" style="background:rgba(192,200,216,.05);border-color:var(--st)">
+      <div class="v" style="color:var(--st);font-size:22px" id="b_qq">—</div>
+      <div class="l">QQ (c/7%)</div></div>
+  </div><div id="b_wn" class="wb inf" style="display:none"></div></div>
+</div>
   <div id="ae-p" class="sp">
     <div class="tw"><table><caption>PLANILLA DE HIERRO — CONSOLIDADO</caption>
       <thead><tr><th>ELEMENTO</th><th>DIÁM.</th><th>N°</th><th>m</th><th>kg</th><th>qq</th></tr></thead>
