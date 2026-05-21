@@ -59,6 +59,11 @@ function SA(submodo, btn) {
   S2(submodo, btn);
 }
 
+function SA(submodo, btn) {
+  alert("SA llamada con " + submodo);
+  S2(submodo, btn);
+}
+
 // Agregar zona en estribos (módulo Acero)
 function addZ() {
   const zl = document.getElementById('zl');
