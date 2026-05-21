@@ -786,7 +786,7 @@ tr:last-child td{border-bottom:none}
         <option value="0">Sin gancho</option>
         <option value="6">6ϕ — 180°</option></select></div>
     </div>
-    <button class="btn bs" onclick="calcBar()">⚙️ CALCULAR</button>
+    <button class="btn bs" onclick="alert('Botón funciona'); try { calcEst(); } catch(e) { alert('Error: ' + e.message); }">⚙️ CALCULAR</button>
     <div id="res-b" class="rb"><h4>✅ BARRAS</h4><div class="rg">
       <div class="ri"><div class="v" style="color:var(--st)" id="b_lb">—</div><div class="l">L barra</div><div class="u">m</div></div>
       <div class="ri"><div class="v" style="color:var(--st)" id="b_tr">—</div><div class="l">Traslape</div><div class="u">m</div></div>
