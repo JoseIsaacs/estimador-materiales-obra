@@ -55,7 +55,6 @@ function S2(submodo, btn) {
   btn.classList.add('on');
 }
 
-// Navegación secundaria de Acero
 function SA(submodo, btn) {
   S2(submodo, btn);
 }
