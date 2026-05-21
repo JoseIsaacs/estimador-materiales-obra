@@ -1,27 +1,6 @@
 // js/vigas_sismicas.js
 function calcVS() {
-  // Geometría
-  const b = parseFloat(document.getElementById('vs_b').value) || 0; // cm
-  const h = parseFloat(document.getElementById('vs_h').value) || 0; // cm
-  const L = parseFloat(document.getElementById('vs_L').value) || 0; // m
-  const n = parseInt(document.getElementById('vs_n').value) || 0;
-  const rec = parseFloat(document.getElementById('vs_rec').value); // cm
-  const fc = parseFloat(document.getElementById('vs_fc').value);
-  
-  // Refuerzo
-  const barra = document.getElementById('vs_bl').value;
-  const estribo = document.getElementById('vs_be').value;
-  const ns = parseInt(document.getElementById('vs_ns').value) || 0;
-  const ni = parseInt(document.getElementById('vs_ni').value) || 0;
-  const gancho = parseInt(document.getElementById('vs_g').value); // 6 o 8
-
-  if (!b || !h || !L || !n) { toast('Complete geometría y número de vigas'); return; }
-  const barL = BAR_DATA[barra];
-  const barE = BAR_DATA[estribo];
-  if (!barL || !barE) { toast('Diámetro no válido'); return; }
-
-  // Diámetros y pesos (heredamos BAR_DATA del archivo columnas.js, debe estar global)
-  // Si no existe, lo definimos aquí también para seguridad
+  // ── DATOS DE BARRAS (DEBE IR PRIMERO) ────
   const BAR_DATA = window.BAR_DATA || {
     '3': { diam: 0.953, kgm: 0.560 },
     '4': { diam: 1.27,  kgm: 0.994 },
@@ -29,6 +8,27 @@ function calcVS() {
     '6': { diam: 1.91,  kgm: 2.235 },
     '8': { diam: 2.54,  kgm: 3.973 }
   };
+
+  // Geometría
+  const b = parseFloat(document.getElementById('vs_b').value) || 0;
+  const h = parseFloat(document.getElementById('vs_h').value) || 0;
+  const L = parseFloat(document.getElementById('vs_L').value) || 0;
+  const n = parseInt(document.getElementById('vs_n').value) || 0;
+  const rec = parseFloat(document.getElementById('vs_rec').value);
+  const fc = parseFloat(document.getElementById('vs_fc').value);
+  
+  // Refuerzo
+  const barra = document.getElementById('vs_bl').value;
+  const estribo = document.getElementById('vs_be').value;
+  const ns = parseInt(document.getElementById('vs_ns').value) || 0;
+  const ni = parseInt(document.getElementById('vs_ni').value) || 0;
+  const gancho = parseInt(document.getElementById('vs_g').value);
+
+  if (!b || !h || !L || !n) { toast('Complete geometría y número de vigas'); return; }
+  
+  const barL = BAR_DATA[barra];
+  const barE = BAR_DATA[estribo];
+  if (!barL || !barE) { toast('Diámetro no válido'); return; }
 
   // Colas de gancho
   const colaLon = (parseInt(barra) <= 5) ? 6 * barL.diam : 12 * barL.diam; // cm
@@ -45,7 +45,7 @@ function calcVS() {
   // Separación zona central sCen = min(d/2, 30cm)
   const sCen = Math.min(d/2, 30);
 
-  // Longitud de una barra longitudinal = L + cola (si aplica, aquí simplificamos con traslape si L>9.15)
+  // Longitud de una barra longitudinal
   const longComercial = 9.15; // m
   const nTraslapes = L > longComercial ? Math.ceil(L / longComercial) - 1 : 0;
   const traslape = 40 * barL.diam / 100; // 40ϕ en m
@@ -56,8 +56,8 @@ function calcVS() {
   const hu = h - 2*rec;
   const Lest = (2*(bu + hu)/100) + 2*(colaEst/100); // m
 
-  // Número de estribos: confinamiento en extremos (lo) + zona central
-  const NestExtremo = Math.ceil(lo * 100 / sConf) * 2; // ambos extremos
+  // Número de estribos
+  const NestExtremo = Math.ceil(lo * 100 / sConf) * 2;
   const NestCentro = Math.ceil((L - 2*lo) * 100 / sCen);
   const Nest = NestExtremo + NestCentro;
 
@@ -77,7 +77,7 @@ function calcVS() {
   const agua = Math.round(vol * 185);
 
   // Mostrar resultados
-  document.getElementById('vs_d').textContent = (d/100).toFixed(3); // d en m
+  document.getElementById('vs_d').textContent = (d/100).toFixed(3);
   document.getElementById('vs_lo').textContent = lo.toFixed(2);
   document.getElementById('vs_sc').textContent = sConf.toFixed(1);
   document.getElementById('vs_ne').textContent = Nest;
