@@ -68,5 +68,43 @@ function addZ() {
   `;
   zl.appendChild(div);
 }
+window.calcEst = function() {
+  const ancho = parseFloat(document.getElementById('e_a').value) || 0;
+  const alto  = parseFloat(document.getElementById('e_h').value) || 0;
+  const rec   = parseFloat(document.getElementById('e_r').value);
+  const diamEst = document.getElementById('e_d').value;
+  const gancho = parseInt(document.getElementById('e_g').value);
 
+  if (!ancho || !alto) { toast('Ingrese ancho y alto del estribo'); return; }
+  const bar = BAR_DATA[diamEst];
+  if (!bar) { toast('Diámetro de estribo no válido'); return; }
+
+  const wu = ancho - 2*rec;
+  const hu = alto - 2*rec;
+  if (wu <= 0 || hu <= 0) { toast('Recubrimiento demasiado grande'); return; }
+
+  const colaCm = gancho * bar.diam;
+  const Lp = (2*(wu + hu)/100) + 2*(colaCm/100);
+
+  let Ntotal = 0;
+  document.querySelectorAll('#zl .zr').forEach(z => {
+    const cant = parseInt(z.querySelector('.zc')?.value) || 0;
+    Ntotal += cant;
+  });
+  if (Ntotal <= 0) { toast('Agregue al menos una zona con cantidad de estribos'); return; }
+
+  const metros = Ntotal * Lp;
+  const kg = metros * bar.kgm * 1.07;
+  const qq = kg / 45.36;
+
+  document.getElementById('e_lp').textContent = Lp.toFixed(3);
+  document.getElementById('e_nt').textContent = Ntotal;
+  document.getElementById('e_mt').textContent = metros.toFixed(2);
+  document.getElementById('e_kg').textContent = kg.toFixed(2);
+  document.getElementById('e_qq').textContent = qq.toFixed(2);
+
+  const res = document.getElementById('res-e');
+  if (res) res.classList.add('show');
+  toast('Estribos calculados');
+};
 // Aquí se cargarán los demás módulos (concreto.js, muros.js, etc.) que definen sus funciones de cálculo.
