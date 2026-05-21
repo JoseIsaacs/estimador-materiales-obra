@@ -1,3 +1,4 @@
+alert('acero.js cargado correctamente');
 // js/acero.js
 
 // Constantes de barras (compartidas con otros módulos)
