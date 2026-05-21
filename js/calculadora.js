@@ -1,5 +1,14 @@
 // js/calculadora.js
 // StructuraPro v3.4 - Funciones globales de navegación y utilidades
+const BAR_DATA = {
+  '3': { diam: 0.953, kgm: 0.560 },
+  '4': { diam: 1.27,  kgm: 0.994 },
+  '5': { diam: 1.59,  kgm: 1.552 },
+  '6': { diam: 1.91,  kgm: 2.235 },
+  '7': { diam: 2.22,  kgm: 3.042 },
+  '8': { diam: 2.54,  kgm: 3.973 }
+};
+window.BAR_DATA = BAR_DATA;
 
 function T(modo, btn) {
   // Ocultar todas las páginas
