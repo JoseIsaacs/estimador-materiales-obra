@@ -49,7 +49,7 @@ function S2(submodo, btn) {
   const parent = btn.closest('.pg');
   if (!parent) return;
   parent.querySelectorAll('.sp').forEach(sp => sp.classList.remove('on'));
-  const target = document.getElementById('sp-' + submodo);
+  const target = document.getElementById(submodo); // ✅ Sin "sp-"
   if (target) target.classList.add('on');
   parent.querySelectorAll('.stab').forEach(s => s.classList.remove('on'));
   btn.classList.add('on');
