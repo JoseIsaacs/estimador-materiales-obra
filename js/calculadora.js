@@ -140,4 +140,13 @@ window.calcBar = function() {
   if (res) res.classList.add('show');
   toast('Barras calculadas');
 };
+// Asignación manual del evento click a la pestaña Escaleras (por si el onclick inline falla)
+document.addEventListener('DOMContentLoaded', function() {
+  const tabEsc = document.querySelector('.tab.te[onclick*="esc"]');
+  if (tabEsc) {
+    tabEsc.addEventListener('click', function() {
+      T('esc', this);
+    });
+  }
+});
 // Aquí se cargarán los demás módulos (concreto.js, muros.js, etc.) que definen sus funciones de cálculo.
