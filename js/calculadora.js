@@ -120,4 +120,29 @@ window.calcEst = function() {
   if (res) res.classList.add('show');
   toast('Estribos calculados');
 };
+window.calcBar = function() {
+  const L = parseFloat(document.getElementById('b_l').value) || 0;
+  const n = parseInt(document.getElementById('b_n').value) || 0;
+  const diam = document.getElementById('b_d').value; // ej: '5'
+
+  if (!L || !n) { toast('Ingrese longitud y número de barras'); return; }
+
+  const bar = BAR_DATA[diam];
+  if (!bar) { toast('Diámetro no válido'); return; }
+
+  // Longitud total = longitud base (sin gancho ni traslape en esta versión simplificada)
+  const Ltotal = L;
+  const metros = Ltotal * n;
+  const kg = metros * bar.kgm * 1.07;   // +7% desperdicio
+  const qq = kg / 45.36;
+
+  document.getElementById('b_lb').textContent = Ltotal.toFixed(2);
+  document.getElementById('b_lt').textContent = Ltotal.toFixed(2);
+  document.getElementById('b_kg').textContent = kg.toFixed(2);
+  document.getElementById('b_qq').textContent = qq.toFixed(2);
+
+  const res = document.getElementById('res-b');
+  if (res) res.classList.add('show');
+  toast('Barras calculadas');
+};
 // Aquí se cargarán los demás módulos (concreto.js, muros.js, etc.) que definen sus funciones de cálculo.
