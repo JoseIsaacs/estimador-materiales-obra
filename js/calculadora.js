@@ -9,6 +9,8 @@ const BAR_DATA = {
   '8': { diam: 2.54,  kgm: 3.973 }
 };
 
+// ========== FUNCIÓN PRINCIPAL DE NAVEGACIÓN ==========
+function T(modo, btn) {
   // Ocultar todas las páginas
   document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
   // Mostrar la página correspondiente
@@ -47,7 +49,7 @@ function S2(submodo, btn) {
   const parent = btn.closest('.pg');
   if (!parent) return;
   parent.querySelectorAll('.sp').forEach(sp => sp.classList.remove('on'));
-  const target = document.getElementById(submodo); // ✅ Sin "sp-"
+  const target = document.getElementById(submodo);
   if (target) target.classList.add('on');
   parent.querySelectorAll('.stab').forEach(s => s.classList.remove('on'));
   btn.classList.add('on');
@@ -74,6 +76,8 @@ function addZ() {
   `;
   zl.appendChild(div);
 }
+
+// Funciones de cálculo asignadas globalmente
 window.calcEst = function() {
   const ancho = parseFloat(document.getElementById('e_a').value) || 0;
   const alto  = parseFloat(document.getElementById('e_h').value) || 0;
@@ -113,20 +117,20 @@ window.calcEst = function() {
   if (res) res.classList.add('show');
   toast('Estribos calculados');
 };
+
 window.calcBar = function() {
   const L = parseFloat(document.getElementById('b_l').value) || 0;
   const n = parseInt(document.getElementById('b_n').value) || 0;
-  const diam = document.getElementById('b_d').value; // ej: '5'
+  const diam = document.getElementById('b_d').value;
 
   if (!L || !n) { toast('Ingrese longitud y número de barras'); return; }
 
   const bar = BAR_DATA[diam];
   if (!bar) { toast('Diámetro no válido'); return; }
 
-  // Longitud total = longitud base (sin gancho ni traslape en esta versión simplificada)
   const Ltotal = L;
   const metros = Ltotal * n;
-  const kg = metros * bar.kgm * 1.07;   // +7% desperdicio
+  const kg = metros * bar.kgm * 1.07;
   const qq = kg / 45.36;
 
   document.getElementById('b_lb').textContent = Ltotal.toFixed(2);
@@ -138,45 +142,3 @@ window.calcBar = function() {
   if (res) res.classList.add('show');
   toast('Barras calculadas');
 };
-// Asignación manual del evento click a la pestaña Escaleras (por si el onclick inline falla)
-document.addEventListener('DOMContentLoaded', function() {
-  const tabEsc = document.querySelector('.tab.te[onclick*="esc"]');
-  if (tabEsc) {
-    tabEsc.addEventListener('click', function() {
-      T('esc', this);
-    });
-  }
-});
-
-  // Mapeo de pestañas: selector del botón -> modo para T()
-  const pestanas = [
-    { selector: '.tab:nth-child(1)', modo: 'con' },
-    { selector: '.tab:nth-child(2)', modo: 'mur' },
-    { selector: '.tab:nth-child(3)', modo: 'pis' },
-    { selector: '.tab:nth-child(4)', modo: 'zap' },
-    { selector: '.tab:nth-child(5)', modo: 'vcim' },
-    { selector: '.tab:nth-child(6)', modo: 'ped' },
-    { selector: '.tab:nth-child(7)', modo: 'col' },
-    { selector: '.tab:nth-child(8)', modo: 'vis' },
-    { selector: '.tab:nth-child(9)', modo: 'ama' },
-    { selector: '.tab:nth-child(10)', modo: 'ace' },
-    { selector: '.tab:nth-child(11)', modo: 'esc' },
-    { selector: '.tab:nth-child(12)', modo: 'res' }
-  ];
-
-  pestanas.forEach(function(p) {
-    const btn = document.querySelector(p.selector);
-    if (btn) {
-      btn.addEventListener('click', function() {
-        T(p.modo, this);
-      });
-    }
-  });
-
-  // Evento para el botón de calcular escalera
-  const btnEsc = document.getElementById('btnCalcEsc');
-  if (btnEsc) {
-    btnEsc.addEventListener('click', calcEsc);
-  }
-});
-// Aquí se cargarán los demás módulos (concreto.js, muros.js, etc.) que definen sus funciones de cálculo.
