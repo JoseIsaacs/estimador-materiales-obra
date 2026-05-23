@@ -1,156 +1,62 @@
-// js/escaleras.js
-function liveEsc() {
-  const H = parseFloat(document.getElementById('E_H').value) || 0;
-  const N = parseInt(document.getElementById('E_N').value) || 1;
-  const huella = parseFloat(document.getElementById('E_hu').value) || 0;
-  const co = H / N;
-  document.getElementById('E_co').value = co.toFixed(1);
-  
-  const Lh = N * huella / 100;
-  const Lincl = Math.sqrt(Math.pow(H/100, 2) + Math.pow(Lh, 2));
-  const alpha = Math.atan2(H/100, Lh) * 180 / Math.PI;
-  const tlosa = Math.max(Math.ceil(Lincl * 100 / 20), 10);
-  
-  document.getElementById('e_incl').textContent = Lincl.toFixed(2);
-  document.getElementById('e_alpha').textContent = alpha.toFixed(1);
-  document.getElementById('e_tlosa').textContent = tlosa;
-}
-
-function calcEsc() {
-  const H = parseFloat(document.getElementById('E_H').value) || 0;
-  const N = parseInt(document.getElementById('E_N').value) || 1;
-  const huella = parseFloat(document.getElementById('E_hu').value) || 0;
-  const ancho = parseFloat(document.getElementById('E_an').value) || 0;
-  const fc = parseFloat(document.getElementById('E_fc').value);
-  const barLong = document.getElementById('E_bl').value;
-  const barTransv = document.getElementById('E_bt').value;
-  const barGancho = document.getElementById('E_bg').value;
-
-  if (!H || !N || !huella || !ancho) { toast('Complete todos los parámetros'); return; }
-
-  const BAR_DATA = {
-    '3': { diam: 0.953, kgm: 0.560 },
-    '4': { diam: 1.27,  kgm: 0.994 },
-    '5': { diam: 1.59,  kgm: 1.552 }
-  };
-  const bl = BAR_DATA[barLong] || BAR_DATA['4'];
-  const bt = BAR_DATA[barTransv] || BAR_DATA['4'];
-  const bg = BAR_DATA[barGancho] || BAR_DATA['3'];
-
-  const co = H / N;
-  const Lh = N * huella / 100;
-  const Lincl = Math.sqrt(Math.pow(H/100, 2) + Math.pow(Lh, 2));
-  const alpha = Math.atan2(H/100, Lh) * 180 / Math.PI;
-  const t = Math.max(Math.ceil(Lincl * 100 / 20), 10);
-
-  // Refuerzo longitudinal inferior
-  const sepLong = 15;
-  const nbLong = Math.floor((ancho - 5) / sepLong) + 1;
-  const LbarraLong = Lincl + 2 * 12 * bl.diam / 100;
-  const kgLong = nbLong * LbarraLong * bl.kgm * 1.07;
-
-  // Refuerzo transversal
-  const sepTransv = 20;
-  const nbTransv = Math.ceil(Lincl * 100 / sepTransv) + 1;
-  const LbarraTransv = (ancho / 100) + 2 * 6 * bt.diam / 100;
-  const kgTransv = nbTransv * LbarraTransv * bt.kgm * 1.07;
-
-  // Barras superiores (ES09 simplificado)
-  const kgSuperior = (nbLong * Lincl * bl.kgm) * 0.15;
-  // ES09 ganchos especiales
-  const kgES09 = (kgLong + kgTransv) * 0.05;
-  const kgTotal = kgLong + kgTransv + kgSuperior + kgES09;
-  const qqTotal = kgTotal / 45.36;
-
-  // Concreto
-  const vol = t/100 * ancho/100 * Lincl;
-  const cemento = (vol * 7).toFixed(1);
-  const arena = (vol * 0.53).toFixed(2);
-  const grava = (vol * 0.72).toFixed(2);
-  const agua = Math.round(vol * 185);
-
-  // Resultados
-  document.getElementById('e_incl').textContent = Lincl.toFixed(2);
-  document.getElementById('e_alpha').textContent = alpha.toFixed(1);
-  document.getElementById('e_tlosa').textContent = t;
-
-  const res = document.getElementById('res-esc');
-  if (res) res.style.display = 'block';
-
-  const tbl = document.getElementById('esc_tbl');
-  if (tbl) {
-    tbl.innerHTML = `
-      <tr><td class="tl">Long. inf.</td><td>#${barLong}</td><td>${(nbLong*LbarraLong).toFixed(2)} m</td><td>${nbLong} barras @${sepLong}cm</td></tr>
-      <tr><td class="tl">Transversal</td><td>#${barTransv}</td><td>${(nbTransv*LbarraTransv).toFixed(2)} m</td><td>${nbTransv} piezas @${sepTransv}cm</td></tr>
-      <tr><td class="tl">Superior</td><td>#${barLong}</td><td>—</td><td>15% extra</td></tr>
-      <tr><td class="tl">ES09</td><td>#${barGancho}</td><td>—</td><td>5% ganchos</td></tr>
-    `;
-  }
-  const totRow = document.getElementById('esc_tot');
-  if (totRow) {
-    totRow.style.display = '';
-    document.getElementById('et_m').textContent = (nbLong*LbarraLong + nbTransv*LbarraTransv).toFixed(2);
-  }
-
-  const escSum = document.getElementById('esc_sum');
-  if (escSum) {
-    escSum.innerHTML = `
-      <div class="ri"><div class="v">${vol.toFixed(2)}</div><div class="l">CONCRETO</div><div class="u">m³</div></div>
-      <div class="ri"><div class="v">${cemento}</div><div class="l">CEMENTO</div><div class="u">sacos</div></div>
-      <div class="ri"><div class="v">${arena}</div><div class="l">ARENA</div><div class="u">m³</div></div>
-      <div class="ri"><div class="v">${grava}</div><div class="l">GRAVA</div><div class="u">m³</div></div>
-      <div class="ri"><div class="v">${agua}</div><div class="l">AGUA</div><div class="u">litros</div></div>
-      <div class="ri full"><div class="v" style="font-size:20px">${kgTotal.toFixed(2)}</div><div class="l">ACERO TOTAL +7%</div><div class="u">kg</div></div>
-      <div class="ri full"><div class="v" style="font-size:20px">${qqTotal.toFixed(2)}</div><div class="l">QUINTALES</div><div class="u">qq</div></div>
-    `;
-  }
-
-  // Diagrama
-  const canvas = document.getElementById('diagCanvas');
-  if (canvas) {
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width = canvas.clientWidth || 350;
-    const h = canvas.height = 200;
-    ctx.clearRect(0, 0, w, h);
-    
-    const escala = Math.min(w / Lincl, h / (H/100)) * 0.7;
-    const offsetX = w/2 - Lincl*escala/2;
-    const offsetY = h - 30;
-    
-    ctx.fillStyle = 'rgba(167,139,250,0.2)';
-    ctx.beginPath();
-    ctx.moveTo(offsetX, offsetY);
-    ctx.lineTo(offsetX + Lincl*escala, offsetY - (H/100)*escala);
-    ctx.lineTo(offsetX + Lincl*escala, offsetY - (H/100)*escala - t/100*escala);
-    ctx.lineTo(offsetX, offsetY - t/100*escala);
-    ctx.closePath();
-    ctx.fill();
-    ctx.strokeStyle = '#a78bfa';
-    ctx.stroke();
-    
-    ctx.strokeStyle = '#f97316';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(offsetX + 5, offsetY - t/200*escala);
-    ctx.lineTo(offsetX + Lincl*escala - 5, offsetY - (H/100)*escala - t/200*escala);
-    ctx.stroke();
-    
-    ctx.strokeStyle = '#38bdf8';
-    ctx.lineWidth = 1;
-    for (let i=0; i<=N; i++) {
-      const x = offsetX + i * (Lincl*escala / N);
-      const y = offsetY - i * ((H/100)*escala / N);
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x, y - t/100*escala);
-      ctx.stroke();
-    }
-  }
-
-  const escWn = document.getElementById('esc_wn');
-  if (escWn) {
-    escWn.style.display = 'block';
-    escWn.innerHTML = `✅ Escalera: ${N} escalones de huella=${huella}cm, contrahuella=${co.toFixed(1)}cm. t losa=${t}cm.`;
-  }
-  toast('Escalera calculada');
-}
+<!-- ═══ ESCALERA ═══ -->
+<div id="esc" class="pg">
+  <div class="sh"><div class="si si-e">🪜</div><div><h2 class="ce">ESCALERA — LOSA INCLINADA</h2><p>SECCIÓN LONGITUDINAL · ACERO · DIAGRAMA</p></div></div>
+  <div class="chip chip-e">🪜 ACI 318 · COPANIT · ES09 Ganchos 90°/135°</div>
+  <div class="fb fb-e"><lbl>📐 GEOMETRÍA Y REFUERZO — ACI 318 / REP</lbl>
+    <div class="f">L<sub>incl</sub>=√(H²+L<sub>h</sub>²) | α=arctan(H/L<sub>h</sub>)<br>
+    t<sub>losa</sub>=max(⌈L<sub>i</sub>/20⌉,10) <span class="e">[cm]</span><br>
+    Long.inf: N barras @15cm | ES09: 90°inf/135°sup<br>
+    qq=(kg×<span class="g">1.07</span>)/<span class="g">45.36</span></div></div>
+  <div class="card"><h4 class="he">PARÁMETROS</h4>
+    <div class="r2">
+      <div class="fi"><label>ALTURA TOTAL (cm)</label><input id="E_H" type="number" min="80" step="1" placeholder="280" oninput="liveEsc()"></div>
+      <div class="fi"><label>N° ESCALONES</label><input id="E_N" type="number" min="3" step="1" placeholder="16" oninput="liveEsc()"></div>
+    </div>
+    <div class="r2">
+      <div class="fi"><label>HUELLA (cm)</label><input id="E_hu" type="number" min="20" step="0.5" placeholder="27" oninput="liveEsc()"></div>
+      <div class="fi"><label>CONTRAHUELLA (cm)</label><input id="E_co" type="number" min="14" step="0.5" placeholder="17.5" oninput="liveEsc()"></div>
+    </div>
+    <div class="r2">
+      <div class="fi"><label>ANCHO (cm)</label><input id="E_an" type="number" min="80" step="5" placeholder="120" oninput="liveEsc()"></div>
+      <div class="fi"><label>f'c</label><select id="E_fc">
+        <option value="175">175 kg/cm²</option>
+        <option value="210" selected>210 kg/cm²</option></select></div>
+    </div>
+    <div class="r3">
+      <div class="fi"><label>BARRA LONG.</label><select id="E_bl">
+        <option value="4" selected>#4</option><option value="5">#5</option></select></div>
+      <div class="fi"><label>TRANSV.</label><select id="E_bt">
+        <option value="4" selected>#4</option><option value="3">#3</option></select></div>
+      <div class="fi"><label>GANCHO</label><select id="E_bg">
+        <option value="3" selected>#3</option><option value="4">#4</option></select></div>
+    </div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:12px">
+    <div class="ri"><div class="v" style="color:var(--esc);font-size:14px" id="e_incl">—</div><div class="l">L INCLINADA</div><div class="u">m</div></div>
+    <div class="ri"><div class="v" style="color:var(--esc);font-size:14px" id="e_alpha">—</div><div class="l">ÁNGULO α</div><div class="u">°</div></div>
+    <div class="ri"><div class="v" style="color:var(--esc);font-size:14px" id="e_tlosa">—</div><div class="l">t LOSA</div><div class="u">cm</div></div>
+  </div>
+  <div class="iso-outer" style="border-color:rgba(232,121,249,.3)">
+    <h4 style="color:var(--esc)">🔥 DIAGRAMA DE REFUERZO — SECCIÓN LONGITUDINAL</h4>
+    <canvas id="diagCanvas" height="200"></canvas>
+    <div class="legend">
+      <div class="leg"><div class="leg-d" style="background:#f97316"></div>Long. inf.</div>
+      <div class="leg"><div class="leg-d" style="background:#38bdf8"></div>Transversal</div>
+      <div class="leg"><div class="leg-d" style="background:#fb7185"></div>Superior</div>
+      <div class="leg"><div class="leg-d" style="background:#4ade80"></div>ES09</div>
+    </div>
+  </div>
+  <button class="btn be" onclick="calcEsc()">🪜 CALCULAR ESCALERA</button>
+  <div id="res-esc" class="rb" style="display:none">
+    <h4>✅ ESCALERA — TABLA DE ACERO</h4>
+    <div class="rg" id="esc_sum" style="margin-bottom:12px"></div>
+    <div class="tw"><table>
+      <thead><tr><th>TIPO REFUERZO</th><th>DIÁM.</th><th>LONG.</th><th>NOTAS</th></tr></thead>
+      <tbody id="esc_tbl"></tbody>
+      <tfoot><tr class="trow-tot" id="esc_tot" style="display:none">
+        <td id="et_l">TOTAL</td><td id="et_d">—</td><td id="et_m">—</td><td>Suma total</td>
+      </tr></tfoot>
+    </table></div>
+    <div id="esc_wn" class="wb ok" style="display:none"></div>
+    <br><button class="bpdf" onclick="exportEscPDF()">📄 EXPORTAR PLANILLA ESCALERA PDF</button>
+  </div>
+</div>
