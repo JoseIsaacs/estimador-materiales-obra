@@ -824,7 +824,7 @@ tr:last-child td{border-bottom:none}
 <div class="toast" id="toast">✅ OK</div>
 
 <!-- Carga de scripts uno por uno, sin loader dinámico -->
-<script src="js/calculadora.js"></script>
+
 <script src="js/concreto.js"></script>
 <script src="js/muros.js"></script>
 <script src="js/pisos.js"></script>
@@ -950,6 +950,53 @@ function calcBar() {
     bWn.innerHTML = '✅ Barras #' + diamBar + ': ' + n + ' und de ' + Ltotal.toFixed(2) + 'm c/u.';
   }
   toast('Barras calculadas');
+}
+</script>
+<script>
+// ========== FUNCIONES ESENCIALES DE NAVEGACIÓN ==========
+function T(modo, btn) {
+  document.querySelectorAll('.pg').forEach(function(p) { p.classList.remove('on'); });
+  var pagina = document.getElementById(modo);
+  if (pagina) pagina.classList.add('on');
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('on'); });
+  if (btn) btn.classList.add('on');
+}
+
+function $(id) { return document.getElementById(id); }
+
+function toast(msg) {
+  var t = $('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2000);
+}
+
+function S2(submodo, btn) {
+  var parent = btn.closest('.pg');
+  if (!parent) return;
+  parent.querySelectorAll('.sp').forEach(function(sp) { sp.classList.remove('on'); });
+  var target = document.getElementById(submodo);
+  if (target) target.classList.add('on');
+  parent.querySelectorAll('.stab').forEach(function(s) { s.classList.remove('on'); });
+  btn.classList.add('on');
+}
+
+function SA(submodo, btn) { S2(submodo, btn); }
+
+function addZ() {
+  var zl = document.getElementById('zl');
+  if (!zl) return;
+  var count = zl.querySelectorAll('.zr').length;
+  var div = document.createElement('div');
+  div.className = 'zr';
+  div.innerHTML = '<span class="zl">Z' + (count + 1) + '</span>' +
+    '<input type="number" class="zc" min="1" placeholder="n°" style="max-width:58px">' +
+    '<span class="zl">@</span>' +
+    '<input type="number" class="zs" min="1" placeholder="cm" style="max-width:62px">' +
+    '<span class="zl">cm</span>' +
+    '<button class="bdel" onclick="this.parentElement.remove()">×</button>';
+  zl.appendChild(div);
 }
 </script>
 </body>
