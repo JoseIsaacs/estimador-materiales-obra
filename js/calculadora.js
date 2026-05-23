@@ -149,4 +149,37 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+// Asignación directa de eventos a las pestañas
+document.addEventListener('DOMContentLoaded', function() {
+  // Mapeo de pestañas: selector del botón -> modo para T()
+  const pestanas = [
+    { selector: '.tab:nth-child(1)', modo: 'con' },
+    { selector: '.tab:nth-child(2)', modo: 'mur' },
+    { selector: '.tab:nth-child(3)', modo: 'pis' },
+    { selector: '.tab:nth-child(4)', modo: 'zap' },
+    { selector: '.tab:nth-child(5)', modo: 'vcim' },
+    { selector: '.tab:nth-child(6)', modo: 'ped' },
+    { selector: '.tab:nth-child(7)', modo: 'col' },
+    { selector: '.tab:nth-child(8)', modo: 'vis' },
+    { selector: '.tab:nth-child(9)', modo: 'ama' },
+    { selector: '.tab:nth-child(10)', modo: 'ace' },
+    { selector: '.tab:nth-child(11)', modo: 'esc' },
+    { selector: '.tab:nth-child(12)', modo: 'res' }
+  ];
+
+  pestanas.forEach(function(p) {
+    const btn = document.querySelector(p.selector);
+    if (btn) {
+      btn.addEventListener('click', function() {
+        T(p.modo, this);
+      });
+    }
+  });
+
+  // Evento para el botón de calcular escalera
+  const btnEsc = document.getElementById('btnCalcEsc');
+  if (btnEsc) {
+    btnEsc.addEventListener('click', calcEsc);
+  }
+});
 // Aquí se cargarán los demás módulos (concreto.js, muros.js, etc.) que definen sus funciones de cálculo.
