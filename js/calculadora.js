@@ -8,9 +8,7 @@ const BAR_DATA = {
   '7': { diam: 2.22,  kgm: 3.042 },
   '8': { diam: 2.54,  kgm: 3.973 }
 };
-window.BAR_DATA = BAR_DATA;
-alert('T llamada con modo: ' + modo);
-function T(modo, btn) {
+
   // Ocultar todas las páginas
   document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
   // Mostrar la página correspondiente
