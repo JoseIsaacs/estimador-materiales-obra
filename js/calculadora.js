@@ -147,8 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
-// Asignación directa de eventos a las pestañas
-document.addEventListener('DOMContentLoaded', function() {
+
   // Mapeo de pestañas: selector del botón -> modo para T()
   const pestanas = [
     { selector: '.tab:nth-child(1)', modo: 'con' },
