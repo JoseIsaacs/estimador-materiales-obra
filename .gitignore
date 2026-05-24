@@ -36,6 +36,7 @@ wheels/
 # IDE
 .vscode/
 .idea/
+desktop.ini
 *.swp
 *.swo
 *.sublime-project
@@ -54,3 +55,4 @@ logs/
 *.tmp
 temp/
 .temp/
+desktop.ini
