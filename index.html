@@ -1044,5 +1044,26 @@ function addZ() {
   zl.appendChild(div);
 }
 </script>
+<div id="test-esc" style="display:none;background:#111;padding:20px;border:2px solid var(--esc);margin-top:20px">
+  <h2 style="color:var(--esc)">🪜 PRUEBA DE ESCALERA</h2>
+  <p>Si ves esto, el HTML funciona. Probando JS...</p>
+  <div class="fi"><label>ALTURA TOTAL (cm)</label><input id="E_H" type="number" min="80" step="1" placeholder="280" oninput="liveEsc()"></div>
+  <button class="btn be" onclick="calcEsc()">CALCULAR</button>
+  <p id="esc-resultado">Resultados aquí</p>
+</div>
+<script>
+  // Forzar la visibilidad del test al cargar la pestaña Escaleras
+  (function(){
+    const originalT = window.T;
+    window.T = function(modo, btn) {
+      originalT(modo, btn);
+      if (modo === 'esc') {
+        document.getElementById('test-esc').style.display = 'block';
+      } else {
+        document.getElementById('test-esc').style.display = 'none';
+      }
+    };
+  })();
+</script>
 </body>
 </html>
