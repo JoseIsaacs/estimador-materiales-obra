@@ -219,7 +219,6 @@ tr:last-child td{border-bottom:none}
   <button class="tab"     onclick="T('res',this)">📊 RESUM.</button>
 </div>
 
-
 <!-- ═══ CONCRETO ═══ -->
 <div id="con" class="pg on">
   <div class="sh"><div class="si si-y">🏗️</div><div><h2 class="cy">CONCRETO ESTRUCTURAL</h2><p>LOSA · ZAPATA · VIGA</p></div></div>
@@ -717,7 +716,6 @@ tr:last-child td{border-bottom:none}
     <button class="stab ss"    onclick="SA('ae-b',this)">📏 BARRAS</button>
     <button class="stab ss"    onclick="SA('ae-p',this)">📋 PLANILLA</button>
   </div>
-
   <!-- SUBPESTAÑA ESTRIBOS -->
   <div id="ae-e" class="sp on">
     <div class="fb fb-s"><lbl>📐 ESTRIBOS — ACI 318 §25.3 / REP</lbl>
@@ -753,7 +751,6 @@ tr:last-child td{border-bottom:none}
       <div class="ri full"><div class="v" id="e_qq">—</div><div class="l">QQ</div></div>
     </div></div>
   </div>
-
   <!-- SUBPESTAÑA BARRAS -->
   <div id="ae-b" class="sp">
     <div class="card"><h4 class="hs">BARRAS</h4>
@@ -769,236 +766,117 @@ tr:last-child td{border-bottom:none}
       <div class="ri full"><div class="v" id="b_qq">—</div><div class="l">QQ</div></div>
     </div></div>
   </div>
-
   <!-- SUBPESTAÑA PLANILLA -->
-<div id="ae-p" class="sp">
-  <div class="tw"><table><caption>PLANILLA DE HIERRO — CONSOLIDADO</caption>
-    <thead><tr><th>ELEMENTO</th><th>DIÁM.</th><th>N°</th><th>m</th><th>kg</th><th>qq</th></tr></thead>
-    <tbody id="pl-body"><tr><td colspan="6" style="color:var(--dim);text-align:center;padding:13px">Calcula los módulos para llenar la planilla</td></tr></tbody>
-    <tfoot id="pl-foot" style="display:none"><tr style="background:rgba(192,200,216,.06)">
-      <td colspan="4" class="tl" style="color:var(--st)">TOTAL</td>
-      <td class="tst" id="pl-kg">—</td><td class="tst" id="pl-qq" style="font-weight:700">—</td>
-    </tr></tfoot>
-  </table></div>
-  <div class="tw"><table><caption>CONSTANTES — GRADO 60 · COPANIT 153-78 · PANAMÁ</caption>
-    <thead><tr><th>BARRA</th><th>mm</th><th>kg/m</th><th>40ϕ cm</th><th>Cola 90° ACI §25.3</th></tr></thead>
-    <tbody>
-      <tr><td class="tl">#3(3/8")</td><td>9.5</td><td class="tst">0.560</td><td>38</td><td>6ϕ=5.7cm</td></tr>
-      <tr><td class="tl">#4(1/2")</td><td>12.7</td><td class="tst">0.994</td><td>51</td><td>6ϕ=7.6cm</td></tr>
-      <tr><td class="tl">#5(5/8")</td><td>15.9</td><td class="tst">1.552</td><td>64</td><td>6ϕ=9.5cm</td></tr>
-      <tr><td class="tl">#6(3/4")</td><td>19.1</td><td class="tst">2.235</td><td>76</td><td class="tok">12ϕ=22.9cm</td></tr>
-      <tr><td class="tl">#7(7/8")</td><td>22.2</td><td class="tst">3.042</td><td>89</td><td class="tok">12ϕ=26.6cm</td></tr>
-      <tr><td class="tl">#8(1")</td><td>25.4</td><td class="tst">3.973</td><td>102</td><td class="tok">12ϕ=30.5cm</td></tr>
-    </tbody></table></div>
-  <div class="wb inf">ℹ️ Long. comercial Panamá: <b>9.15m (30 pies)</b><br>
-  Cola gancho 90°: <b>6ϕ</b> #3–#5 | <b>12ϕ</b> #6–#8 — ACI §25.3.2 / COPANIT</div><br>
-  <button class="bpdf" onclick="exportPlan()">📄 EXPORTAR PLANILLA PDF</button>
+  <div id="ae-p" class="sp">
+    <div class="tw"><table><caption>PLANILLA DE HIERRO — CONSOLIDADO</caption>
+      <thead><tr><th>ELEMENTO</th><th>DIÁM.</th><th>N°</th><th>m</th><th>kg</th><th>qq</th></tr></thead>
+      <tbody id="pl-body"><tr><td colspan="6" style="color:var(--dim);text-align:center;padding:13px">Calcula los módulos para llenar la planilla</td></tr></tbody>
+      <tfoot id="pl-foot" style="display:none"><tr style="background:rgba(192,200,216,.06)">
+        <td colspan="4" class="tl" style="color:var(--st)">TOTAL</td>
+        <td class="tst" id="pl-kg">—</td><td class="tst" id="pl-qq" style="font-weight:700">—</td>
+      </tr></tfoot>
+    </table></div>
+    <div class="tw"><table><caption>CONSTANTES — GRADO 60 · COPANIT 153-78 · PANAMÁ</caption>
+      <thead><tr><th>BARRA</th><th>mm</th><th>kg/m</th><th>40ϕ cm</th><th>Cola 90° ACI §25.3</th></tr></thead>
+      <tbody>
+        <tr><td class="tl">#3(3/8")</td><td>9.5</td><td class="tst">0.560</td><td>38</td><td>6ϕ=5.7cm</td></tr>
+        <tr><td class="tl">#4(1/2")</td><td>12.7</td><td class="tst">0.994</td><td>51</td><td>6ϕ=7.6cm</td></tr>
+        <tr><td class="tl">#5(5/8")</td><td>15.9</td><td class="tst">1.552</td><td>64</td><td>6ϕ=9.5cm</td></tr>
+        <tr><td class="tl">#6(3/4")</td><td>19.1</td><td class="tst">2.235</td><td>76</td><td class="tok">12ϕ=22.9cm</td></tr>
+        <tr><td class="tl">#7(7/8")</td><td>22.2</td><td class="tst">3.042</td><td>89</td><td class="tok">12ϕ=26.6cm</td></tr>
+        <tr><td class="tl">#8(1")</td><td>25.4</td><td class="tst">3.973</td><td>102</td><td class="tok">12ϕ=30.5cm</td></tr>
+      </tbody></table></div>
+    <div class="wb inf">ℹ️ Long. comercial Panamá: <b>9.15m (30 pies)</b><br>
+    Cola gancho 90°: <b>6ϕ</b> #3–#5 | <b>12ϕ</b> #6–#8 — ACI §25.3.2 / COPANIT</div><br>
+    <button class="bpdf" onclick="exportPlan()">📄 EXPORTAR PLANILLA PDF</button>
+  </div>
 </div>
-<div style="clear:both;display:block !important;width:100%"></div>
 
 <!-- ═══ ESCALERA ═══ -->
-<div style="clear:both;display:block !important;width:100%">
-  <div id="esc" class="pg">
-    <div class="sh"><div class="si si-e">🪜</div><div><h2 class="ce">ESCALERA — LOSA INCLINADA</h2><p>SECCIÓN LONGITUDINAL · ACERO · DIAGRAMA</p></div></div>
-    <div class="chip chip-e">🪜 ACI 318 · COPANIT · ES09 Ganchos 90°/135°</div>
-    <div class="fb fb-e"><lbl>📐 GEOMETRÍA Y REFUERZO — ACI 318 / REP</lbl>
-      <div class="f">L<sub>incl</sub>=√(H²+L<sub>h</sub>²) | α=arctan(H/L<sub>h</sub>)<br>
-      t<sub>losa</sub>=max(⌈L<sub>i</sub>/20⌉,10) <span class="e">[cm]</span><br>
-      Long.inf: N barras @15cm | ES09: 90°inf/135°sup<br>
-      qq=(kg×<span class="g">1.07</span>)/<span class="g">45.36</span></div></div>
-    <div class="card"><h4 class="he">PARÁMETROS</h4>
-      <div class="r2">
-        <div class="fi"><label>ALTURA TOTAL (cm)</label><input id="E_H" type="number" min="80" step="1" placeholder="280" oninput="liveEsc()"></div>
-        <div class="fi"><label>N° ESCALONES</label><input id="E_N" type="number" min="3" step="1" placeholder="16" oninput="liveEsc()"></div>
-      </div>
-      <div class="r2">
-        <div class="fi"><label>HUELLA (cm)</label><input id="E_hu" type="number" min="20" step="0.5" placeholder="27" oninput="liveEsc()"></div>
-        <div class="fi"><label>CONTRAHUELLA (cm)</label><input id="E_co" type="number" min="14" step="0.5" placeholder="17.5" oninput="liveEsc()"></div>
-      </div>
-      <div class="r2">
-        <div class="fi"><label>ANCHO (cm)</label><input id="E_an" type="number" min="80" step="5" placeholder="120" oninput="liveEsc()"></div>
-        <div class="fi"><label>f'c</label><select id="E_fc">
-          <option value="175">175 kg/cm²</option>
-          <option value="210" selected>210 kg/cm²</option></select></div>
-      </div>
-      <div class="r3">
-        <div class="fi"><label>BARRA LONG.</label><select id="E_bl">
-          <option value="4" selected>#4</option><option value="5">#5</option></select></div>
-        <div class="fi"><label>TRANSV.</label><select id="E_bt">
-          <option value="4" selected>#4</option><option value="3">#3</option></select></div>
-        <div class="fi"><label>GANCHO</label><select id="E_bg">
-          <option value="3" selected>#3</option><option value="4">#4</option></select></div>
-      </div></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:12px">
-      <div class="ri"><div class="v" style="color:var(--esc);font-size:14px" id="e_incl">—</div><div class="l">L INCLINADA</div><div class="u">m</div></div>
-      <div class="ri"><div class="v" style="color:var(--esc);font-size:14px" id="e_alpha">—</div><div class="l">ÁNGULO α</div><div class="u">°</div></div>
-      <div class="ri"><div class="v" style="color:var(--esc);font-size:14px" id="e_tlosa">—</div><div class="l">t LOSA</div><div class="u">cm</div></div>
+<div id="esc" class="pg">
+  <div class="sh"><div class="si si-e">🪜</div><div><h2 class="ce">ESCALERA — LOSA INCLINADA</h2><p>SECCIÓN LONGITUDINAL · ACERO · DIAGRAMA</p></div></div>
+  <div class="chip chip-e">🪜 ACI 318 · COPANIT · ES09 Ganchos 90°/135°</div>
+  <div class="fb fb-e"><lbl>📐 GEOMETRÍA Y REFUERZO — ACI 318 / REP</lbl>
+    <div class="f">L<sub>incl</sub>=√(H²+L<sub>h</sub>²) | α=arctan(H/L<sub>h</sub>)<br>
+    t<sub>losa</sub>=max(⌈L<sub>i</sub>/20⌉,10) <span class="e">[cm]</span><br>
+    Long.inf: N barras @15cm | ES09: 90°inf/135°sup<br>
+    qq=(kg×<span class="g">1.07</span>)/<span class="g">45.36</span></div></div>
+  <div class="card"><h4 class="he">PARÁMETROS</h4>
+    <div class="r2">
+      <div class="fi"><label>ALTURA TOTAL (cm)</label><input id="E_H" type="number" min="80" step="1" placeholder="280" oninput="liveEsc()"></div>
+      <div class="fi"><label>N° ESCALONES</label><input id="E_N" type="number" min="3" step="1" placeholder="16" oninput="liveEsc()"></div>
     </div>
-    <div class="iso-outer" style="border-color:rgba(232,121,249,.3)">
-      <h4 style="color:var(--esc)">🔥 DIAGRAMA DE REFUERZO — SECCIÓN LONGITUDINAL</h4>
-      <canvas id="diagCanvas" height="200"></canvas>
-      <div class="legend">
-        <div class="leg"><div class="leg-d" style="background:#f97316"></div>Long. inf.</div>
-        <div class="leg"><div class="leg-d" style="background:#38bdf8"></div>Transversal</div>
-        <div class="leg"><div class="leg-d" style="background:#fb7185"></div>Superior</div>
-        <div class="leg"><div class="leg-d" style="background:#4ade80"></div>ES09</div>
-      </div>
+    <div class="r2">
+      <div class="fi"><label>HUELLA (cm)</label><input id="E_hu" type="number" min="20" step="0.5" placeholder="27" oninput="liveEsc()"></div>
+      <div class="fi"><label>CONTRAHUELLA (cm)</label><input id="E_co" type="number" min="14" step="0.5" placeholder="17.5" oninput="liveEsc()"></div>
     </div>
-    <button class="btn be" onclick="calcEsc()">🪜 CALCULAR ESCALERA</button>
-    <div id="res-esc" class="rb" style="display:none">
-      <h4>✅ ESCALERA — TABLA DE ACERO</h4>
-      <div class="rg" id="esc_sum" style="margin-bottom:12px"></div>
-      <div class="tw"><table>
-        <thead><tr><th>TIPO REFUERZO</th><th>DIÁM.</th><th>LONG.</th><th>NOTAS</th></tr></thead>
-        <tbody id="esc_tbl"></tbody>
-        <tfoot><tr class="trow-tot" id="esc_tot" style="display:none">
-          <td id="et_l">TOTAL</td><td id="et_d">—</td><td id="et_m">—</td><td>Suma total</td>
-        </tr></tfoot>
-      </table></div>
-      <div id="esc_wn" class="wb ok" style="display:none"></div>
-      <br><button class="bpdf" onclick="exportEscPDF()">📄 EXPORTAR PLANILLA ESCALERA PDF</button>
+    <div class="r2">
+      <div class="fi"><label>ANCHO (cm)</label><input id="E_an" type="number" min="80" step="5" placeholder="120" oninput="liveEsc()"></div>
+      <div class="fi"><label>f'c</label><select id="E_fc">
+        <option value="175">175 kg/cm²</option>
+        <option value="210" selected>210 kg/cm²</option></select></div>
     </div>
+    <div class="r3">
+      <div class="fi"><label>BARRA LONG.</label><select id="E_bl">
+        <option value="4" selected>#4</option><option value="5">#5</option></select></div>
+      <div class="fi"><label>TRANSV.</label><select id="E_bt">
+        <option value="4" selected>#4</option><option value="3">#3</option></select></div>
+      <div class="fi"><label>GANCHO</label><select id="E_bg">
+        <option value="3" selected>#3</option><option value="4">#4</option></select></div>
+    </div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:12px">
+    <div class="ri"><div class="v" style="color:var(--esc);font-size:14px" id="e_incl">—</div><div class="l">L INCLINADA</div><div class="u">m</div></div>
+    <div class="ri"><div class="v" style="color:var(--esc);font-size:14px" id="e_alpha">—</div><div class="l">ÁNGULO α</div><div class="u">°</div></div>
+    <div class="ri"><div class="v" style="color:var(--esc);font-size:14px" id="e_tlosa">—</div><div class="l">t LOSA</div><div class="u">cm</div></div>
+  </div>
+  <div class="iso-outer" style="border-color:rgba(232,121,249,.3)">
+    <h4 style="color:var(--esc)">🔥 DIAGRAMA DE REFUERZO — SECCIÓN LONGITUDINAL</h4>
+    <canvas id="diagCanvas" height="200"></canvas>
+    <div class="legend">
+      <div class="leg"><div class="leg-d" style="background:#f97316"></div>Long. inf.</div>
+      <div class="leg"><div class="leg-d" style="background:#38bdf8"></div>Transversal</div>
+      <div class="leg"><div class="leg-d" style="background:#fb7185"></div>Superior</div>
+      <div class="leg"><div class="leg-d" style="background:#4ade80"></div>ES09</div>
+    </div>
+  </div>
+  <button class="btn be" onclick="calcEsc()">🪜 CALCULAR ESCALERA</button>
+  <div id="res-esc" class="rb" style="display:none">
+    <h4>✅ ESCALERA — TABLA DE ACERO</h4>
+    <div class="rg" id="esc_sum" style="margin-bottom:12px"></div>
+    <div class="tw"><table>
+      <thead><tr><th>TIPO REFUERZO</th><th>DIÁM.</th><th>LONG.</th><th>NOTAS</th></tr></thead>
+      <tbody id="esc_tbl"></tbody>
+      <tfoot><tr class="trow-tot" id="esc_tot" style="display:none">
+        <td id="et_l">TOTAL</td><td id="et_d">—</td><td id="et_m">—</td><td>Suma total</td>
+      </tr></tfoot>
+    </table></div>
+    <div id="esc_wn" class="wb ok" style="display:none"></div>
+    <br><button class="bpdf" onclick="exportEscPDF()">📄 EXPORTAR PLANILLA ESCALERA PDF</button>
   </div>
 </div>
 
 <!-- ═══ RESUMEN MEJORADO ═══ -->
-<div id="res" class="pg" style="display:none">
+<div id="res" class="pg">
   <div class="sh"><div class="si si-y">📊</div><div><h2 class="cy">RESUMEN DEL PROYECTO</h2><p>3D INTERACTIVO · MEMORIA · ACERO · ANÁLISIS</p></div></div>
   <p style="color:var(--dim);text-align:center;padding:20px">Calcula los módulos para ver el resumen.</p>
 </div>
-
 <div class="toast" id="toast">✅ OK</div>
 
-<!-- Carga de scripts uno por uno, sin loader dinámico -->
-
+<!-- SCRIPTS EXTERNOS DE MÓDULOS (se mantienen las rutas que ya funcionan) -->
 <script src="js/concreto.js"></script>
 <script src="js/muros.js"></script>
 <script src="js/pisos.js"></script>
 <script src="js/zapatas.js"></script>
 <script src="js/vigas_cimentacion.js"></script>
-<script src="js/vigas_sismicas.js?v=2"></script>
+<script src="js/vigas_sismicas.js"></script>
 <script src="js/vigas_amarre.js"></script>
 <script src="js/columnas.js"></script>
 <script src="js/pedestales.js"></script>
-<!-- <script src="js/escaleras.js"></script> -->
 <script src="js/resumen.js"></script>
+
+<!-- ========== SCRIPTS INCRUSTADOS ========== -->
 <script>
-// ========== MÓDULO ACERO (INCRUSTADO) ==========
-const BAR_DATA = {
-  '3': { diam: 0.953, kgm: 0.560 },
-  '4': { diam: 1.27,  kgm: 0.994 },
-  '5': { diam: 1.59,  kgm: 1.552 },
-  '6': { diam: 1.91,  kgm: 2.235 },
-  '7': { diam: 2.22,  kgm: 3.042 },
-  '8': { diam: 2.54,  kgm: 3.973 }
-};
-window.BAR_DATA = BAR_DATA;
-
-function addZ() {
-  const zl = document.getElementById('zl');
-  if (!zl) return;
-  const count = zl.querySelectorAll('.zr').length;
-  const div = document.createElement('div');
-  div.className = 'zr';
-  div.innerHTML = '<span class="zl">Z'+(count+1)+'</span>' +
-    '<input type="number" class="zc" min="1" placeholder="n°" style="max-width:58px">' +
-    '<span class="zl">@</span>' +
-    '<input type="number" class="zs" min="1" placeholder="cm" style="max-width:62px">' +
-    '<span class="zl">cm</span>' +
-    '<button class="bdel" onclick="this.parentElement.remove()">×</button>';
-  zl.appendChild(div);
-}
-
-function calcEst() {
-  const ancho = parseFloat(document.getElementById('e_a').value) || 0;
-  const alto  = parseFloat(document.getElementById('e_h').value) || 0;
-  const rec   = parseFloat(document.getElementById('e_r').value);
-  const diamEst = document.getElementById('e_d').value;
-  const gancho = parseInt(document.getElementById('e_g').value);
-
-  if (!ancho || !alto) { toast('Ingrese ancho y alto del estribo'); return; }
-  const bar = BAR_DATA[diamEst];
-  if (!bar) { toast('Diámetro de estribo no válido'); return; }
-
-  const wu = ancho - 2*rec;
-  const hu = alto - 2*rec;
-  if (wu <= 0 || hu <= 0) { toast('Recubrimiento demasiado grande'); return; }
-
-  const colaCm = gancho * bar.diam;
-  const Lp = (2*(wu + hu)/100) + 2*(colaCm/100);
-
-  let Ntotal = 0;
-  document.querySelectorAll('#zl .zr').forEach(z => {
-    const cant = parseInt(z.querySelector('.zc')?.value) || 0;
-    Ntotal += cant;
-  });
-  if (Ntotal <= 0) { toast('Agregue al menos una zona con cantidad de estribos'); return; }
-
-  const metros = Ntotal * Lp;
-  const kg = metros * bar.kgm * 1.07;
-  const qq = kg / 45.36;
-
-  document.getElementById('e_lp').textContent = Lp.toFixed(3);
-  document.getElementById('e_nt').textContent = Ntotal;
-  document.getElementById('e_mt').textContent = metros.toFixed(2);
-  document.getElementById('e_kg').textContent = kg.toFixed(2);
-  document.getElementById('e_qq').textContent = qq.toFixed(2);
-
-  const res = document.getElementById('res-e');
-  if (res) res.classList.add('show');
-  toast('Estribos calculados');
-}
-
-function calcBar() {
-  const L = parseFloat(document.getElementById('b_l').value) || 0;
-  const n = parseInt(document.getElementById('b_n').value) || 0;
-  const diamBar = document.getElementById('b_d').value;
-  const tipoTraslape = document.getElementById('b_tt').value;
-  const traslapeManual = parseFloat(document.getElementById('b_tcm').value) || 0;
-  const ganchoTipo = document.getElementById('b_g').value;
-
-  if (!L || !n) { toast('Ingrese longitud y número de barras'); return; }
-  const bar = BAR_DATA[diamBar];
-  if (!bar) { toast('Diámetro de barra no válido'); return; }
-
-  let ganchoM = 0;
-  if (ganchoTipo !== '0') {
-    const veces = parseInt(ganchoTipo) || 12;
-    ganchoM = (veces * bar.diam) / 100;
-  }
-  const Lbarra = L + ganchoM;
-
-  let traslapeM = 0;
-  const largoComercial = 9.15;
-  if (Lbarra > largoComercial) {
-    const nTraslapes = Math.ceil(Lbarra / largoComercial) - 1;
-    traslapeM = nTraslapes * (tipoTraslape === 'a' ? 40 * bar.diam / 100 : traslapeManual / 100);
-  }
-
-  const Ltotal = Lbarra + traslapeM;
-  const metros = Ltotal * n;
-  const kg = metros * bar.kgm * 1.07;
-  const qq = kg / 45.36;
-
-  document.getElementById('b_lb').textContent = Lbarra.toFixed(2);
-  document.getElementById('b_tr').textContent = traslapeM.toFixed(2);
-  document.getElementById('b_lt').textContent = Ltotal.toFixed(2);
-  document.getElementById('b_kg').textContent = kg.toFixed(2);
-  document.getElementById('b_qq').textContent = qq.toFixed(2);
-
-  const res = document.getElementById('res-b');
-  if (res) res.classList.add('show');
-
-  const bWn = document.getElementById('b_wn');
-  if (bWn) {
-    bWn.style.display = 'block';
-    bWn.innerHTML = '✅ Barras #' + diamBar + ': ' + n + ' und de ' + Ltotal.toFixed(2) + 'm c/u.';
-  }
-  toast('Barras calculadas');
-}
-</script>
-<script>
-// ========== FUNCIONES ESENCIALES DE NAVEGACIÓN ==========
+// ========== NAVEGACIÓN Y UTILIDADES ==========
 function T(modo, btn) {
   document.querySelectorAll('.pg').forEach(function(p) { p.classList.remove('on'); });
   var pagina = document.getElementById(modo);
@@ -1007,7 +885,6 @@ function T(modo, btn) {
   if (btn) btn.classList.add('on');
 }
 function $(id) { return document.getElementById(id); }
-
 function toast(msg) {
   var t = $('toast');
   if (!t) return;
@@ -1025,7 +902,6 @@ function S2(submodo, btn) {
   btn.classList.add('on');
 }
 function SA(submodo, btn) { S2(submodo, btn); }
-
 function addZ() {
   var zl = document.getElementById('zl');
   if (!zl) return;
@@ -1041,13 +917,96 @@ function addZ() {
   zl.appendChild(div);
 }
 </script>
+
 <script>
+// ========== MÓDULO ACERO (COMPLETO) ==========
+const BAR_DATA = {
+  '3': { diam: 0.953, kgm: 0.560 },
+  '4': { diam: 1.27,  kgm: 0.994 },
+  '5': { diam: 1.59,  kgm: 1.552 },
+  '6': { diam: 1.91,  kgm: 2.235 },
+  '7': { diam: 2.22,  kgm: 3.042 },
+  '8': { diam: 2.54,  kgm: 3.973 }
+};
+window.BAR_DATA = BAR_DATA;
+
+function calcEst() {
+  const ancho = parseFloat(document.getElementById('e_a').value) || 0;
+  const alto  = parseFloat(document.getElementById('e_h').value) || 0;
+  const rec   = parseFloat(document.getElementById('e_r').value);
+  const diamEst = document.getElementById('e_d').value;
+  const gancho = parseInt(document.getElementById('e_g').value);
+  if (!ancho || !alto) { toast('Ingrese ancho y alto del estribo'); return; }
+  const bar = BAR_DATA[diamEst];
+  if (!bar) { toast('Diámetro de estribo no válido'); return; }
+  const wu = ancho - 2*rec;
+  const hu = alto - 2*rec;
+  if (wu <= 0 || hu <= 0) { toast('Recubrimiento demasiado grande'); return; }
+  const colaCm = gancho * bar.diam;
+  const Lp = (2*(wu + hu)/100) + 2*(colaCm/100);
+  let Ntotal = 0;
+  document.querySelectorAll('#zl .zr').forEach(z => {
+    const cant = parseInt(z.querySelector('.zc')?.value) || 0;
+    Ntotal += cant;
+  });
+  if (Ntotal <= 0) { toast('Agregue al menos una zona con cantidad de estribos'); return; }
+  const metros = Ntotal * Lp;
+  const kg = metros * bar.kgm * 1.07;
+  const qq = kg / 45.36;
+  document.getElementById('e_lp').textContent = Lp.toFixed(3);
+  document.getElementById('e_nt').textContent = Ntotal;
+  document.getElementById('e_mt').textContent = metros.toFixed(2);
+  document.getElementById('e_kg').textContent = kg.toFixed(2);
+  document.getElementById('e_qq').textContent = qq.toFixed(2);
+  const res = document.getElementById('res-e');
+  if (res) res.classList.add('show');
+  toast('Estribos calculados');
+}
+
+function calcBar() {
+  const L = parseFloat(document.getElementById('b_l').value) || 0;
+  const n = parseInt(document.getElementById('b_n').value) || 0;
+  const diamBar = document.getElementById('b_d').value;
+  const tipoTraslape = document.getElementById('b_tt')?.value || 'a';
+  const traslapeManual = parseFloat(document.getElementById('b_tcm')?.value) || 0;
+  const ganchoTipo = document.getElementById('b_g')?.value || '12';
+  if (!L || !n) { toast('Ingrese longitud y número de barras'); return; }
+  const bar = BAR_DATA[diamBar];
+  if (!bar) { toast('Diámetro de barra no válido'); return; }
+  let ganchoM = 0;
+  if (ganchoTipo !== '0') {
+    const veces = parseInt(ganchoTipo) || 12;
+    ganchoM = (veces * bar.diam) / 100;
+  }
+  const Lbarra = L + ganchoM;
+  let traslapeM = 0;
+  const largoComercial = 9.15;
+  if (Lbarra > largoComercial) {
+    const nTraslapes = Math.ceil(Lbarra / largoComercial) - 1;
+    traslapeM = nTraslapes * (tipoTraslape === 'a' ? 40 * bar.diam / 100 : traslapeManual / 100);
+  }
+  const Ltotal = Lbarra + traslapeM;
+  const metros = Ltotal * n;
+  const kg = metros * bar.kgm * 1.07;
+  const qq = kg / 45.36;
+  document.getElementById('b_lb').textContent = Lbarra.toFixed(2);
+  document.getElementById('b_tr').textContent = traslapeM.toFixed(2);
+  document.getElementById('b_lt').textContent = Ltotal.toFixed(2);
+  document.getElementById('b_kg').textContent = kg.toFixed(2);
+  document.getElementById('b_qq').textContent = qq.toFixed(2);
+  const res = document.getElementById('res-b');
+  if (res) res.classList.add('show');
+  toast('Barras calculadas');
+}
+</script>
+
+<script>
+// ========== ESCALERA ==========
 function liveEsc() {
   const H = parseFloat(document.getElementById('E_H').value) || 0;
   const N = parseInt(document.getElementById('E_N').value) || 1;
   const huella = parseFloat(document.getElementById('E_hu').value) || 0;
-  const co = H / N;
-  document.getElementById('E_co').value = co.toFixed(1);
+  document.getElementById('E_co').value = (H/N).toFixed(1);
 }
 function calcEsc() {
   const H = parseFloat(document.getElementById('E_H').value) || 0;
@@ -1063,7 +1022,6 @@ function calcEsc() {
   document.getElementById('e_tlosa').textContent = Math.max(Math.ceil(Lincl * 100 / 20), 10);
   const res = document.getElementById('res-esc');
   if (res) res.style.display = 'block';
-  document.getElementById('esc-resultado').textContent = `L inclinada: ${Lincl.toFixed(2)} m, α: ${alpha.toFixed(1)}°`;
   toast('Escalera calculada');
 }
 </script>
