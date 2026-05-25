@@ -1006,7 +1006,6 @@ function T(modo, btn) {
   document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('on'); });
   if (btn) btn.classList.add('on');
 }
-
 function $(id) { return document.getElementById(id); }
 
 function toast(msg) {
@@ -1016,7 +1015,6 @@ function toast(msg) {
   t.classList.add('show');
   setTimeout(function() { t.classList.remove('show'); }, 2000);
 }
-
 function S2(submodo, btn) {
   var parent = btn.closest('.pg');
   if (!parent) return;
@@ -1026,7 +1024,6 @@ function S2(submodo, btn) {
   parent.querySelectorAll('.stab').forEach(function(s) { s.classList.remove('on'); });
   btn.classList.add('on');
 }
-
 function SA(submodo, btn) { S2(submodo, btn); }
 
 function addZ() {
@@ -1070,27 +1067,5 @@ function calcEsc() {
   toast('Escalera calculada');
 }
 </script>
-<div id="test-esc" style="display:none;background:#111;padding:20px;border:2px solid var(--esc);margin-top:20px">
-  <h2 style="color:var(--esc)">🪜 PRUEBA DE ESCALERA</h2>
-  <p>Si ves esto, el HTML funciona. Probando JS...</p>
-  <div class="fi"><label>ALTURA TOTAL (cm)</label><input id="E_H" type="number" min="80" step="1" placeholder="280" oninput="liveEsc()"></div>
-  <button class="btn be" onclick="calcEsc()">CALCULAR</button>
-  <p id="esc-resultado">Resultados aquí</p>
-</div>
-<script>
-  // Forzar la visibilidad del test al cargar la pestaña Escaleras
-  (function(){
-    const originalT = window.T;
-    window.T = function(modo, btn) {
-      originalT(modo, btn);
-      if (modo === 'esc') {
-        document.getElementById('test-esc').style.display = 'block';
-      } else {
-        document.getElementById('test-esc').style.display = 'none';
-      }
-    };
-  })();
-</script>
-
 </body>
 </html>
