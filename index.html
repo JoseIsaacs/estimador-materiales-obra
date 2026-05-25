@@ -606,6 +606,22 @@ tr:last-child td{border-bottom:none}
     </div><div id="ci_wn" class="wb ok" style="display:none"></div></div>
   </div>
 </div>
+<script>
+  // Parche para asegurar que el botón T/L funcione correctamente
+  (function() {
+    const btnTL = document.querySelector('#col .stab[onclick*="tl"]');
+    if (btnTL) {
+      btnTL.addEventListener('click', function(e) {
+        const parent = document.getElementById('col');
+        parent.querySelectorAll('.sp').forEach(sp => sp.classList.remove('on'));
+        const target = document.getElementById('sp-tl');
+        if (target) target.classList.add('on');
+        parent.querySelectorAll('.stab').forEach(s => s.classList.remove('on'));
+        this.classList.add('on');
+      });
+    }
+  })();
+</script>
 
 <!-- ═══ VIGA SÍSMICA ═══ -->
 <div id="vis" class="pg">
