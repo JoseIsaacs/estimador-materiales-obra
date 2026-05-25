@@ -858,7 +858,73 @@ tr:last-child td{border-bottom:none}
 <!-- ═══ RESUMEN MEJORADO ═══ -->
 <div id="res" class="pg">
   <div class="sh"><div class="si si-y">📊</div><div><h2 class="cy">RESUMEN DEL PROYECTO</h2><p>3D INTERACTIVO · MEMORIA · ACERO · ANÁLISIS</p></div></div>
-  <p style="color:var(--dim);text-align:center;padding:20px">Calcula los módulos para ver el resumen.</p>
+
+  <!-- ISO 3D MEJORADO CON DRAG -->
+  <div class="iso-outer">
+    <h4>🏗️ ESTRUCTURA 3D — ARRASTRA PARA GIRAR</h4>
+    <p class="iso-hint">👆 Touch/drag para rotar · Muestra módulos calculados</p>
+    <canvas id="isoCanvas" height="260"></canvas>
+    <div class="legend">
+      <div class="leg"><div class="leg-d" style="background:rgba(240,165,0,.9)"></div>Columna</div>
+      <div class="leg"><div class="leg-d" style="background:var(--ped)"></div>Pedestal</div>
+      <div class="leg"><div class="leg-d" style="background:rgba(90,60,0,.9)"></div>Zapata</div>
+      <div class="leg"><div class="leg-d" style="background:var(--vg)"></div>Viga sísmica</div>
+      <div class="leg"><div class="leg-d" style="background:var(--am)"></div>V. amarre</div>
+      <div class="leg"><div class="leg-d" style="background:var(--vc)"></div>V. cimen.</div>
+    </div>
+  </div>
+
+  <!-- TOTALES EJECUTIVOS -->
+  <div class="sum-section">
+    <h4>📋 MEMORIA DE CANTIDADES — RESUMEN EJECUTIVO</h4>
+    <div id="sum-exec">
+      <p style="color:var(--dim);font-size:12px;text-align:center;padding:10px">Calcula módulos para ver resumen</p>
+    </div>
+  </div>
+
+  <!-- TOTALES GLOBALES -->
+  <div class="sum-total" id="sum-totals" style="display:none">
+    <div class="st-item"><div class="v" id="st-vol">—</div><div class="l">CONCRETO TOTAL</div><div class="u">m³</div></div>
+    <div class="st-item"><div class="v" id="st-kg">—</div><div class="l">ACERO TOTAL</div><div class="u">kg</div></div>
+    <div class="st-item"><div class="v" style="font-size:24px" id="st-qq">—</div><div class="l">QUINTALES TOTAL</div><div class="u">qq</div></div>
+  </div>
+
+  <!-- DONUT ACERO -->
+  <div class="sum-section" id="donut-section" style="display:none">
+    <h4>🔩 DISTRIBUCIÓN DE ACERO POR MÓDULO</h4>
+    <div class="donut-wrap">
+      <canvas id="donutChart" width="130" height="130"></canvas>
+      <div class="donut-legend" id="donut-legend"></div>
+    </div>
+  </div>
+
+  <!-- CHART MATERIALES -->
+  <div class="cw"><h4>📈 DISTRIBUCIÓN CEMENTO · ARENA · GRAVA</h4>
+    <canvas id="matChart" height="170"></canvas></div>
+
+  <!-- TABLA ACERO CONSOLIDADA -->
+  <div class="tw" id="ta-wrap" style="display:none">
+    <table><caption>RESUMEN — ACERO DE REFUERZO POR MÓDULO</caption>
+      <thead><tr><th>MÓDULO</th><th>kg acero</th><th>qq (c/7%)</th><th>TIPO</th></tr></thead>
+      <tbody id="ta-body"></tbody>
+      <tfoot id="ta-foot" style="display:none">
+        <tr style="background:rgba(240,165,0,.07)">
+          <td class="tl">TOTAL ACERO</td>
+          <td class="tt" id="ta-kg-tot">—</td>
+          <td class="tt" id="ta-qq-tot">—</td>
+          <td>—</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <!-- CONCLUSIONES -->
+  <div class="concl"><h4>🔍 CONCLUSIONES Y RECOMENDACIONES — ACI 318 / REP/SPIA</h4>
+    <div id="concl-items"><div class="ci"><div class="cd"></div>
+      <p style="color:var(--dim)">Calcula módulos para generar conclusiones.</p></div></div></div>
+  <div class="div"></div>
+  <button class="bpdf" onclick="exportPDF()">📄 EXPORTAR REPORTE COMPLETO PDF</button>
+  <br><br>
 </div>
 <div class="toast" id="toast">✅ OK</div>
 
