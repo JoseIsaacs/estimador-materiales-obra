@@ -622,6 +622,22 @@ tr:last-child td{border-bottom:none}
     }
   })();
 </script>
+<script>
+  // Parche para asegurar que el botón Cilíndrica funcione correctamente
+  (function() {
+    const btnCi = document.querySelector('#col .stab[onclick*="ci"]');
+    if (btnCi) {
+      btnCi.addEventListener('click', function(e) {
+        const parent = document.getElementById('col');
+        parent.querySelectorAll('.sp').forEach(sp => sp.classList.remove('on'));
+        const target = document.getElementById('sp-ci');
+        if (target) target.classList.add('on');
+        parent.querySelectorAll('.stab').forEach(s => s.classList.remove('on'));
+        this.classList.add('on');
+      });
+    }
+  })();
+</script>
 
 <!-- ═══ VIGA SÍSMICA ═══ -->
 <div id="vis" class="pg">
