@@ -797,7 +797,7 @@ tr:last-child td{border-bottom:none}
 <div style="clear:both;display:block !important;width:100%"></div>
 
 <!-- ═══ ESCALERA ═══ -->
-<<div style="clear:both;display:block !important;width:100%">
+<div style="clear:both;display:block !important;width:100%">
   <div id="esc" class="pg" style="display:block !important">
     <div class="sh"><div class="si si-e">🪜</div><div><h2 class="ce">ESCALERA — LOSA INCLINADA</h2><p>SECCIÓN LONGITUDINAL · ACERO · DIAGRAMA</p></div></div>
     <div class="chip chip-e">🪜 ACI 318 · COPANIT · ES09 Ganchos 90°/135°</div>
@@ -880,7 +880,7 @@ tr:last-child td{border-bottom:none}
 <script src="js/vigas_amarre.js"></script>
 <script src="js/columnas.js"></script>
 <script src="js/pedestales.js"></script>
-<!-- <script src="js/escaleras.js"></script> -->)
+<!-- <script src="js/escaleras.js"></script> -->
 <script src="js/resumen.js"></script>
 <script>
 // ========== MÓDULO ACERO (INCRUSTADO) ==========
@@ -988,7 +988,7 @@ function calcBar() {
 
   const res = document.getElementById('res-b');
   if (res) res.classList.add('show');
-  
+
   const bWn = document.getElementById('b_wn');
   if (bWn) {
     bWn.style.display = 'block';
@@ -1042,6 +1042,32 @@ function addZ() {
     '<span class="zl">cm</span>' +
     '<button class="bdel" onclick="this.parentElement.remove()">×</button>';
   zl.appendChild(div);
+}
+</script>
+<script>
+function liveEsc() {
+  const H = parseFloat(document.getElementById('E_H').value) || 0;
+  const N = parseInt(document.getElementById('E_N').value) || 1;
+  const huella = parseFloat(document.getElementById('E_hu').value) || 0;
+  const co = H / N;
+  document.getElementById('E_co').value = co.toFixed(1);
+}
+function calcEsc() {
+  const H = parseFloat(document.getElementById('E_H').value) || 0;
+  const N = parseInt(document.getElementById('E_N').value) || 1;
+  const huella = parseFloat(document.getElementById('E_hu').value) || 0;
+  const ancho = parseFloat(document.getElementById('E_an')?.value) || 120;
+  if (!H || !N || !huella) { toast('Complete los datos'); return; }
+  const Lh = N * huella / 100;
+  const Lincl = Math.sqrt(Math.pow(H/100, 2) + Math.pow(Lh, 2));
+  const alpha = Math.atan2(H/100, Lh) * 180 / Math.PI;
+  document.getElementById('e_incl').textContent = Lincl.toFixed(2);
+  document.getElementById('e_alpha').textContent = alpha.toFixed(1);
+  document.getElementById('e_tlosa').textContent = Math.max(Math.ceil(Lincl * 100 / 20), 10);
+  const res = document.getElementById('res-esc');
+  if (res) res.style.display = 'block';
+  document.getElementById('esc-resultado').textContent = `L inclinada: ${Lincl.toFixed(2)} m, α: ${alpha.toFixed(1)}°`;
+  toast('Escalera calculada');
 }
 </script>
 <div id="test-esc" style="display:none;background:#111;padding:20px;border:2px solid var(--esc);margin-top:20px">
