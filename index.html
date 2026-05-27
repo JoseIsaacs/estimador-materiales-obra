@@ -1149,33 +1149,27 @@ function calcEsc() {
   const alpha = Math.atan2(H/100, Lh) * 180 / Math.PI;
   const t = Math.max(Math.ceil(Lincl * 100 / 20), 10);
 
-  // Refuerzo longitudinal inferior
   const sepLong = 15;
   const nbLong = Math.floor((ancho - 5) / sepLong) + 1;
   const LbarraLong = Lincl + 2 * 12 * bl.diam / 100;
   const kgLong = nbLong * LbarraLong * bl.kgm * 1.07;
 
-  // Refuerzo transversal
   const sepTransv = 20;
   const nbTransv = Math.ceil(Lincl * 100 / sepTransv) + 1;
   const LbarraTransv = (ancho / 100) + 2 * 6 * bt.diam / 100;
   const kgTransv = nbTransv * LbarraTransv * bt.kgm * 1.07;
 
-  // Barras superiores (ES09 simplificado)
   const kgSuperior = (nbLong * Lincl * bl.kgm) * 0.15;
-  // ES09 ganchos especiales
   const kgES09 = (kgLong + kgTransv) * 0.05;
   const kgTotal = kgLong + kgTransv + kgSuperior + kgES09;
   const qqTotal = kgTotal / 45.36;
 
-  // Concreto
   const vol = t/100 * ancho/100 * Lincl;
   const cemento = (vol * 7).toFixed(1);
   const arena = (vol * 0.53).toFixed(2);
   const grava = (vol * 0.72).toFixed(2);
   const agua = Math.round(vol * 185);
 
-  // Resultados geométricos
   document.getElementById('e_incl').textContent = Lincl.toFixed(2);
   document.getElementById('e_alpha').textContent = alpha.toFixed(1);
   document.getElementById('e_tlosa').textContent = t;
@@ -1183,7 +1177,6 @@ function calcEsc() {
   const res = document.getElementById('res-esc');
   if (res) res.style.display = 'block';
 
-  // Llenar tabla de acero
   const tbl = document.getElementById('esc_tbl');
   if (tbl) {
     tbl.innerHTML = `
@@ -1199,7 +1192,6 @@ function calcEsc() {
     document.getElementById('et_m').textContent = (nbLong*LbarraLong + nbTransv*LbarraTransv).toFixed(2);
   }
 
-  // Resumen de concreto
   const escSum = document.getElementById('esc_sum');
   if (escSum) {
     escSum.innerHTML = `
@@ -1213,12 +1205,40 @@ function calcEsc() {
     `;
   }
 
-  // Advertencias
   const escWn = document.getElementById('esc_wn');
   if (escWn) {
     escWn.style.display = 'block';
     escWn.innerHTML = `✅ Escalera: ${N} escalones de huella=${huella}cm, contrahuella=${co.toFixed(1)}cm. t losa=${t}cm.`;
   }
+
+  // --- DIAGRAMA (versión con diagnóstico) ---
+  const canvas = document.getElementById('diagCanvas');
+  if (!canvas) {
+    alert('No se encontró el canvas diagCanvas');
+    return;
+  }
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    alert('No se pudo obtener contexto 2d');
+    return;
+  }
+
+  // Forzar tamaño fijo
+  canvas.width = 320;
+  canvas.height = 220;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Prueba: rectángulo de fondo
+  ctx.fillStyle = '#ff0';
+  ctx.fillRect(10, 10, 100, 50); // debería verse un rectángulo amarillo
+  ctx.fillStyle = '#fff';
+  ctx.font = '12px sans-serif';
+  ctx.fillText('Prueba de canvas', 10, 80);
+
+  // Si lo ves, entonces la prueba funciona y procedemos con el dibujo real
+  // (puedes comentar las líneas de prueba después de comprobar)
+  // ... (deja el resto del código de dibujo anterior después de la prueba)
+}
 
   // ======== DIAGRAMA MEJORADO ========
   const canvas = document.getElementById('diagCanvas');
