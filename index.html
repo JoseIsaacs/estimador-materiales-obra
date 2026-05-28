@@ -1765,33 +1765,41 @@ if (canvas) {
     // ── INICIALIZACIÓN ────────────────────────────────
   let canvas3DIniciado = false; // bandera para evitar reinicios innecesarios
 
-  function iniciar3DConRetraso(intentos) {
-    if (canvas3DIniciado) return;
+    // ── INICIALIZACIÓN CORREGIDA ──────────────────────
+  function inicializar3DConRetraso(intentos) {
     const canvas = document.getElementById('isoCanvas');
     if (!canvas) return;
     
-    // Si el canvas tiene dimensiones 0, esperamos un poco más
-    if (canvas.clientWidth === 0 && intentos < 5) {
-      setTimeout(() => iniciar3DConRetraso(intentos + 1), 150);
-      return;
-    }
+    // Forzar dimensiones y visibilidad
+    canvas.style.display = 'block';
+    canvas.width = canvas.clientWidth || 340;
+    canvas.height = 260;
     
-    canvas3DIniciado = true;
-    iniciar3D();
+    if (canvas.clientWidth > 0) {
+      iniciar3D(); // llamada a la función que ya existe
+    } else if (intentos < 5) {
+      setTimeout(() => inicializar3DConRetraso(intentos + 1), 200);
+    }
   }
 
   window.addEventListener('load', () => {
     actualizar();
-    iniciar3DConRetraso(0);
+    inicializar3DConRetraso(0);
   });
 
-  // También dibujar cuando se muestre el resumen
   const tabRes = document.querySelector('.tab[onclick*="res"]');
   if (tabRes) {
     tabRes.addEventListener('click', () => {
-      canvas3DIniciado = false; // permitir reinicio al cambiar de pestaña
       actualizar();
-      setTimeout(() => iniciar3DConRetraso(0), 300); // dar tiempo a que el DOM se pinte
+      // Reiniciar el canvas al volver a la pestaña
+      setTimeout(() => {
+        const canvas = document.getElementById('isoCanvas');
+        if (canvas) {
+          canvas.width = canvas.clientWidth || 340; // forzar reinicio
+          canvas.height = 260;
+        }
+        inicializar3DConRetraso(0);
+      }, 300);
     });
   }
 })();
