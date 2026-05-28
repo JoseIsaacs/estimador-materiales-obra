@@ -1762,20 +1762,36 @@ if (canvas) {
     toast('Planilla de escalera exportada');
   };
 
-  // ── INICIALIZACIÓN ────────────────────────────────
+    // ── INICIALIZACIÓN ────────────────────────────────
+  let canvas3DIniciado = false; // bandera para evitar reinicios innecesarios
+
+  function iniciar3DConRetraso(intentos) {
+    if (canvas3DIniciado) return;
+    const canvas = document.getElementById('isoCanvas');
+    if (!canvas) return;
+    
+    // Si el canvas tiene dimensiones 0, esperamos un poco más
+    if (canvas.clientWidth === 0 && intentos < 5) {
+      setTimeout(() => iniciar3DConRetraso(intentos + 1), 150);
+      return;
+    }
+    
+    canvas3DIniciado = true;
+    iniciar3D();
+  }
+
   window.addEventListener('load', () => {
     actualizar();
-    iniciar3D();
+    iniciar3DConRetraso(0);
   });
 
   // También dibujar cuando se muestre el resumen
   const tabRes = document.querySelector('.tab[onclick*="res"]');
   if (tabRes) {
     tabRes.addEventListener('click', () => {
-      setTimeout(() => {
-        iniciar3D();
-        actualizar();
-      }, 200);
+      canvas3DIniciado = false; // permitir reinicio al cambiar de pestaña
+      actualizar();
+      setTimeout(() => iniciar3DConRetraso(0), 300); // dar tiempo a que el DOM se pinte
     });
   }
 })();
