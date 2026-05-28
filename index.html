@@ -1382,9 +1382,7 @@ if (canvas) {
     mods.push({
       nombre: 'V.Cimen.',
       color: '#06b6d4',
-      vol: getNum('vc_vol') || 0,
-      cem: getNum('vc_cem') || 0,
-      arena: 0, grava: 0, agua: 0,
+      vol: 0, cem: 0, arena: 0, grava: 0, agua: 0,
       kg: vcKg, qq: vcQQ
     });
 
@@ -1620,115 +1618,114 @@ if (canvas) {
 
   // ── CANVAS 3D INTERACTIVO ──────────────────────────
   function iniciar3D() {
-  const canvas = document.getElementById('isoCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  let ang = 0.5, lastX = 0, lastY = 0;
-  canvas.width = canvas.clientWidth || 340;
-  canvas.height = 260;
+    const canvas = document.getElementById('isoCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let ang = 0.5, lastX = 0, lastY = 0;
+    canvas.width = canvas.clientWidth || 340;
+    canvas.height = 260;
 
-  function dibujar() {
-    const w = canvas.width, h = canvas.height;
-    ctx.clearRect(0, 0, w, h);
-    const cx = w/2, cy = h/1.8;
-    const escala = 35;
-    const cos = Math.cos(ang), sin = Math.sin(ang);
+    function dibujar() {
+      const w = canvas.width, h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+      const cx = w/2, cy = h/1.8;
+      const escala = 35;
+      const cos = Math.cos(ang), sin = Math.sin(ang);
 
-    function proy(x, y, z) {
-      const xp = (x - y) * cos * escala + cx;
-      const yp = (x + y) * sin * escala * 0.7 - z * escala * 0.9 + cy;
-      return { x: xp, y: yp };
-    }
+      function proy(x, y, z) {
+        const xp = (x - y) * cos * escala + cx;
+        const yp = (x + y) * sin * escala * 0.7 - z * escala * 0.9 + cy;
+        return { x: xp, y: yp };
+      }
 
-    // Cuadrícula base
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-    ctx.lineWidth = 0.5;
-    for (let i = -2; i <= 2; i++) {
-      ctx.beginPath();
-      const p1 = proj(i, -2, 0);
-      const p2 = proj(i, 2, 0);
-      ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-      const p3 = proj(-2, i, 0);
-      const p4 = proj(2, i, 0);
-      ctx.moveTo(p3.x, p3.y); ctx.lineTo(p4.x, p4.y); ctx.stroke();
-    }
-
-    // Parámetros estructurales (valores representativos)
-    const numCols = 4;
-    const colH = 3.0;
-    const pedestalH = 0.6;
-    const zapataH = 0.3;
-
-    // Zapatas
-    for (let ix = -1; ix <= 1; ix+=2) {
-      for (let iy = -1; iy <= 1; iy+=2) {
-        const base = proj(ix*0.9, iy*0.9, 0);
-        const top = proj(ix*0.9, iy*0.9, zapataH);
-        ctx.fillStyle = 'rgba(251,191,36,0.4)';
+      // Cuadrícula base
+      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+      ctx.lineWidth = 0.5;
+      for (let i = -2; i <= 2; i++) {
         ctx.beginPath();
-        ctx.moveTo(base.x, base.y);
-        ctx.lineTo(proj(ix*0.9+0.15, iy*0.9, 0).x, proj(ix*0.9+0.15, iy*0.9, 0).y);
-        ctx.lineTo(proj(ix*0.9+0.15, iy*0.9, zapataH).x, proj(ix*0.9+0.15, iy*0.9, zapataH).y);
-        ctx.lineTo(top.x, top.y);
-        ctx.closePath();
-        ctx.fill();
+        const p1 = proj(i, -2, 0);
+        const p2 = proj(i, 2, 0);
+        ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+        const p3 = proj(-2, i, 0);
+        const p4 = proj(2, i, 0);
+        ctx.moveTo(p3.x, p3.y); ctx.lineTo(p4.x, p4.y); ctx.stroke();
+      }
+
+      const numCols = 4;
+      const colH = 3.0;
+      const pedestalH = 0.6;
+      const zapataH = 0.3;
+
+      // Zapatas
+      for (let ix = -1; ix <= 1; ix+=2) {
+        for (let iy = -1; iy <= 1; iy+=2) {
+          const base = proj(ix*0.9, iy*0.9, 0);
+          const top = proj(ix*0.9, iy*0.9, zapataH);
+          ctx.fillStyle = 'rgba(251,191,36,0.4)';
+          ctx.beginPath();
+          ctx.moveTo(base.x, base.y);
+          ctx.lineTo(proj(ix*0.9+0.15, iy*0.9, 0).x, proj(ix*0.9+0.15, iy*0.9, 0).y);
+          ctx.lineTo(proj(ix*0.9+0.15, iy*0.9, zapataH).x, proj(ix*0.9+0.15, iy*0.9, zapataH).y);
+          ctx.lineTo(top.x, top.y);
+          ctx.closePath();
+          ctx.fill();
+        }
+      }
+
+      // Pedestales
+      for (let ix = -1; ix <= 1; ix+=2) {
+        for (let iy = -1; iy <= 1; iy+=2) {
+          const base = proj(ix*0.8, iy*0.8, zapataH);
+          const top = proj(ix*0.8, iy*0.8, zapataH + pedestalH);
+          ctx.strokeStyle = '#fb923c';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath(); ctx.moveTo(base.x, base.y); ctx.lineTo(top.x, top.y); ctx.stroke();
+        }
+      }
+
+      // Columnas
+      for (let ix = -1; ix <= 1; ix+=2) {
+        for (let iy = -1; iy <= 1; iy+=2) {
+          const base = proj(ix*0.75, iy*0.75, zapataH + pedestalH);
+          const top = proj(ix*0.75, iy*0.75, zapataH + pedestalH + colH);
+          ctx.strokeStyle = '#f0a500';
+          ctx.lineWidth = 4;
+          ctx.beginPath(); ctx.moveTo(base.x, base.y); ctx.lineTo(top.x, top.y); ctx.stroke();
+        }
+      }
+
+      // Vigas sísmicas (superior)
+      const vigaZ = zapataH + pedestalH + colH;
+      ctx.strokeStyle = '#a78bfa';
+      ctx.lineWidth = 2.5;
+      const esquinas = [[-1,-1],[1,-1],[1,1],[-1,1]];
+      for (let i=0; i<4; i++) {
+        const p1 = proj(esquinas[i][0]*0.75, esquinas[i][1]*0.75, vigaZ);
+        const p2 = proj(esquinas[(i+1)%4][0]*0.75, esquinas[(i+1)%4][1]*0.75, vigaZ);
+        ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+      }
+
+      // Vigas de amarre (media altura)
+      const amarreZ = zapataH + pedestalH + colH * 0.5;
+      ctx.strokeStyle = '#34d399';
+      ctx.lineWidth = 2;
+      for (let i=0; i<4; i++) {
+        const p1 = proj(esquinas[i][0]*0.75, esquinas[i][1]*0.75, amarreZ);
+        const p2 = proj(esquinas[(i+1)%4][0]*0.75, esquinas[(i+1)%4][1]*0.75, amarreZ);
+        ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
       }
     }
 
-    // Pedestales
-    for (let ix = -1; ix <= 1; ix+=2) {
-      for (let iy = -1; iy <= 1; iy+=2) {
-        const base = proj(ix*0.8, iy*0.8, zapataH);
-        const top = proj(ix*0.8, iy*0.8, zapataH + pedestalH);
-        ctx.strokeStyle = '#fb923c';
-        ctx.lineWidth = 2.5;
-        ctx.beginPath(); ctx.moveTo(base.x, base.y); ctx.lineTo(top.x, top.y); ctx.stroke();
-      }
-    }
-
-    // Columnas
-    for (let ix = -1; ix <= 1; ix+=2) {
-      for (let iy = -1; iy <= 1; iy+=2) {
-        const base = proj(ix*0.75, iy*0.75, zapataH + pedestalH);
-        const top = proj(ix*0.75, iy*0.75, zapataH + pedestalH + colH);
-        ctx.strokeStyle = '#f0a500';
-        ctx.lineWidth = 4;
-        ctx.beginPath(); ctx.moveTo(base.x, base.y); ctx.lineTo(top.x, top.y); ctx.stroke();
-      }
-    }
-
-    // Vigas sísmicas (superior)
-    const vigaZ = zapataH + pedestalH + colH;
-    ctx.strokeStyle = '#a78bfa';
-    ctx.lineWidth = 2.5;
-    const esquinas = [[-1,-1],[1,-1],[1,1],[-1,1]];
-    for (let i=0; i<4; i++) {
-      const p1 = proj(esquinas[i][0]*0.75, esquinas[i][1]*0.75, vigaZ);
-      const p2 = proj(esquinas[(i+1)%4][0]*0.75, esquinas[(i+1)%4][1]*0.75, vigaZ);
-      ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-    }
-
-    // Vigas de amarre (media altura)
-    const amarreZ = zapataH + pedestalH + colH * 0.5;
-    ctx.strokeStyle = '#34d399';
-    ctx.lineWidth = 2;
-    for (let i=0; i<4; i++) {
-      const p1 = proj(esquinas[i][0]*0.75, esquinas[i][1]*0.75, amarreZ);
-      const p2 = proj(esquinas[(i+1)%4][0]*0.75, esquinas[(i+1)%4][1]*0.75, amarreZ);
-      ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-    }
+    // Eventos de arrastre
+    let dragging = false;
+    canvas.addEventListener('touchstart', e => { e.preventDefault(); dragging = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; });
+    canvas.addEventListener('touchmove', e => { if (!dragging) return; const dx = e.touches[0].clientX - lastX; const dy = e.touches[0].clientY - lastY; ang += dx * 0.01; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; dibujar(); });
+    canvas.addEventListener('touchend', () => dragging = false);
+    canvas.addEventListener('mousedown', e => { dragging = true; lastX = e.clientX; lastY = e.clientY; });
+    canvas.addEventListener('mousemove', e => { if (!dragging) return; const dx = e.clientX - lastX; const dy = e.clientY - lastY; ang += dx * 0.01; lastX = e.clientX; lastY = e.clientY; dibujar(); });
+    canvas.addEventListener('mouseup', () => dragging = false);
+    dibujar();
   }
-
-  // Eventos de arrastre
-  let dragging = false;
-  canvas.addEventListener('touchstart', e => { e.preventDefault(); dragging = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; });
-  canvas.addEventListener('touchmove', e => { if (!dragging) return; const dx = e.touches[0].clientX - lastX; const dy = e.touches[0].clientY - lastY; ang += dx * 0.01; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; dibujar(); });
-  canvas.addEventListener('touchend', () => dragging = false);
-  canvas.addEventListener('mousedown', e => { dragging = true; lastX = e.clientX; lastY = e.clientY; });
-  canvas.addEventListener('mousemove', e => { if (!dragging) return; const dx = e.clientX - lastX; const dy = e.clientY - lastY; ang += dx * 0.01; lastX = e.clientX; lastY = e.clientY; dibujar(); });
-  canvas.addEventListener('mouseup', () => dragging = false);
-  dibujar();
-}
 
   // ── EXPORTACIONES PDF ──────────────────────────────
   window.exportPDF = function() {
@@ -1771,10 +1768,14 @@ if (canvas) {
     iniciar3D();
   });
 
-  const tabResumen = document.querySelector('.tab[onclick*="res"]');
-  if (tabResumen) {
-    tabResumen.addEventListener('click', () => {
-      setTimeout(actualizar, 100);
+  // También dibujar cuando se muestre el resumen
+  const tabRes = document.querySelector('.tab[onclick*="res"]');
+  if (tabRes) {
+    tabRes.addEventListener('click', () => {
+      setTimeout(() => {
+        iniciar3D();
+        actualizar();
+      }, 200);
     });
   }
 })();
