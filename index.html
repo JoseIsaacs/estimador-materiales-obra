@@ -1637,5 +1637,10 @@ function iniciar3D() {
   }
 })();
 </script>
+<script>
+  // Desactivar funciones viejas del canvas para que no interfieran con Three.js
+  window.iniciar3D = function(){};
+  window.inicializar3DConRetraso = function(){};
+</script>
 </body>
 </html>
