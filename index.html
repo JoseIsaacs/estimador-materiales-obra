@@ -1471,15 +1471,6 @@ if (canvas) {
     canvas.width = canvas.clientWidth || 340;
     canvas.height = 260;
 
-    function dibujar() {
-      const w = canvas.width, h = canvas.height;
-      ctx.clearRect(0, 0, w, h);
-
-      // ---- PRUEBA DE DIAGNÓSTICO (quitar después de verificar) ----
-      ctx.fillStyle = '#ff0';
-      ctx.fillRect(10, 10, 40, 40); // rectángulo amarillo
-      // -----------------------------------------------------------
-
       const cx = w/2, cy = h/1.8, escala = 35;
       const cos = Math.cos(ang), sin = Math.sin(ang);
       function proy(x, y, z) {
