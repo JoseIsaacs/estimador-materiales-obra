@@ -1463,77 +1463,81 @@ if (canvas) {
   }
 
   // ── CANVAS 3D INTERACTIVO ──────────────────────────
-  function iniciar3D() {
-    const canvas = document.getElementById('isoCanvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let ang = 0.5, lastX = 0, lastY = 0;
-    canvas.width = canvas.clientWidth || 340;
-    canvas.height = 260;
+function iniciar3D() {
+  const canvas = document.getElementById('isoCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let ang = 0.5, lastX = 0, lastY = 0;
+  canvas.width = canvas.clientWidth || 340;
+  canvas.height = 260;
 
-      const cx = w/2, cy = h/1.8, escala = 35;
-      const cos = Math.cos(ang), sin = Math.sin(ang);
-      function proy(x, y, z) {
-        return { x: (x - y) * cos * escala + cx, y: (x + y) * sin * escala * 0.7 - z * escala * 0.9 + cy };
-      }
+  function dibujar() {
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
 
-      // Cuadrícula
-      ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 0.5;
-      for (let i = -2; i <= 2; i++) {
-        ctx.beginPath(); ctx.moveTo(proj(i,-2,0).x, proj(i,-2,0).y); ctx.lineTo(proj(i,2,0).x, proj(i,2,0).y); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(proj(-2,i,0).x, proj(-2,i,0).y); ctx.lineTo(proj(2,i,0).x, proj(2,i,0).y); ctx.stroke();
-      }
-
-      const colH = 3.0, pedestalH = 0.6, zapataH = 0.3;
-      // Zapatas
-      for (let ix = -1; ix <= 1; ix+=2) for (let iy = -1; iy <= 1; iy+=2) {
-        ctx.fillStyle = 'rgba(251,191,36,0.4)';
-        ctx.beginPath(); ctx.moveTo(proj(ix*0.9, iy*0.9, 0).x, proj(ix*0.9, iy*0.9, 0).y);
-        ctx.lineTo(proj(ix*0.9+0.15, iy*0.9, 0).x, proj(ix*0.9+0.15, iy*0.9, 0).y);
-        ctx.lineTo(proj(ix*0.9+0.15, iy*0.9, zapataH).x, proj(ix*0.9+0.15, iy*0.9, zapataH).y);
-        ctx.lineTo(proj(ix*0.9, iy*0.9, zapataH).x, proj(ix*0.9, iy*0.9, zapataH).y);
-        ctx.closePath(); ctx.fill();
-      }
-      // Pedestales
-      for (let ix = -1; ix <= 1; ix+=2) for (let iy = -1; iy <= 1; iy+=2) {
-        ctx.strokeStyle = '#fb923c'; ctx.lineWidth = 2.5;
-        const base = proj(ix*0.8, iy*0.8, zapataH), top = proj(ix*0.8, iy*0.8, zapataH + pedestalH);
-        ctx.beginPath(); ctx.moveTo(base.x, base.y); ctx.lineTo(top.x, top.y); ctx.stroke();
-      }
-      // Columnas
-      for (let ix = -1; ix <= 1; ix+=2) for (let iy = -1; iy <= 1; iy+=2) {
-        ctx.strokeStyle = '#f0a500'; ctx.lineWidth = 4;
-        const base = proj(ix*0.75, iy*0.75, zapataH + pedestalH), top = proj(ix*0.75, iy*0.75, zapataH + pedestalH + colH);
-        ctx.beginPath(); ctx.moveTo(base.x, base.y); ctx.lineTo(top.x, top.y); ctx.stroke();
-      }
-      // Vigas sísmicas
-      const vigaZ = zapataH + pedestalH + colH;
-      const esquinas = [[-1,-1],[1,-1],[1,1],[-1,1]];
-      ctx.strokeStyle = '#a78bfa'; ctx.lineWidth = 2.5;
-      for (let i=0; i<4; i++) {
-        const p1 = proj(esquinas[i][0]*0.75, esquinas[i][1]*0.75, vigaZ);
-        const p2 = proj(esquinas[(i+1)%4][0]*0.75, esquinas[(i+1)%4][1]*0.75, vigaZ);
-        ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-      }
-      // Vigas de amarre
-      const amarreZ = zapataH + pedestalH + colH * 0.5;
-      ctx.strokeStyle = '#34d399'; ctx.lineWidth = 2;
-      for (let i=0; i<4; i++) {
-        const p1 = proj(esquinas[i][0]*0.75, esquinas[i][1]*0.75, amarreZ);
-        const p2 = proj(esquinas[(i+1)%4][0]*0.75, esquinas[(i+1)%4][1]*0.75, amarreZ);
-        ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-      }
+    const cx = w/2, cy = h/1.8, escala = 35;
+    const cos = Math.cos(ang), sin = Math.sin(ang);
+    function proy(x, y, z) {
+      return { x: (x - y) * cos * escala + cx, y: (x + y) * sin * escala * 0.7 - z * escala * 0.9 + cy };
     }
 
-    let dragging = false;
-    canvas.addEventListener('touchstart', e => { e.preventDefault(); dragging = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; });
-    canvas.addEventListener('touchmove', e => { if (!dragging) return; ang += (e.touches[0].clientX - lastX) * 0.01; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; dibujar(); });
-    canvas.addEventListener('touchend', () => dragging = false);
-    canvas.addEventListener('mousedown', e => { dragging = true; lastX = e.clientX; lastY = e.clientY; });
-    canvas.addEventListener('mousemove', e => { if (!dragging) return; ang += (e.clientX - lastX) * 0.01; lastX = e.clientX; lastY = e.clientY; dibujar(); });
-    canvas.addEventListener('mouseup', () => dragging = false);
-    dibujar();
+    // Cuadrícula
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 0.5;
+    for (let i = -2; i <= 2; i++) {
+      ctx.beginPath(); ctx.moveTo(proj(i,-2,0).x, proj(i,-2,0).y); ctx.lineTo(proj(i,2,0).x, proj(i,2,0).y); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(proj(-2,i,0).x, proj(-2,i,0).y); ctx.lineTo(proj(2,i,0).x, proj(2,i,0).y); ctx.stroke();
+    }
+
+    const colH = 3.0, pedestalH = 0.6, zapataH = 0.3;
+    // Zapatas
+    for (let ix = -1; ix <= 1; ix+=2) for (let iy = -1; iy <= 1; iy+=2) {
+      ctx.fillStyle = 'rgba(251,191,36,0.4)';
+      ctx.beginPath(); ctx.moveTo(proj(ix*0.9, iy*0.9, 0).x, proj(ix*0.9, iy*0.9, 0).y);
+      ctx.lineTo(proj(ix*0.9+0.15, iy*0.9, 0).x, proj(ix*0.9+0.15, iy*0.9, 0).y);
+      ctx.lineTo(proj(ix*0.9+0.15, iy*0.9, zapataH).x, proj(ix*0.9+0.15, iy*0.9, zapataH).y);
+      ctx.lineTo(proj(ix*0.9, iy*0.9, zapataH).x, proj(ix*0.9, iy*0.9, zapataH).y);
+      ctx.closePath(); ctx.fill();
+    }
+    // Pedestales
+    for (let ix = -1; ix <= 1; ix+=2) for (let iy = -1; iy <= 1; iy+=2) {
+      ctx.strokeStyle = '#fb923c'; ctx.lineWidth = 2.5;
+      const base = proj(ix*0.8, iy*0.8, zapataH), top = proj(ix*0.8, iy*0.8, zapataH + pedestalH);
+      ctx.beginPath(); ctx.moveTo(base.x, base.y); ctx.lineTo(top.x, top.y); ctx.stroke();
+    }
+    // Columnas
+    for (let ix = -1; ix <= 1; ix+=2) for (let iy = -1; iy <= 1; iy+=2) {
+      ctx.strokeStyle = '#f0a500'; ctx.lineWidth = 4;
+      const base = proj(ix*0.75, iy*0.75, zapataH + pedestalH), top = proj(ix*0.75, iy*0.75, zapataH + pedestalH + colH);
+      ctx.beginPath(); ctx.moveTo(base.x, base.y); ctx.lineTo(top.x, top.y); ctx.stroke();
+    }
+    // Vigas sísmicas
+    const vigaZ = zapataH + pedestalH + colH;
+    const esquinas = [[-1,-1],[1,-1],[1,1],[-1,1]];
+    ctx.strokeStyle = '#a78bfa'; ctx.lineWidth = 2.5;
+    for (let i=0; i<4; i++) {
+      const p1 = proj(esquinas[i][0]*0.75, esquinas[i][1]*0.75, vigaZ);
+      const p2 = proj(esquinas[(i+1)%4][0]*0.75, esquinas[(i+1)%4][1]*0.75, vigaZ);
+      ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+    }
+    // Vigas de amarre
+    const amarreZ = zapataH + pedestalH + colH * 0.5;
+    ctx.strokeStyle = '#34d399'; ctx.lineWidth = 2;
+    for (let i=0; i<4; i++) {
+      const p1 = proj(esquinas[i][0]*0.75, esquinas[i][1]*0.75, amarreZ);
+      const p2 = proj(esquinas[(i+1)%4][0]*0.75, esquinas[(i+1)%4][1]*0.75, amarreZ);
+      ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+    }
   }
+
+  let dragging = false;
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); dragging = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; });
+  canvas.addEventListener('touchmove', e => { if (!dragging) return; ang += (e.touches[0].clientX - lastX) * 0.01; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; dibujar(); });
+  canvas.addEventListener('touchend', () => dragging = false);
+  canvas.addEventListener('mousedown', e => { dragging = true; lastX = e.clientX; lastY = e.clientY; });
+  canvas.addEventListener('mousemove', e => { if (!dragging) return; ang += (e.clientX - lastX) * 0.01; lastX = e.clientX; lastY = e.clientY; dibujar(); });
+  canvas.addEventListener('mouseup', () => dragging = false);
+  dibujar();
+}
 
   window.exportPDF = function() {
     if (!window.jspdf || !window.jspdf.jsPDF) { toast('Librería PDF no disponible'); return; }
