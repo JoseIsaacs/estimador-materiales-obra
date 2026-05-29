@@ -1298,7 +1298,7 @@ if (canvas) {
 }
 </script>
 <script>
-// ========== RESUMEN COMPLETO ==========
+// ========== RESUMEN COMPLETO (CORREGIDO) ==========
 (function() {
   // ── RECOLECCIÓN DE DATOS ────────────────────────────
   function getNum(id) {
@@ -1310,40 +1310,10 @@ if (canvas) {
 
   function recolectar() {
     const mods = [];
+    mods.push({ nombre: 'Concreto', color: '#f0a500', vol: getNum('cv'), cem: getNum('cc'), arena: getNum('ca'), grava: getNum('cg'), agua: getNum('cw'), kg: 0, qq: 0 });
+    mods.push({ nombre: 'Muros', color: '#fbbf24', vol: 0, cem: getNum('mc'), arena: getNum('ma'), grava: 0, agua: getNum('mw'), kg: 0, qq: 0 });
+    mods.push({ nombre: 'Pisos', color: '#34d399', vol: 0, cem: 0, arena: 0, grava: 0, agua: 0, kg: 0, qq: 0 });
 
-    // Concreto
-    mods.push({
-      nombre: 'Concreto',
-      color: '#f0a500',
-      vol: getNum('cv'),
-      cem: getNum('cc'),
-      arena: getNum('ca'),
-      grava: getNum('cg'),
-      agua: getNum('cw'),
-      kg: 0, qq: 0
-    });
-
-    // Muros
-    mods.push({
-      nombre: 'Muros',
-      color: '#fbbf24',
-      vol: 0,
-      cem: getNum('mc'),
-      arena: getNum('ma'),
-      grava: 0,
-      agua: getNum('mw'),
-      kg: 0, qq: 0
-    });
-
-    // Pisos
-    mods.push({
-      nombre: 'Pisos',
-      color: '#34d399',
-      vol: 0, cem: 0, arena: 0, grava: 0, agua: 0,
-      kg: 0, qq: 0
-    });
-
-    // Zapatas – leer de la tabla de desarrollo
     let zapKg = 0, zapQQ = 0, zapVol = 0, zapCem = 0, zapArena = 0, zapGrava = 0, zapAgua = 0;
     const zSum = document.getElementById('z_sum');
     if (zSum) {
@@ -1358,35 +1328,18 @@ if (canvas) {
     }
     const zTbl = document.getElementById('z_tbl_wrap');
     if (zTbl) {
-      const rows = zTbl.querySelectorAll('tr');
-      rows.forEach(row => {
+      zTbl.querySelectorAll('tr').forEach(row => {
         const celdas = row.querySelectorAll('td');
-        if (celdas.length >= 2 && celdas[0].textContent.includes('Peso acero total')) {
-          zapKg = parseFloat(celdas[1]?.textContent) || 0;
-        }
-        if (celdas.length >= 2 && celdas[0].textContent.includes('Quintales totales')) {
-          zapQQ = parseFloat(celdas[1]?.textContent) || 0;
-        }
+        if (celdas.length >= 2 && celdas[0].textContent.includes('Peso acero total')) zapKg = parseFloat(celdas[1]?.textContent) || 0;
+        if (celdas.length >= 2 && celdas[0].textContent.includes('Quintales totales')) zapQQ = parseFloat(celdas[1]?.textContent) || 0;
       });
     }
-    mods.push({
-      nombre: 'Zapatas',
-      color: '#fbbf24',
-      vol: zapVol, cem: zapCem, arena: zapArena, grava: zapGrava, agua: zapAgua,
-      kg: zapKg, qq: zapQQ
-    });
+    mods.push({ nombre: 'Zapatas', color: '#fbbf24', vol: zapVol, cem: zapCem, arena: zapArena, grava: zapGrava, agua: zapAgua, kg: zapKg, qq: zapQQ });
 
-    // Viga Cimentación
     const vcKg = getNum('vc_ke') + getNum('vc_kl');
     const vcQQ = (vcKg * 1.07 / 45.36) || 0;
-    mods.push({
-      nombre: 'V.Cimen.',
-      color: '#06b6d4',
-      vol: 0, cem: 0, arena: 0, grava: 0, agua: 0,
-      kg: vcKg, qq: vcQQ
-    });
+    mods.push({ nombre: 'V.Cimen.', color: '#06b6d4', vol: 0, cem: 0, arena: 0, grava: 0, agua: 0, kg: vcKg, qq: vcQQ });
 
-    // Pedestales
     let pdKg = 0, pdQQ = 0, pdVol = 0, pdCem = 0, pdArena = 0, pdGrava = 0, pdAgua = 0;
     const pdSum = document.getElementById('pd_sum');
     if (pdSum) {
@@ -1401,58 +1354,29 @@ if (canvas) {
     }
     const pdTbl = document.getElementById('pd_tbl_wrap');
     if (pdTbl) {
-      const rows = pdTbl.querySelectorAll('tr');
-      rows.forEach(row => {
+      pdTbl.querySelectorAll('tr').forEach(row => {
         const celdas = row.querySelectorAll('td');
         if (celdas.length >= 2 && celdas[0].textContent.includes('Peso total +7%')) pdKg = parseFloat(celdas[1]?.textContent) || 0;
         if (celdas.length >= 2 && celdas[0].textContent.includes('Quintales totales')) pdQQ = parseFloat(celdas[1]?.textContent) || 0;
       });
     }
-    mods.push({
-      nombre: 'Pedestales',
-      color: '#fb923c',
-      vol: pdVol, cem: pdCem, arena: pdArena, grava: pdGrava, agua: pdAgua,
-      kg: pdKg, qq: pdQQ
-    });
+    mods.push({ nombre: 'Pedestales', color: '#fb923c', vol: pdVol, cem: pdCem, arena: pdArena, grava: pdGrava, agua: pdAgua, kg: pdKg, qq: pdQQ });
 
-    // Columnas
     let colKg = 0, colQQ = 0;
     ['cr', 'tl', 'ci'].forEach(pref => {
-      const kg = getNum(pref + '_kl') + getNum(pref + '_ke');
-      const qq = getNum(pref + '_qq');
-      colKg += kg;
-      colQQ += qq;
+      colKg += getNum(pref + '_kl') + getNum(pref + '_ke');
+      colQQ += getNum(pref + '_qq');
     });
-    mods.push({
-      nombre: 'Columnas',
-      color: '#a78bfa',
-      vol: getNum('cr_vol') + getNum('tl_vol') + getNum('ci_vol'),
-      cem: getNum('cr_cem') + getNum('tl_cem') + getNum('ci_cem'),
-      arena: 0, grava: 0, agua: 0,
-      kg: colKg, qq: colQQ
-    });
+    mods.push({ nombre: 'Columnas', color: '#a78bfa', vol: getNum('cr_vol') + getNum('tl_vol') + getNum('ci_vol'), cem: getNum('cr_cem') + getNum('tl_cem') + getNum('ci_cem'), arena: 0, grava: 0, agua: 0, kg: colKg, qq: colQQ });
 
-    // Viga Sísmica
     const vsKg = getNum('vs_kl') + getNum('vs_ke');
     const vsQQ = getNum('vs_qq');
-    mods.push({
-      nombre: 'V.Sís.',
-      color: '#a78bfa',
-      vol: getNum('vs_vol'), cem: getNum('vs_cem'), arena: 0, grava: 0, agua: 0,
-      kg: vsKg, qq: vsQQ
-    });
+    mods.push({ nombre: 'V.Sís.', color: '#a78bfa', vol: getNum('vs_vol'), cem: getNum('vs_cem'), arena: 0, grava: 0, agua: 0, kg: vsKg, qq: vsQQ });
 
-    // Viga Amarre
     const amKg = getNum('am_kl') + getNum('am_ke');
     const amQQ = getNum('am_qq');
-    mods.push({
-      nombre: 'V.Amarre',
-      color: '#34d399',
-      vol: getNum('am_vol'), cem: getNum('am_cem'), arena: 0, grava: 0, agua: 0,
-      kg: amKg, qq: amQQ
-    });
+    mods.push({ nombre: 'V.Amarre', color: '#34d399', vol: getNum('am_vol'), cem: getNum('am_cem'), arena: 0, grava: 0, agua: 0, kg: amKg, qq: amQQ });
 
-    // Escaleras
     let escKg = 0, escQQ = 0, escVol = 0, escCem = 0, escArena = 0, escGrava = 0, escAgua = 0;
     const escSum = document.getElementById('esc_sum');
     if (escSum) {
@@ -1467,79 +1391,38 @@ if (canvas) {
         escQQ = parseFloat(ris[6]?.querySelector('.v')?.textContent) || 0;
       }
     }
-    mods.push({
-      nombre: 'Escaleras',
-      color: '#e879f9',
-      vol: escVol, cem: escCem, arena: escArena, grava: escGrava, agua: escAgua,
-      kg: escKg, qq: escQQ
-    });
+    mods.push({ nombre: 'Escaleras', color: '#e879f9', vol: escVol, cem: escCem, arena: escArena, grava: escGrava, agua: escAgua, kg: escKg, qq: escQQ });
 
-    // Acero manual
     const acKg = getNum('e_kg') + getNum('b_kg');
     const acQQ = getNum('e_qq') + getNum('b_qq');
-    mods.push({
-      nombre: 'Acero (planilla)',
-      color: '#c0c8d8',
-      vol: 0, cem: 0, arena: 0, grava: 0, agua: 0,
-      kg: acKg, qq: acQQ
-    });
+    mods.push({ nombre: 'Acero (planilla)', color: '#c0c8d8', vol: 0, cem: 0, arena: 0, grava: 0, agua: 0, kg: acKg, qq: acQQ });
 
     return mods;
   }
 
-  // ── ACTUALIZAR INTERFAZ ────────────────────────────
   function actualizar() {
     const mods = recolectar();
-    
-    // Resumen ejecutivo
     const exec = document.getElementById('sum-exec');
-    if (exec) {
-      exec.innerHTML = mods.filter(m => m.vol > 0 || m.kg > 0).map(m => `
-        <div class="sum-row">
-          <span class="sr-mod" style="color:${m.color}">${m.nombre}</span>
-          <div class="sr-vals">
-            ${m.vol > 0 ? `<div class="sr-val"><div class="v">${m.vol.toFixed(2)}</div><div class="u">m³</div></div>` : ''}
-            ${m.kg > 0 ? `<div class="sr-val"><div class="v">${m.kg.toFixed(2)}</div><div class="u">kg</div></div>` : ''}
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Totales globales
+    if (exec) exec.innerHTML = mods.filter(m => m.vol > 0 || m.kg > 0).map(m => `<div class="sum-row"><span class="sr-mod" style="color:${m.color}">${m.nombre}</span><div class="sr-vals">${m.vol>0?`<div class="sr-val"><div class="v">${m.vol.toFixed(2)}</div><div class="u">m³</div></div>`:''}${m.kg>0?`<div class="sr-val"><div class="v">${m.kg.toFixed(2)}</div><div class="u">kg</div></div>`:''}</div></div>`).join('');
     const totalVol = mods.reduce((s, m) => s + m.vol, 0);
     const totalKg = mods.reduce((s, m) => s + m.kg, 0);
     const totalQQ = mods.reduce((s, m) => s + m.qq, 0);
-
     document.getElementById('st-vol').textContent = totalVol.toFixed(2);
     document.getElementById('st-kg').textContent = totalKg.toFixed(2);
     document.getElementById('st-qq').textContent = totalQQ.toFixed(2);
     document.getElementById('sum-totals').style.display = totalVol > 0 || totalKg > 0 ? 'grid' : 'none';
-
-    // Tabla de acero consolidada
     const taBody = document.getElementById('ta-body');
-    const taFoot = document.getElementById('ta-foot');
-    const taKgTot = document.getElementById('ta-kg-tot');
-    const taQQTot = document.getElementById('ta-qq-tot');
     if (taBody) {
       const filas = mods.filter(m => m.kg > 0);
-      taBody.innerHTML = filas.map(m => `
-        <tr>
-          <td class="tl" style="color:${m.color}">${m.nombre}</td>
-          <td class="tst">${m.kg.toFixed(2)}</td>
-          <td class="tst">${m.qq.toFixed(2)}</td>
-          <td>—</td>
-        </tr>
-      `).join('');
-      if (taFoot) taFoot.style.display = filas.length > 0 ? '' : 'none';
-      if (taKgTot) taKgTot.textContent = totalKg.toFixed(2);
-      if (taQQTot) taQQTot.textContent = totalQQ.toFixed(2);
+      taBody.innerHTML = filas.map(m => `<tr><td class="tl" style="color:${m.color}">${m.nombre}</td><td class="tst">${m.kg.toFixed(2)}</td><td class="tst">${m.qq.toFixed(2)}</td><td>—</td></tr>`).join('');
+      document.getElementById('ta-foot').style.display = filas.length > 0 ? '' : 'none';
+      document.getElementById('ta-kg-tot').textContent = totalKg.toFixed(2);
+      document.getElementById('ta-qq-tot').textContent = totalQQ.toFixed(2);
     }
     document.getElementById('ta-wrap').style.display = totalKg > 0 ? 'block' : 'none';
 
-    // Donut de acero
     const donutSection = document.getElementById('donut-section');
     const donutCanvas = document.getElementById('donutChart');
-    const donutLegend = document.getElementById('donut-legend');
     if (donutSection && donutCanvas && totalKg > 0) {
       donutSection.style.display = 'block';
       const ctx = donutCanvas.getContext('2d');
@@ -1550,61 +1433,24 @@ if (canvas) {
       ctx.clearRect(0, 0, 130, 130);
       partes.forEach(p => {
         const slice = (p.kg / total) * Math.PI * 2;
-        ctx.beginPath();
-        ctx.moveTo(65, 65);
-        ctx.arc(65, 65, 50, angIni, angIni + slice);
-        ctx.closePath();
-        ctx.fillStyle = p.color;
-        ctx.fill();
-        ctx.strokeStyle = '#060e1c';
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(65, 65); ctx.arc(65, 65, 50, angIni, angIni + slice); ctx.closePath();
+        ctx.fillStyle = p.color; ctx.fill(); ctx.strokeStyle = '#060e1c'; ctx.lineWidth = 2; ctx.stroke();
         angIni += slice;
       });
-      ctx.beginPath();
-      ctx.arc(65, 65, 25, 0, Math.PI*2);
-      ctx.fillStyle = '#060e1c';
-      ctx.fill();
-      if (donutLegend) {
-        donutLegend.innerHTML = partes.map(p => `
-          <div class="dl-item">
-            <div class="dl-dot" style="background:${p.color}"></div>
-            <span>${p.nombre}</span>
-            <strong>${p.kg.toFixed(2)} kg</strong>
-          </div>
-        `).join('');
-      }
-    } else if (donutSection) {
-      donutSection.style.display = 'none';
-    }
+      ctx.beginPath(); ctx.arc(65, 65, 25, 0, Math.PI*2); ctx.fillStyle = '#060e1c'; ctx.fill();
+      document.getElementById('donut-legend').innerHTML = partes.map(p => `<div class="dl-item"><div class="dl-dot" style="background:${p.color}"></div><span>${p.nombre}</span><strong>${p.kg.toFixed(2)} kg</strong></div>`).join('');
+    } else if (donutSection) donutSection.style.display = 'none';
 
-    // Gráfico de materiales
     const matCanvas = document.getElementById('matChart');
     if (matCanvas) {
       const totalCem = mods.reduce((s, m) => s + m.cem, 0);
       const totalArena = mods.reduce((s, m) => s + m.arena, 0);
       const totalGrava = mods.reduce((s, m) => s + m.grava, 0);
       if (totalCem + totalArena + totalGrava > 0) {
-        const ctx = matCanvas.getContext('2d');
-        new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: ['Cemento (sacos)', 'Arena (m³)', 'Grava (m³)'],
-            datasets: [{
-              label: 'Total',
-              data: [totalCem, totalArena, totalGrava],
-              backgroundColor: ['#f0a500', '#00c9ff', '#a78bfa']
-            }]
-          },
-          options: {
-            responsive: true,
-            plugins: { legend: { display: false } }
-          }
-        });
+        new Chart(matCanvas.getContext('2d'), { type: 'bar', data: { labels: ['Cemento (sacos)', 'Arena (m³)', 'Grava (m³)'], datasets: [{ label: 'Total', data: [totalCem, totalArena, totalGrava], backgroundColor: ['#f0a500', '#00c9ff', '#a78bfa'] }] }, options: { responsive: true, plugins: { legend: { display: false } } } });
       }
     }
 
-    // Conclusiones
     const concl = document.getElementById('concl-items');
     if (concl) {
       let items = '';
@@ -1628,87 +1474,59 @@ if (canvas) {
     function dibujar() {
       const w = canvas.width, h = canvas.height;
       ctx.clearRect(0, 0, w, h);
-      const cx = w/2, cy = h/1.8;
-      const escala = 35;
+
+      // ---- PRUEBA DE DIAGNÓSTICO (quitar después de verificar) ----
+      ctx.fillStyle = '#ff0';
+      ctx.fillRect(10, 10, 40, 40); // rectángulo amarillo
+      // -----------------------------------------------------------
+
+      const cx = w/2, cy = h/1.8, escala = 35;
       const cos = Math.cos(ang), sin = Math.sin(ang);
-
       function proy(x, y, z) {
-        const xp = (x - y) * cos * escala + cx;
-        const yp = (x + y) * sin * escala * 0.7 - z * escala * 0.9 + cy;
-        return { x: xp, y: yp };
+        return { x: (x - y) * cos * escala + cx, y: (x + y) * sin * escala * 0.7 - z * escala * 0.9 + cy };
       }
 
-      // Cuadrícula base
-      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-      ctx.lineWidth = 0.5;
+      // Cuadrícula
+      ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 0.5;
       for (let i = -2; i <= 2; i++) {
-        ctx.beginPath();
-        const p1 = proj(i, -2, 0);
-        const p2 = proj(i, 2, 0);
-        ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-        const p3 = proj(-2, i, 0);
-        const p4 = proj(2, i, 0);
-        ctx.moveTo(p3.x, p3.y); ctx.lineTo(p4.x, p4.y); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(proj(i,-2,0).x, proj(i,-2,0).y); ctx.lineTo(proj(i,2,0).x, proj(i,2,0).y); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(proj(-2,i,0).x, proj(-2,i,0).y); ctx.lineTo(proj(2,i,0).x, proj(2,i,0).y); ctx.stroke();
       }
 
-      const numCols = 4;
-      const colH = 3.0;
-      const pedestalH = 0.6;
-      const zapataH = 0.3;
-
+      const colH = 3.0, pedestalH = 0.6, zapataH = 0.3;
       // Zapatas
-      for (let ix = -1; ix <= 1; ix+=2) {
-        for (let iy = -1; iy <= 1; iy+=2) {
-          const base = proj(ix*0.9, iy*0.9, 0);
-          const top = proj(ix*0.9, iy*0.9, zapataH);
-          ctx.fillStyle = 'rgba(251,191,36,0.4)';
-          ctx.beginPath();
-          ctx.moveTo(base.x, base.y);
-          ctx.lineTo(proj(ix*0.9+0.15, iy*0.9, 0).x, proj(ix*0.9+0.15, iy*0.9, 0).y);
-          ctx.lineTo(proj(ix*0.9+0.15, iy*0.9, zapataH).x, proj(ix*0.9+0.15, iy*0.9, zapataH).y);
-          ctx.lineTo(top.x, top.y);
-          ctx.closePath();
-          ctx.fill();
-        }
+      for (let ix = -1; ix <= 1; ix+=2) for (let iy = -1; iy <= 1; iy+=2) {
+        ctx.fillStyle = 'rgba(251,191,36,0.4)';
+        ctx.beginPath(); ctx.moveTo(proj(ix*0.9, iy*0.9, 0).x, proj(ix*0.9, iy*0.9, 0).y);
+        ctx.lineTo(proj(ix*0.9+0.15, iy*0.9, 0).x, proj(ix*0.9+0.15, iy*0.9, 0).y);
+        ctx.lineTo(proj(ix*0.9+0.15, iy*0.9, zapataH).x, proj(ix*0.9+0.15, iy*0.9, zapataH).y);
+        ctx.lineTo(proj(ix*0.9, iy*0.9, zapataH).x, proj(ix*0.9, iy*0.9, zapataH).y);
+        ctx.closePath(); ctx.fill();
       }
-
       // Pedestales
-      for (let ix = -1; ix <= 1; ix+=2) {
-        for (let iy = -1; iy <= 1; iy+=2) {
-          const base = proj(ix*0.8, iy*0.8, zapataH);
-          const top = proj(ix*0.8, iy*0.8, zapataH + pedestalH);
-          ctx.strokeStyle = '#fb923c';
-          ctx.lineWidth = 2.5;
-          ctx.beginPath(); ctx.moveTo(base.x, base.y); ctx.lineTo(top.x, top.y); ctx.stroke();
-        }
+      for (let ix = -1; ix <= 1; ix+=2) for (let iy = -1; iy <= 1; iy+=2) {
+        ctx.strokeStyle = '#fb923c'; ctx.lineWidth = 2.5;
+        const base = proj(ix*0.8, iy*0.8, zapataH), top = proj(ix*0.8, iy*0.8, zapataH + pedestalH);
+        ctx.beginPath(); ctx.moveTo(base.x, base.y); ctx.lineTo(top.x, top.y); ctx.stroke();
       }
-
       // Columnas
-      for (let ix = -1; ix <= 1; ix+=2) {
-        for (let iy = -1; iy <= 1; iy+=2) {
-          const base = proj(ix*0.75, iy*0.75, zapataH + pedestalH);
-          const top = proj(ix*0.75, iy*0.75, zapataH + pedestalH + colH);
-          ctx.strokeStyle = '#f0a500';
-          ctx.lineWidth = 4;
-          ctx.beginPath(); ctx.moveTo(base.x, base.y); ctx.lineTo(top.x, top.y); ctx.stroke();
-        }
+      for (let ix = -1; ix <= 1; ix+=2) for (let iy = -1; iy <= 1; iy+=2) {
+        ctx.strokeStyle = '#f0a500'; ctx.lineWidth = 4;
+        const base = proj(ix*0.75, iy*0.75, zapataH + pedestalH), top = proj(ix*0.75, iy*0.75, zapataH + pedestalH + colH);
+        ctx.beginPath(); ctx.moveTo(base.x, base.y); ctx.lineTo(top.x, top.y); ctx.stroke();
       }
-
-      // Vigas sísmicas (superior)
+      // Vigas sísmicas
       const vigaZ = zapataH + pedestalH + colH;
-      ctx.strokeStyle = '#a78bfa';
-      ctx.lineWidth = 2.5;
       const esquinas = [[-1,-1],[1,-1],[1,1],[-1,1]];
+      ctx.strokeStyle = '#a78bfa'; ctx.lineWidth = 2.5;
       for (let i=0; i<4; i++) {
         const p1 = proj(esquinas[i][0]*0.75, esquinas[i][1]*0.75, vigaZ);
         const p2 = proj(esquinas[(i+1)%4][0]*0.75, esquinas[(i+1)%4][1]*0.75, vigaZ);
         ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
       }
-
-      // Vigas de amarre (media altura)
+      // Vigas de amarre
       const amarreZ = zapataH + pedestalH + colH * 0.5;
-      ctx.strokeStyle = '#34d399';
-      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#34d399'; ctx.lineWidth = 2;
       for (let i=0; i<4; i++) {
         const p1 = proj(esquinas[i][0]*0.75, esquinas[i][1]*0.75, amarreZ);
         const p2 = proj(esquinas[(i+1)%4][0]*0.75, esquinas[(i+1)%4][1]*0.75, amarreZ);
@@ -1716,18 +1534,16 @@ if (canvas) {
       }
     }
 
-    // Eventos de arrastre
     let dragging = false;
     canvas.addEventListener('touchstart', e => { e.preventDefault(); dragging = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; });
-    canvas.addEventListener('touchmove', e => { if (!dragging) return; const dx = e.touches[0].clientX - lastX; const dy = e.touches[0].clientY - lastY; ang += dx * 0.01; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; dibujar(); });
+    canvas.addEventListener('touchmove', e => { if (!dragging) return; ang += (e.touches[0].clientX - lastX) * 0.01; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; dibujar(); });
     canvas.addEventListener('touchend', () => dragging = false);
     canvas.addEventListener('mousedown', e => { dragging = true; lastX = e.clientX; lastY = e.clientY; });
-    canvas.addEventListener('mousemove', e => { if (!dragging) return; const dx = e.clientX - lastX; const dy = e.clientY - lastY; ang += dx * 0.01; lastX = e.clientX; lastY = e.clientY; dibujar(); });
+    canvas.addEventListener('mousemove', e => { if (!dragging) return; ang += (e.clientX - lastX) * 0.01; lastX = e.clientX; lastY = e.clientY; dibujar(); });
     canvas.addEventListener('mouseup', () => dragging = false);
     dibujar();
   }
 
-  // ── EXPORTACIONES PDF ──────────────────────────────
   window.exportPDF = function() {
     if (!window.jspdf || !window.jspdf.jsPDF) { toast('Librería PDF no disponible'); return; }
     const { jsPDF } = window.jspdf;
@@ -1739,44 +1555,34 @@ if (canvas) {
     doc.save('resumen.pdf');
     toast('PDF exportado');
   };
-
   window.exportPlan = function() {
     if (!window.jspdf || !window.jspdf.jsPDF) { toast('Librería PDF no disponible'); return; }
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.text('Planilla de Hierro', 10, 10);
+    const doc = new jsPDF(); doc.text('Planilla de Hierro', 10, 10);
     const tabla = document.querySelector('#ta-wrap table');
-    if (tabla) { doc.autoTable({ html: tabla, startY: 20 }); }
+    if (tabla) doc.autoTable({ html: tabla, startY: 20 });
     doc.save('planilla_acero.pdf');
     toast('Planilla exportada');
   };
-
   window.exportEscPDF = function() {
     if (!window.jspdf || !window.jspdf.jsPDF) { toast('Librería PDF no disponible'); return; }
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.text('Planilla Escalera', 10, 10);
+    const doc = new jsPDF(); doc.text('Planilla Escalera', 10, 10);
     const tabla = document.querySelector('#esc_tbl')?.closest('table');
-    if (tabla) { doc.autoTable({ html: tabla, startY: 20 }); }
+    if (tabla) doc.autoTable({ html: tabla, startY: 20 });
     doc.save('escalera.pdf');
     toast('Planilla de escalera exportada');
   };
 
-    // ── INICIALIZACIÓN ────────────────────────────────
-  let canvas3DIniciado = false; // bandera para evitar reinicios innecesarios
-
-    // ── INICIALIZACIÓN CORREGIDA ──────────────────────
+  // ── INICIALIZACIÓN ─────────────────────────────────
   function inicializar3DConRetraso(intentos) {
     const canvas = document.getElementById('isoCanvas');
     if (!canvas) return;
-    
-    // Forzar dimensiones y visibilidad
     canvas.style.display = 'block';
     canvas.width = canvas.clientWidth || 340;
     canvas.height = 260;
-    
     if (canvas.clientWidth > 0) {
-      iniciar3D(); // llamada a la función que ya existe
+      iniciar3D();
     } else if (intentos < 5) {
       setTimeout(() => inicializar3DConRetraso(intentos + 1), 200);
     }
@@ -1791,13 +1597,9 @@ if (canvas) {
   if (tabRes) {
     tabRes.addEventListener('click', () => {
       actualizar();
-      // Reiniciar el canvas al volver a la pestaña
       setTimeout(() => {
         const canvas = document.getElementById('isoCanvas');
-        if (canvas) {
-          canvas.width = canvas.clientWidth || 340; // forzar reinicio
-          canvas.height = 260;
-        }
+        if (canvas) { canvas.width = canvas.clientWidth || 340; canvas.height = 260; }
         inicializar3DConRetraso(0);
       }, 300);
     });
