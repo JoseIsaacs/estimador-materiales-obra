@@ -923,14 +923,6 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
-<script>
-  // Desactivar cualquier intento de usar el canvas viejo
-  window.iniciar3D = function(){};
-  window.inicializar3DConRetraso = function(){};
-  // Eliminar listeners residuales (opcional)
-  document.getElementById('isoCanvas')?.remove();
-</script>
-
   <!-- TOTALES EJECUTIVOS -->
   <div class="sum-section">
     <h4>📋 MEMORIA DE CANTIDADES — RESUMEN EJECUTIVO</h4>
@@ -1610,11 +1602,6 @@ function iniciar3D() {
     });
   }
 })();
-</script>
-<script>
-  // Desactivar funciones viejas del canvas para que no interfieran con Three.js
-  window.iniciar3D = function(){};
-  window.inicializar3DConRetraso = function(){};
 </script>
 </body>
 </html>
