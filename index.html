@@ -8,7 +8,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <style>
 :root{
   --bg:#060e1c;--card:#0f2040;--bdr:#1a3a60;
@@ -607,54 +606,6 @@ tr:last-child td{border-bottom:none}
     </div><div id="ci_wn" class="wb ok" style="display:none"></div></div>
   </div>
 </div>
-<script>
-  // Parche para asegurar que el botón T/L funcione correctamente
-  (function() {
-    const btnTL = document.querySelector('#col .stab[onclick*="tl"]');
-    if (btnTL) {
-      btnTL.addEventListener('click', function(e) {
-        const parent = document.getElementById('col');
-        parent.querySelectorAll('.sp').forEach(sp => sp.classList.remove('on'));
-        const target = document.getElementById('sp-tl');
-        if (target) target.classList.add('on');
-        parent.querySelectorAll('.stab').forEach(s => s.classList.remove('on'));
-        this.classList.add('on');
-      });
-    }
-  })();
-</script>
-<script>
-  // Parche para asegurar que el botón Cilíndrica funcione correctamente
-  (function() {
-    const btnCi = document.querySelector('#col .stab[onclick*="ci"]');
-    if (btnCi) {
-      btnCi.addEventListener('click', function(e) {
-        const parent = document.getElementById('col');
-        parent.querySelectorAll('.sp').forEach(sp => sp.classList.remove('on'));
-        const target = document.getElementById('sp-ci');
-        if (target) target.classList.add('on');
-        parent.querySelectorAll('.stab').forEach(s => s.classList.remove('on'));
-        this.classList.add('on');
-      });
-    }
-  })();
-</script>
-<script>
-  // Parche para asegurar que el botón Cilíndrica funcione correctamente
-  (function() {
-    const btnCi = document.querySelector('#col .stab[onclick*="ci"]');
-    if (btnCi) {
-      btnCi.addEventListener('click', function(e) {
-        const parent = document.getElementById('col');
-        parent.querySelectorAll('.sp').forEach(sp => sp.classList.remove('on'));
-        const target = document.getElementById('sp-ci');
-        if (target) target.classList.add('on');
-        parent.querySelectorAll('.stab').forEach(s => s.classList.remove('on'));
-        this.classList.add('on');
-      });
-    }
-  })();
-</script>
 
 <!-- ═══ VIGA SÍSMICA ═══ -->
 <div id="vis" class="pg">
@@ -910,9 +861,35 @@ tr:last-child td{border-bottom:none}
 
   <!-- ISO 3D CSS (modelo estable sin canvas) -->
 <div class="iso-outer">
-  <h4>🏗️ ESTRUCTURA 3D — ARRASTRA PARA GIRAR</h4>
-  <p class="iso-hint">👆 Touch/drag para rotar · Muestra módulos calculados</p>
-  <div id="three-container" style="width:100%;height:260px;touch-action:none;background:#060e1c;border-radius:6px;overflow:hidden;"></div>
+  <h4>🏗️ ESTRUCTURA 3D — VISTA ISOMÉTRICA</h4>
+  <p class="iso-hint">👆 Modelo representativo de la estructura</p>
+  <div id="iso-scene" style="width:100%;height:260px;display:flex;justify-content:center;align-items:center;perspective:600px;background:#060e1c;border-radius:6px;overflow:hidden;">
+    <div style="width:160px;height:160px;position:relative;transform:rotateX(60deg) rotateZ(45deg);transform-style:preserve-3d;">
+      <!-- Placa base -->
+      <div style="position:absolute;width:160px;height:160px;background:rgba(251,191,36,0.2);border:1px solid rgba(251,191,36,0.4);transform:translateZ(0);"></div>
+      <!-- Zapatas -->
+      <div style="position:absolute;width:30px;height:30px;background:rgba(251,191,36,0.6);transform:translateZ(5px);"></div>
+      <div style="position:absolute;width:30px;height:30px;background:rgba(251,191,36,0.6);right:0;transform:translateZ(5px);"></div>
+      <div style="position:absolute;width:30px;height:30px;background:rgba(251,191,36,0.6);bottom:0;transform:translateZ(5px);"></div>
+      <div style="position:absolute;width:30px;height:30px;background:rgba(251,191,36,0.6);right:0;bottom:0;transform:translateZ(5px);"></div>
+      <!-- Pedestales -->
+      <div style="position:absolute;width:16px;height:16px;background:rgba(251,146,60,0.8);transform:translateZ(30px);left:7px;top:7px;"></div>
+      <div style="position:absolute;width:16px;height:16px;background:rgba(251,146,60,0.8);transform:translateZ(30px);right:7px;top:7px;"></div>
+      <div style="position:absolute;width:16px;height:16px;background:rgba(251,146,60,0.8);transform:translateZ(30px);left:7px;bottom:7px;"></div>
+      <div style="position:absolute;width:16px;height:16px;background:rgba(251,146,60,0.8);transform:translateZ(30px);right:7px;bottom:7px;"></div>
+      <!-- Columnas -->
+      <div style="position:absolute;width:10px;height:10px;background:rgba(240,165,0,0.9);transform:translateZ(60px);left:10px;top:10px;"></div>
+      <div style="position:absolute;width:10px;height:10px;background:rgba(240,165,0,0.9);transform:translateZ(60px);right:10px;top:10px;"></div>
+      <div style="position:absolute;width:10px;height:10px;background:rgba(240,165,0,0.9);transform:translateZ(60px);left:10px;bottom:10px;"></div>
+      <div style="position:absolute;width:10px;height:10px;background:rgba(240,165,0,0.9);transform:translateZ(60px);right:10px;bottom:10px;"></div>
+      <!-- Vigas superiores (sísmicas) -->
+      <div style="position:absolute;width:140px;height:4px;background:rgba(167,139,250,0.8);transform:translateZ(90px);left:10px;top:10px;"></div>
+      <div style="position:absolute;width:4px;height:140px;background:rgba(167,139,250,0.8);transform:translateZ(90px);left:10px;top:10px;"></div>
+      <!-- Vigas de amarre -->
+      <div style="position:absolute;width:140px;height:3px;background:rgba(52,211,153,0.6);transform:translateZ(45px);left:10px;top:10px;"></div>
+      <div style="position:absolute;width:3px;height:140px;background:rgba(52,211,153,0.6);transform:translateZ(45px);left:10px;top:10px;"></div>
+    </div>
+  </div>
   <div class="legend">
     <div class="leg"><div class="leg-d" style="background:rgba(240,165,0,.9)"></div>Columna</div>
     <div class="leg"><div class="leg-d" style="background:var(--ped)"></div>Pedestal</div>
@@ -922,6 +899,14 @@ tr:last-child td{border-bottom:none}
     <div class="leg"><div class="leg-d" style="background:var(--vc)"></div>V. cimen.</div>
   </div>
 </div>
+
+<script>
+  // Desactivar cualquier intento de usar el canvas viejo
+  window.iniciar3D = function(){};
+  window.inicializar3DConRetraso = function(){};
+  // Eliminar listeners residuales (opcional)
+  document.getElementById('isoCanvas')?.remove();
+</script>
 
   <!-- TOTALES EJECUTIVOS -->
   <div class="sum-section">
@@ -977,7 +962,7 @@ tr:last-child td{border-bottom:none}
 </div>
 <div class="toast" id="toast">✅ OK</div>
 
-<!-- SCRIPTS EXTERNOS DE MÓDULOS (se mantienen las rutas que ya funcionan) -->
+<!-- SCRIPTS EXTERNOS DE MÓDULOS -->
 <script src="js/concreto.js"></script>
 <script src="js/muros.js"></script>
 <script src="js/pisos.js"></script>
@@ -987,156 +972,9 @@ tr:last-child td{border-bottom:none}
 <script src="js/vigas_amarre.js"></script>
 <script src="js/columnas.js"></script>
 <script src="js/pedestales.js"></script>
-<!-- <script src="js/resumen.js"></script> -->
 
 <!-- ========== SCRIPTS INCRUSTADOS ========== -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script>
-  (function() {
-    function iniciarThreeJS() {
-      const container = document.getElementById('three-container');
-      if (!container || container.clientWidth === 0) return;
-
-      // Limpiar contenedor por si acaso
-      container.innerHTML = '';
-
-      const scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x060e1c);
-      
-      const width = container.clientWidth || 340;
-      const height = container.clientHeight || 260;
-      const renderer = new THREE.WebGLRenderer({ antialias: true });
-      renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      container.appendChild(renderer.domElement);
-
-      const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 20);
-      camera.position.set(5, 4, 6);
-      camera.lookAt(0, 0.8, 0);
-
-      scene.add(new THREE.AmbientLight(0x404060));
-      const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-      dirLight.position.set(1, 2, 1);
-      scene.add(dirLight);
-
-      const group = new THREE.Group();
-      scene.add(group);
-
-      const matZapata = new THREE.MeshLambertMaterial({ color: 0xfbbf24, transparent: true, opacity: 0.8 });
-      const matPedestal = new THREE.MeshLambertMaterial({ color: 0xfb923c, transparent: true, opacity: 0.8 });
-      const matColumna = new THREE.MeshLambertMaterial({ color: 0xf0a500, transparent: true, opacity: 0.9 });
-      const matVigaSismica = new THREE.MeshLambertMaterial({ color: 0xa78bfa, transparent: true, opacity: 0.8 });
-      const matVigaAmarre = new THREE.MeshLambertMaterial({ color: 0x34d399, transparent: true, opacity: 0.6 });
-
-      const geomZapata = new THREE.BoxGeometry(0.5, 0.15, 0.5);
-      const geomPedestal = new THREE.BoxGeometry(0.25, 0.3, 0.25);
-      const geomColumna = new THREE.BoxGeometry(0.2, 1.5, 0.2);
-      const geomVigaX = new THREE.BoxGeometry(1.8, 0.1, 0.15);
-      const geomVigaZ = new THREE.BoxGeometry(0.15, 0.1, 1.8);
-
-      const esquinas = [
-        [-0.7, 0, -0.7], [0.7, 0, -0.7], [0.7, 0, 0.7], [-0.7, 0, 0.7]
-      ];
-
-      esquinas.forEach(([x, y, z]) => {
-        const zapata = new THREE.Mesh(geomZapata, matZapata);
-        zapata.position.set(x, -0.7, z);
-        group.add(zapata);
-
-        const pedestal = new THREE.Mesh(geomPedestal, matPedestal);
-        pedestal.position.set(x, -0.35, z);
-        group.add(pedestal);
-
-        const columna = new THREE.Mesh(geomColumna, matColumna);
-        columna.position.set(x, 0.25, z);
-        group.add(columna);
-      });
-
-      function crearViga(p1, p2, material, y) {
-        const dx = p2[0] - p1[0];
-        const dz = p2[2] - p1[2];
-        const length = Math.sqrt(dx*dx + dz*dz);
-        const viga = new THREE.Mesh(new THREE.BoxGeometry(length, 0.08, 0.15), material);
-        viga.position.set((p1[0]+p2[0])/2, y, (p1[2]+p2[2])/2);
-        viga.rotation.y = Math.atan2(dx, dz);
-        group.add(viga);
-      }
-
-      const alturaSuperior = 0.9;
-      const alturaMedia = 0.2;
-      for (let i = 0; i < 4; i++) {
-        const p1 = esquinas[i];
-        const p2 = esquinas[(i+1)%4];
-        crearViga(p1, p2, matVigaSismica, alturaSuperior);
-        crearViga(p1, p2, matVigaAmarre, alturaMedia);
-      }
-
-      // Interactividad táctil y ratón
-      let isDragging = false;
-      let previousTouch = { x: 0, y: 0 };
-      const canvas = renderer.domElement;
-
-      canvas.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        isDragging = true;
-        previousTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-      }, { passive: false });
-
-      canvas.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        const deltaX = e.touches[0].clientX - previousTouch.x;
-        const deltaY = e.touches[0].clientY - previousTouch.y;
-        group.rotation.y += deltaX * 0.01;
-        group.rotation.x += deltaY * 0.005;
-        previousTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-      }, { passive: false });
-
-      canvas.addEventListener('touchend', () => { isDragging = false; });
-      canvas.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        isDragging = true;
-        previousTouch = { x: e.clientX, y: e.clientY };
-      });
-      canvas.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        const deltaX = e.clientX - previousTouch.x;
-        const deltaY = e.clientY - previousTouch.y;
-        group.rotation.y += deltaX * 0.01;
-        group.rotation.x += deltaY * 0.005;
-        previousTouch = { x: e.clientX, y: e.clientY };
-      });
-      canvas.addEventListener('mouseup', () => { isDragging = false; });
-
-      // Redimensionar al cambiar tamaño de ventana
-      window.addEventListener('resize', () => {
-        if (container.clientWidth > 0) {
-          const w = container.clientWidth;
-          const h = container.clientHeight || 260;
-          renderer.setSize(w, h);
-          camera.aspect = w / h;
-          camera.updateProjectionMatrix();
-        }
-      });
-
-      function animate() {
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-      }
-      animate();
-    }
-
-    // Iniciar Three.js cuando el DOM esté listo y se muestre el resumen
-    window.addEventListener('load', iniciarThreeJS);
-    const tabRes = document.querySelector('.tab[onclick*="res"]');
-    if (tabRes) {
-      tabRes.addEventListener('click', () => {
-        setTimeout(iniciarThreeJS, 300);
-      });
-    }
-  })();
-</script>
-
 // ========== NAVEGACIÓN Y UTILIDADES ==========
 function T(modo, btn) {
   document.querySelectorAll('.pg').forEach(function(p) { p.classList.remove('on'); });
@@ -1366,89 +1204,90 @@ function calcEsc() {
     escWn.style.display = 'block';
     escWn.innerHTML = `✅ Escalera: ${N} escalones de huella=${huella}cm, contrahuella=${co.toFixed(1)}cm. t losa=${t}cm.`;
   }
-// ======== DIAGRAMA EFICAZ (FUNCIONA) ========
-const canvas = document.getElementById('diagCanvas');
-if (canvas) {
-  const ctx = canvas.getContext('2d');
-  canvas.width = 320;
-  canvas.height = 220;
-  ctx.clearRect(0, 0, 320, 220);
 
-  // Fondo de losa inclinada
-  ctx.fillStyle = 'rgba(167,139,250,0.2)';
-  ctx.beginPath();
-  ctx.moveTo(40, 190);
-  ctx.lineTo(280, 40);
-  ctx.lineTo(280, 55);
-  ctx.lineTo(40, 205);
-  ctx.closePath();
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(167,139,250,0.6)';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
+  // ======== DIAGRAMA EFICAZ (FUNCIONA) ========
+  const canvas = document.getElementById('diagCanvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    canvas.width = 320;
+    canvas.height = 220;
+    ctx.clearRect(0, 0, 320, 220);
 
-  // Peldaños (escalera)
-  const incX = 240 / N;
-  const incY = 150 / N;
-  ctx.fillStyle = 'rgba(255,255,255,0.08)';
-  ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-  ctx.lineWidth = 0.8;
-  for (let i = 0; i < N; i++) {
-    const x = 40 + i * incX;
-    const y = 190 - i * incY;
+    // Fondo de losa inclinada
+    ctx.fillStyle = 'rgba(167,139,250,0.2)';
     ctx.beginPath();
-    ctx.rect(x, y - incY, incX, incY);
+    ctx.moveTo(40, 190);
+    ctx.lineTo(280, 40);
+    ctx.lineTo(280, 55);
+    ctx.lineTo(40, 205);
+    ctx.closePath();
     ctx.fill();
+    ctx.strokeStyle = 'rgba(167,139,250,0.6)';
+    ctx.lineWidth = 1.5;
     ctx.stroke();
-  }
 
-  // Barras de refuerzo
-  ctx.strokeStyle = '#f97316';
-  ctx.lineWidth = 2.5;
-  ctx.beginPath();
-  ctx.moveTo(40, 195);
-  ctx.lineTo(280, 45);
-  ctx.stroke();
+    // Peldaños (escalera)
+    const incX = 240 / N;
+    const incY = 150 / N;
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.lineWidth = 0.8;
+    for (let i = 0; i < N; i++) {
+      const x = 40 + i * incX;
+      const y = 190 - i * incY;
+      ctx.beginPath();
+      ctx.rect(x, y - incY, incX, incY);
+      ctx.fill();
+      ctx.stroke();
+    }
 
-  ctx.strokeStyle = '#fb7185';
-  ctx.beginPath();
-  ctx.moveTo(40, 180);
-  ctx.lineTo(280, 30);
-  ctx.stroke();
-
-  ctx.strokeStyle = '#38bdf8';
-  ctx.lineWidth = 1.5;
-  const stepX = 240 / (nbTransv || 20);
-  for (let i = 0; i <= (nbTransv || 20); i++) {
-    const x = 40 + i * stepX;
-    const y = 190 - (i * stepX) * (150 / 240);
+    // Barras de refuerzo
+    ctx.strokeStyle = '#f97316';
+    ctx.lineWidth = 2.5;
     ctx.beginPath();
-    ctx.moveTo(x, y - 10);
-    ctx.lineTo(x, y + 10);
+    ctx.moveTo(40, 195);
+    ctx.lineTo(280, 45);
     ctx.stroke();
+
+    ctx.strokeStyle = '#fb7185';
+    ctx.beginPath();
+    ctx.moveTo(40, 180);
+    ctx.lineTo(280, 30);
+    ctx.stroke();
+
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 1.5;
+    const stepX = 240 / (nbTransv || 20);
+    for (let i = 0; i <= (nbTransv || 20); i++) {
+      const x = 40 + i * stepX;
+      const y = 190 - (i * stepX) * (150 / 240);
+      ctx.beginPath();
+      ctx.moveTo(x, y - 10);
+      ctx.lineTo(x, y + 10);
+      ctx.stroke();
+    }
+
+    ctx.fillStyle = '#4ade80';
+    ctx.beginPath();
+    ctx.arc(40, 195, 4, 0, Math.PI*2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(280, 45, 4, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '9px monospace';
+    ctx.fillText('L = ' + Lincl.toFixed(2) + ' m', 130, 15);
+    ctx.fillText('H = ' + (H/100).toFixed(2) + ' m', 285, 115);
+    ctx.fillText('t = ' + t + ' cm', 10, 200);
   }
-
-  ctx.fillStyle = '#4ade80';
-  ctx.beginPath();
-  ctx.arc(40, 195, 4, 0, Math.PI*2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(280, 45, 4, 0, Math.PI*2);
-  ctx.fill();
-
-  ctx.fillStyle = '#ffffff';
-  ctx.font = '9px monospace';
-  ctx.fillText('L = ' + Lincl.toFixed(2) + ' m', 130, 15);
-  ctx.fillText('H = ' + (H/100).toFixed(2) + ' m', 285, 115);
-  ctx.fillText('t = ' + t + ' cm', 10, 200);
-}
   toast('Escalera calculada');
 }
 </script>
+
 <script>
 // ========== RESUMEN COMPLETO (CORREGIDO) ==========
 (function() {
-  // ── RECOLECCIÓN DE DATOS ────────────────────────────
   function getNum(id) {
     const el = document.getElementById(id);
     if (!el) return 0;
@@ -1610,97 +1449,17 @@ if (canvas) {
     }
   }
 
-  // ── CANVAS 3D INTERACTIVO ─────────────────────────
-    // Cuadrícula
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 0.5;
-    for (let i = -2; i <= 2; i++) {
-      ctx.beginPath(); ctx.moveTo(proj(i,-2,0).x, proj(i,-2,0).y); ctx.lineTo(proj(i,2,0).x, proj(i,2,0).y); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(proj(-2,i,0).x, proj(-2,i,0).y); ctx.lineTo(proj(2,i,0).x, proj(2,i,0).y); ctx.stroke();
-    }
+  window.addEventListener('load', () => {
+    actualizar();
+  });
 
-    const colH = 3.0, pedestalH = 0.6, zapataH = 0.3;
-    // Zapatas
-    for (let ix = -1; ix <= 1; ix+=2) for (let iy = -1; iy <= 1; iy+=2) {
-      ctx.fillStyle = 'rgba(251,191,36,0.4)';
-      ctx.beginPath(); ctx.moveTo(proj(ix*0.9, iy*0.9, 0).x, proj(ix*0.9, iy*0.9, 0).y);
-      ctx.lineTo(proj(ix*0.9+0.15, iy*0.9, 0).x, proj(ix*0.9+0.15, iy*0.9, 0).y);
-      ctx.lineTo(proj(ix*0.9+0.15, iy*0.9, zapataH).x, proj(ix*0.9+0.15, iy*0.9, zapataH).y);
-      ctx.lineTo(proj(ix*0.9, iy*0.9, zapataH).x, proj(ix*0.9, iy*0.9, zapataH).y);
-      ctx.closePath(); ctx.fill();
-    }
-    // Pedestales
-    for (let ix = -1; ix <= 1; ix+=2) for (let iy = -1; iy <= 1; iy+=2) {
-      ctx.strokeStyle = '#fb923c'; ctx.lineWidth = 2.5;
-      const base = proj(ix*0.8, iy*0.8, zapataH), top = proj(ix*0.8, iy*0.8, zapataH + pedestalH);
-      ctx.beginPath(); ctx.moveTo(base.x, base.y); ctx.lineTo(top.x, top.y); ctx.stroke();
-    }
-    // Columnas
-    for (let ix = -1; ix <= 1; ix+=2) for (let iy = -1; iy <= 1; iy+=2) {
-      ctx.strokeStyle = '#f0a500'; ctx.lineWidth = 4;
-      const base = proj(ix*0.75, iy*0.75, zapataH + pedestalH), top = proj(ix*0.75, iy*0.75, zapataH + pedestalH + colH);
-      ctx.beginPath(); ctx.moveTo(base.x, base.y); ctx.lineTo(top.x, top.y); ctx.stroke();
-    }
-    // Vigas sísmicas
-    const vigaZ = zapataH + pedestalH + colH;
-    const esquinas = [[-1,-1],[1,-1],[1,1],[-1,1]];
-    ctx.strokeStyle = '#a78bfa'; ctx.lineWidth = 2.5;
-    for (let i=0; i<4; i++) {
-      const p1 = proj(esquinas[i][0]*0.75, esquinas[i][1]*0.75, vigaZ);
-      const p2 = proj(esquinas[(i+1)%4][0]*0.75, esquinas[(i+1)%4][1]*0.75, vigaZ);
-      ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-    }
-    // Vigas de amarre
-    const amarreZ = zapataH + pedestalH + colH * 0.5;
-    ctx.strokeStyle = '#34d399'; ctx.lineWidth = 2;
-    for (let i=0; i<4; i++) {
-      const p1 = proj(esquinas[i][0]*0.75, esquinas[i][1]*0.75, amarreZ);
-      const p2 = proj(esquinas[(i+1)%4][0]*0.75, esquinas[(i+1)%4][1]*0.75, amarreZ);
-      ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-    }
+  const tabRes = document.querySelector('.tab[onclick*="res"]');
+  if (tabRes) {
+    tabRes.addEventListener('click', () => {
+      setTimeout(actualizar, 100);
+    });
   }
-
-  let dragging = false;
-  canvas.addEventListener('touchstart', e => { e.preventDefault(); dragging = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; });
-  canvas.addEventListener('touchmove', e => { if (!dragging) return; ang += (e.touches[0].clientX - lastX) * 0.01; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; dibujar(); });
-  canvas.addEventListener('touchend', () => dragging = false);
-  canvas.addEventListener('mousedown', e => { dragging = true; lastX = e.clientX; lastY = e.clientY; });
-  canvas.addEventListener('mousemove', e => { if (!dragging) return; ang += (e.clientX - lastX) * 0.01; lastX = e.clientX; lastY = e.clientY; dibujar(); });
-  canvas.addEventListener('mouseup', () => dragging = false);
-  dibujar();
-}
-
-  window.exportPDF = function() {
-    if (!window.jspdf || !window.jspdf.jsPDF) { toast('Librería PDF no disponible'); return; }
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.text('StructuraPro - Resumen de Proyecto', 10, 10);
-    doc.text('Concreto total: ' + document.getElementById('st-vol')?.textContent + ' m3', 10, 20);
-    doc.text('Acero total: ' + document.getElementById('st-kg')?.textContent + ' kg', 10, 30);
-    doc.text('Quintales totales: ' + document.getElementById('st-qq')?.textContent, 10, 40);
-    doc.save('resumen.pdf');
-    toast('PDF exportado');
-  };
-  window.exportPlan = function() {
-    if (!window.jspdf || !window.jspdf.jsPDF) { toast('Librería PDF no disponible'); return; }
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF(); doc.text('Planilla de Hierro', 10, 10);
-    const tabla = document.querySelector('#ta-wrap table');
-    if (tabla) doc.autoTable({ html: tabla, startY: 20 });
-    doc.save('planilla_acero.pdf');
-    toast('Planilla exportada');
-  };
-  window.exportEscPDF = function() {
-    if (!window.jspdf || !window.jspdf.jsPDF) { toast('Librería PDF no disponible'); return; }
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF(); doc.text('Planilla Escalera', 10, 10);
-    const tabla = document.querySelector('#esc_tbl')?.closest('table');
-    if (tabla) doc.autoTable({ html: tabla, startY: 20 });
-    doc.save('escalera.pdf');
-    toast('Planilla de escalera exportada');
-  };
-
-  // ── INICIALIZACIÓN ─────────────────────────────────
-      actualizar();
+})();
 </script>
 </body>
 </html>
