@@ -707,11 +707,13 @@ tr:last-child td{border-bottom:none}
 <div id="ace" class="pg">
   <div class="sh"><div class="si si-s">⚙️</div><div><h2 class="cs">PLANILLA DE HIERRO</h2><p>ESTRIBOS · BARRAS · QQ</p></div></div>
   <div class="stabs">
-    <button class="stab ss on" onclick="SA('sp-ae-e',this)">🔩 ESTRIBOS</button>
-    <button class="stab ss"    onclick="SA('sp-ae-b',this)">📏 BARRAS</button>
-    <button class="stab ss"    onclick="SA('sp-ae-p',this)">📋 PLANILLA</button>
+    <button class="stab ss on" onclick="SA('ae-e',this)">🔩 ESTRIBOS</button>
+    <button class="stab ss"    onclick="SA('ae-b',this)">📏 BARRAS</button>
+    <button class="stab ss"    onclick="SA('ae-p',this)">📋 PLANILLA</button>
   </div>
-  <div id="ae-e" class="sp on">
+
+  <!-- SUBPESTAÑA ESTRIBOS -->
+  <div id="sp-ae-e" class="sp on">
     <div class="fb fb-s"><lbl>📐 ESTRIBOS — ACI 318 §25.3 / REP</lbl>
       <div class="f">Cola: <span class="a">6ϕ</span>(#3–#5) | <span class="a">12ϕ</span>(#6–#8) — ACI §25.3.2<br>
       qq=(m×N×peso×<span class="s">1.07</span>)/<span class="s">45.36</span></div></div>
@@ -745,7 +747,9 @@ tr:last-child td{border-bottom:none}
       <div class="ri full"><div class="v" id="e_qq">—</div><div class="l">QQ</div></div>
     </div></div>
   </div>
-  <div id="ae-b" class="sp">
+
+  <!-- SUBPESTAÑA BARRAS -->
+  <div id="sp-ae-b" class="sp">
     <div class="card"><h4 class="hs">BARRAS</h4>
       <div class="fi"><label>LONGITUD (m)</label><input id="b_l" type="number" step="0.1" placeholder="3.0"></div>
       <div class="fi"><label>N° BARRAS</label><input id="b_n" type="number" placeholder="4"></div>
@@ -759,7 +763,9 @@ tr:last-child td{border-bottom:none}
       <div class="ri full"><div class="v" id="b_qq">—</div><div class="l">QQ</div></div>
     </div></div>
   </div>
-  <div id="ae-p" class="sp">
+
+  <!-- SUBPESTAÑA PLANILLA -->
+  <div id="sp-ae-p" class="sp">
     <div class="tw"><table><caption>PLANILLA DE HIERRO — CONSOLIDADO</caption>
       <thead><tr><th>ELEMENTO</th><th>DIÁM.</th><th>N°</th><th>m</th><th>kg</th><th>qq</th></tr></thead>
       <tbody id="pl-body"><tr><td colspan="6" style="color:var(--dim);text-align:center;padding:13px">Calcula los módulos para llenar la planilla</td></tr></tbody>
