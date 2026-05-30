@@ -910,35 +910,9 @@ tr:last-child td{border-bottom:none}
 
   <!-- ISO 3D CSS (modelo estable sin canvas) -->
 <div class="iso-outer">
-  <h4>🏗️ ESTRUCTURA 3D — VISTA ISOMÉTRICA</h4>
-  <p class="iso-hint">👆 Modelo representativo de la estructura</p>
-  <div id="iso-scene" style="width:100%;height:260px;display:flex;justify-content:center;align-items:center;perspective:600px;background:#060e1c;border-radius:6px;overflow:hidden;">
-    <div style="width:160px;height:160px;position:relative;transform:rotateX(60deg) rotateZ(45deg);transform-style:preserve-3d;">
-      <!-- Placa base -->
-      <div style="position:absolute;width:160px;height:160px;background:rgba(251,191,36,0.2);border:1px solid rgba(251,191,36,0.4);transform:translateZ(0);"></div>
-      <!-- Zapatas -->
-      <div style="position:absolute;width:30px;height:30px;background:rgba(251,191,36,0.6);transform:translateZ(5px);"></div>
-      <div style="position:absolute;width:30px;height:30px;background:rgba(251,191,36,0.6);right:0;transform:translateZ(5px);"></div>
-      <div style="position:absolute;width:30px;height:30px;background:rgba(251,191,36,0.6);bottom:0;transform:translateZ(5px);"></div>
-      <div style="position:absolute;width:30px;height:30px;background:rgba(251,191,36,0.6);right:0;bottom:0;transform:translateZ(5px);"></div>
-      <!-- Pedestales -->
-      <div style="position:absolute;width:16px;height:16px;background:rgba(251,146,60,0.8);transform:translateZ(30px);left:7px;top:7px;"></div>
-      <div style="position:absolute;width:16px;height:16px;background:rgba(251,146,60,0.8);transform:translateZ(30px);right:7px;top:7px;"></div>
-      <div style="position:absolute;width:16px;height:16px;background:rgba(251,146,60,0.8);transform:translateZ(30px);left:7px;bottom:7px;"></div>
-      <div style="position:absolute;width:16px;height:16px;background:rgba(251,146,60,0.8);transform:translateZ(30px);right:7px;bottom:7px;"></div>
-      <!-- Columnas -->
-      <div style="position:absolute;width:10px;height:10px;background:rgba(240,165,0,0.9);transform:translateZ(60px);left:10px;top:10px;"></div>
-      <div style="position:absolute;width:10px;height:10px;background:rgba(240,165,0,0.9);transform:translateZ(60px);right:10px;top:10px;"></div>
-      <div style="position:absolute;width:10px;height:10px;background:rgba(240,165,0,0.9);transform:translateZ(60px);left:10px;bottom:10px;"></div>
-      <div style="position:absolute;width:10px;height:10px;background:rgba(240,165,0,0.9);transform:translateZ(60px);right:10px;bottom:10px;"></div>
-      <!-- Vigas superiores (sísmicas) -->
-      <div style="position:absolute;width:140px;height:4px;background:rgba(167,139,250,0.8);transform:translateZ(90px);left:10px;top:10px;"></div>
-      <div style="position:absolute;width:4px;height:140px;background:rgba(167,139,250,0.8);transform:translateZ(90px);left:10px;top:10px;"></div>
-      <!-- Vigas de amarre -->
-      <div style="position:absolute;width:140px;height:3px;background:rgba(52,211,153,0.6);transform:translateZ(45px);left:10px;top:10px;"></div>
-      <div style="position:absolute;width:3px;height:140px;background:rgba(52,211,153,0.6);transform:translateZ(45px);left:10px;top:10px;"></div>
-    </div>
-  </div>
+  <h4>🏗️ ESTRUCTURA 3D — ARRASTRA PARA GIRAR</h4>
+  <p class="iso-hint">👆 Touch/drag para rotar · Muestra módulos calculados</p>
+  <div id="three-container" style="width:100%;height:260px;touch-action:none;background:#060e1c;border-radius:6px;overflow:hidden;"></div>
   <div class="legend">
     <div class="leg"><div class="leg-d" style="background:rgba(240,165,0,.9)"></div>Columna</div>
     <div class="leg"><div class="leg-d" style="background:var(--ped)"></div>Pedestal</div>
