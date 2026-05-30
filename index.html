@@ -1464,25 +1464,7 @@ if (canvas) {
     }
   }
 
-  // ── CANVAS 3D INTERACTIVO ──────────────────────────
-function iniciar3D() {
-  const canvas = document.getElementById('isoCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  let ang = 0.5, lastX = 0, lastY = 0;
-  canvas.width = canvas.clientWidth || 340;
-  canvas.height = 260;
-
-  function dibujar() {
-    const w = canvas.width, h = canvas.height;
-    ctx.clearRect(0, 0, w, h);
-
-    const cx = w/2, cy = h/1.8, escala = 35;
-    const cos = Math.cos(ang), sin = Math.sin(ang);
-    function proy(x, y, z) {
-      return { x: (x - y) * cos * escala + cx, y: (x + y) * sin * escala * 0.7 - z * escala * 0.9 + cy };
-    }
-
+  // ── CANVAS 3D INTERACTIVO ─────────────────────────
     // Cuadrícula
     ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 0.5;
     for (let i = -2; i <= 2; i++) {
@@ -1572,36 +1554,7 @@ function iniciar3D() {
   };
 
   // ── INICIALIZACIÓN ─────────────────────────────────
-  function inicializar3DConRetraso(intentos) {
-    const canvas = document.getElementById('isoCanvas');
-    if (!canvas) return;
-    canvas.style.display = 'block';
-    canvas.width = canvas.clientWidth || 340;
-    canvas.height = 260;
-    if (canvas.clientWidth > 0) {
-      iniciar3D();
-    } else if (intentos < 5) {
-      setTimeout(() => inicializar3DConRetraso(intentos + 1), 200);
-    }
-  }
-
-  window.addEventListener('load', () => {
-    actualizar();
-    inicializar3DConRetraso(0);
-  });
-
-  const tabRes = document.querySelector('.tab[onclick*="res"]');
-  if (tabRes) {
-    tabRes.addEventListener('click', () => {
       actualizar();
-      setTimeout(() => {
-        const canvas = document.getElementById('isoCanvas');
-        if (canvas) { canvas.width = canvas.clientWidth || 340; canvas.height = 260; }
-        inicializar3DConRetraso(0);
-      }, 300);
-    });
-  }
-})();
 </script>
 </body>
 </html>
