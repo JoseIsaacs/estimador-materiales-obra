@@ -990,7 +990,153 @@ tr:last-child td{border-bottom:none}
 <!-- <script src="js/resumen.js"></script> -->
 
 <!-- ========== SCRIPTS INCRUSTADOS ========== -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script>
+  (function() {
+    function iniciarThreeJS() {
+      const container = document.getElementById('three-container');
+      if (!container || container.clientWidth === 0) return;
+
+      // Limpiar contenedor por si acaso
+      container.innerHTML = '';
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x060e1c);
+      
+      const width = container.clientWidth || 340;
+      const height = container.clientHeight || 260;
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 20);
+      camera.position.set(5, 4, 6);
+      camera.lookAt(0, 0.8, 0);
+
+      scene.add(new THREE.AmbientLight(0x404060));
+      const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      dirLight.position.set(1, 2, 1);
+      scene.add(dirLight);
+
+      const group = new THREE.Group();
+      scene.add(group);
+
+      const matZapata = new THREE.MeshLambertMaterial({ color: 0xfbbf24, transparent: true, opacity: 0.8 });
+      const matPedestal = new THREE.MeshLambertMaterial({ color: 0xfb923c, transparent: true, opacity: 0.8 });
+      const matColumna = new THREE.MeshLambertMaterial({ color: 0xf0a500, transparent: true, opacity: 0.9 });
+      const matVigaSismica = new THREE.MeshLambertMaterial({ color: 0xa78bfa, transparent: true, opacity: 0.8 });
+      const matVigaAmarre = new THREE.MeshLambertMaterial({ color: 0x34d399, transparent: true, opacity: 0.6 });
+
+      const geomZapata = new THREE.BoxGeometry(0.5, 0.15, 0.5);
+      const geomPedestal = new THREE.BoxGeometry(0.25, 0.3, 0.25);
+      const geomColumna = new THREE.BoxGeometry(0.2, 1.5, 0.2);
+      const geomVigaX = new THREE.BoxGeometry(1.8, 0.1, 0.15);
+      const geomVigaZ = new THREE.BoxGeometry(0.15, 0.1, 1.8);
+
+      const esquinas = [
+        [-0.7, 0, -0.7], [0.7, 0, -0.7], [0.7, 0, 0.7], [-0.7, 0, 0.7]
+      ];
+
+      esquinas.forEach(([x, y, z]) => {
+        const zapata = new THREE.Mesh(geomZapata, matZapata);
+        zapata.position.set(x, -0.7, z);
+        group.add(zapata);
+
+        const pedestal = new THREE.Mesh(geomPedestal, matPedestal);
+        pedestal.position.set(x, -0.35, z);
+        group.add(pedestal);
+
+        const columna = new THREE.Mesh(geomColumna, matColumna);
+        columna.position.set(x, 0.25, z);
+        group.add(columna);
+      });
+
+      function crearViga(p1, p2, material, y) {
+        const dx = p2[0] - p1[0];
+        const dz = p2[2] - p1[2];
+        const length = Math.sqrt(dx*dx + dz*dz);
+        const viga = new THREE.Mesh(new THREE.BoxGeometry(length, 0.08, 0.15), material);
+        viga.position.set((p1[0]+p2[0])/2, y, (p1[2]+p2[2])/2);
+        viga.rotation.y = Math.atan2(dx, dz);
+        group.add(viga);
+      }
+
+      const alturaSuperior = 0.9;
+      const alturaMedia = 0.2;
+      for (let i = 0; i < 4; i++) {
+        const p1 = esquinas[i];
+        const p2 = esquinas[(i+1)%4];
+        crearViga(p1, p2, matVigaSismica, alturaSuperior);
+        crearViga(p1, p2, matVigaAmarre, alturaMedia);
+      }
+
+      // Interactividad táctil y ratón
+      let isDragging = false;
+      let previousTouch = { x: 0, y: 0 };
+      const canvas = renderer.domElement;
+
+      canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        isDragging = true;
+        previousTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }, { passive: false });
+
+      canvas.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const deltaX = e.touches[0].clientX - previousTouch.x;
+        const deltaY = e.touches[0].clientY - previousTouch.y;
+        group.rotation.y += deltaX * 0.01;
+        group.rotation.x += deltaY * 0.005;
+        previousTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }, { passive: false });
+
+      canvas.addEventListener('touchend', () => { isDragging = false; });
+      canvas.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        isDragging = true;
+        previousTouch = { x: e.clientX, y: e.clientY };
+      });
+      canvas.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - previousTouch.x;
+        const deltaY = e.clientY - previousTouch.y;
+        group.rotation.y += deltaX * 0.01;
+        group.rotation.x += deltaY * 0.005;
+        previousTouch = { x: e.clientX, y: e.clientY };
+      });
+      canvas.addEventListener('mouseup', () => { isDragging = false; });
+
+      // Redimensionar al cambiar tamaño de ventana
+      window.addEventListener('resize', () => {
+        if (container.clientWidth > 0) {
+          const w = container.clientWidth;
+          const h = container.clientHeight || 260;
+          renderer.setSize(w, h);
+          camera.aspect = w / h;
+          camera.updateProjectionMatrix();
+        }
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+      }
+      animate();
+    }
+
+    // Iniciar Three.js cuando el DOM esté listo y se muestre el resumen
+    window.addEventListener('load', iniciarThreeJS);
+    const tabRes = document.querySelector('.tab[onclick*="res"]');
+    if (tabRes) {
+      tabRes.addEventListener('click', () => {
+        setTimeout(iniciarThreeJS, 300);
+      });
+    }
+  })();
+</script>
+
 // ========== NAVEGACIÓN Y UTILIDADES ==========
 function T(modo, btn) {
   document.querySelectorAll('.pg').forEach(function(p) { p.classList.remove('on'); });
