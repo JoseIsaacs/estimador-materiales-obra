@@ -1355,11 +1355,16 @@ function calcEsc() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     doc.text('Planilla de Hierro', 10, 10);
-    const tabla = document.querySelector('#ta-wrap table');
-    if (tabla) doc.autoTable({ html: tabla, startY: 20 });
-    doc.save('planilla_acero.pdf');
-    toast('Planilla exportada');
-  };
+    // Buscar la tabla de la planilla de acero (la que contiene pl-body)
+    const tabla = document.querySelector('#pl-body').closest('table');
+    if (tabla) {
+        doc.autoTable({ html: tabla, startY: 20 });
+        doc.save('planilla_acero.pdf');
+        toast('Planilla exportada');
+    } else {
+        toast('No se encontró la tabla de planilla');
+    }
+};
   window.exportEscPDF = function() {
     if (!window.jspdf || !window.jspdf.jsPDF) { toast('Librería PDF no disponible'); return; }
     const { jsPDF } = window.jspdf;
