@@ -1298,6 +1298,27 @@ function calcEsc() {
     }
     document.getElementById('ta-wrap').style.display = totalKg > 0 ? 'block' : 'none';
 
+// Actualizar también la planilla de Acero (pl-body)
+const plBody = document.getElementById('pl-body');
+const plFoot = document.getElementById('pl-foot');
+const plKg = document.getElementById('pl-kg');
+const plQq = document.getElementById('pl-qq');
+if (plBody) {
+  const filas = mods.filter(m => m.kg > 0);
+  plBody.innerHTML = filas.map(m => `
+    <tr>
+      <td class="tl" style="color:${m.color}">${m.nombre}</td>
+      <td>—</td>
+      <td>—</td>
+      <td>${m.kg.toFixed(2)}</td>
+      <td class="tst">${m.kg.toFixed(2)}</td>
+      <td class="tst">${m.qq.toFixed(2)}</td>
+    </tr>
+  `).join('');
+  if (plFoot) plFoot.style.display = filas.length > 0 ? '' : 'none';
+  if (plKg) plKg.textContent = totalKg.toFixed(2);
+  if (plQq) plQq.textContent = totalQQ.toFixed(2);
+}
     const donutSection = document.getElementById('donut-section');
     const donutCanvas = document.getElementById('donutChart');
     if (donutSection && donutCanvas && totalKg > 0) {
