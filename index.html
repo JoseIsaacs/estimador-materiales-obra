@@ -1376,7 +1376,6 @@ if (plBody) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     doc.text('Planilla de Hierro', 10, 10);
-    // Buscar la tabla de la planilla de acero (la que contiene pl-body)
     const tabla = document.querySelector('#pl-body').closest('table');
     if (tabla) {
         doc.autoTable({ html: tabla, startY: 20 });
