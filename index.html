@@ -1373,6 +1373,8 @@ if (plBody) {
   };
   window.exportPlan = function() {
     if (!window.jspdf || !window.jspdf.jsPDF) { toast('Librería PDF no disponible'); return; }
+    // Actualizar todos los datos del resumen (incluye llenar la planilla de Acero)
+    actualizar();
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     doc.text('Planilla de Hierro', 10, 10);
