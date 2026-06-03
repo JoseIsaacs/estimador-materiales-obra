@@ -115,6 +115,11 @@ Ver [CONTRIBUTING.md](CONTRIBUTING.md)
 
 Este proyecto está bajo la Licencia MIT - ver [LICENSE](LICENSE)
 
+> 🔄 **Restauración completada – Junio 2026**  
+> StructuraPro v3.4 ha sido completamente restaurado y estabilizado.  
+> Todos los módulos de cálculo funcionan, las exportaciones PDF están corregidas,  
+> la navegación es sólida y los resultados cumplen las normativas ACI 318, REP/SPIA y COPANIT.  
+> Versión etiquetada como `v3.4-estable`.
 ## 👤 Autor
 
 **José Isaacs**
