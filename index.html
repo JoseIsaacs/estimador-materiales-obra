@@ -949,8 +949,8 @@ tr:last-child td{border-bottom:none}
 
 <!-- SCRIPTS EXTERNOS DE MÓDULOS (se incrustarán automáticamente en el despliegue) -->
 <!-- SCRIPT:concreto -->
-// js/concreto.js
 <script>
+// js/concreto.js
 function calcConcreto() {
   // Leer entradas
   const area = parseFloat(document.getElementById('c_area').value);
@@ -1015,8 +1015,8 @@ function calcConcreto() {
 }
 </script>
 <!-- SCRIPT:muros -->
-// js/muros.js
 <script>
+// js/muros.js
 function calcM() {
   const area = parseFloat(document.getElementById('m_area').value);
   const bloqueTipo = document.getElementById('m_bloque').value;
@@ -1053,8 +1053,8 @@ function calcM() {
 }
 </script>
 <!-- SCRIPT:pisos -->
-// js/pisos.js
 <script>
+// js/pisos.js
 function calcP() {
   const area = parseFloat(document.getElementById('p_area').value);
   const ladoSel = document.getElementById('p_lado').value;
@@ -1096,8 +1096,8 @@ function calcP() {
 }
 </script>
 <!-- SCRIPT:zapatas -->
-// js/zapatas.js
 <script>
+// js/zapatas.js
 function calcZap() {
   // Lectura de inputs
   const b = parseFloat(document.getElementById('z_b').value) || 0; // ancho cm
@@ -1241,8 +1241,8 @@ function calcZap() {
 }
 </script>
 <!-- SCRIPT:vigas_cimentacion -->
-// js/vigas_cimentacion.js
 <script>
+// js/vigas_cimentacion.js
 function calcVCim() {
   // ── GEOMETRÍA ────────────────────────────
   const b = parseFloat(document.getElementById('vc_b').value) || 0;    // cm
@@ -1372,8 +1372,8 @@ function calcVCim() {
 }
 </script>
 <!-- SCRIPT:vigas_sismicas -->
-// js/vigas_sismicas.js
 <script>
+// js/vigas_sismicas.js
 function calcVS() {
   // ── DATOS DE BARRAS (DEBE IR PRIMERO) ────
   const BAR_DATA = window.BAR_DATA || {
@@ -1474,7 +1474,9 @@ function calcVS() {
 
   toast('Viga sísmica calculada');
 }
+</script>
 <!-- SCRIPT:vigas_amarre -->
+<script>
 // js/vigas_amarre.js
 function calcAM() {
   // Geometría
@@ -1542,8 +1544,8 @@ function calcAM() {
 }
 </script>
 <!-- SCRIPT:columnas -->
-// js/columnas.js
 <script>
+// js/columnas.js
 // Constantes de barras
 const BAR_DATA = {
   '3': { diam: 0.953, kgm: 0.560 },
@@ -1698,8 +1700,8 @@ function calcColCi() {
 }
 </script>
 <!-- SCRIPT:pedestales -->
-// js/pedestales.js
 <script>
+// js/pedestales.js
 function calcPed() {
   // Lectura de inputs
   const b = parseFloat(document.getElementById('pd_b').value) || 0;
