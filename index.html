@@ -950,6 +950,7 @@ tr:last-child td{border-bottom:none}
 <!-- SCRIPTS EXTERNOS DE MÓDULOS (se incrustarán automáticamente en el despliegue) -->
 <!-- SCRIPT:concreto -->
 // js/concreto.js
+<script>
 function calcConcreto() {
   // Leer entradas
   const area = parseFloat(document.getElementById('c_area').value);
@@ -1012,8 +1013,10 @@ function calcConcreto() {
 
   toast('Concreto calculado');
 }
+</script>
 <!-- SCRIPT:muros -->
 // js/muros.js
+<script>
 function calcM() {
   const area = parseFloat(document.getElementById('m_area').value);
   const bloqueTipo = document.getElementById('m_bloque').value;
@@ -1048,8 +1051,10 @@ function calcM() {
 
   toast('Muros calculados');
 }
+</script>
 <!-- SCRIPT:pisos -->
 // js/pisos.js
+<script>
 function calcP() {
   const area = parseFloat(document.getElementById('p_area').value);
   const ladoSel = document.getElementById('p_lado').value;
@@ -1089,8 +1094,10 @@ function calcP() {
 
   toast('Pisos calculados');
 }
+</script>
 <!-- SCRIPT:zapatas -->
 // js/zapatas.js
+<script>
 function calcZap() {
   // Lectura de inputs
   const b = parseFloat(document.getElementById('z_b').value) || 0; // ancho cm
@@ -1232,8 +1239,10 @@ function calcZap() {
 
   toast('Zapata calculada');
 }
+</script>
 <!-- SCRIPT:vigas_cimentacion -->
 // js/vigas_cimentacion.js
+<script>
 function calcVCim() {
   // ── GEOMETRÍA ────────────────────────────
   const b = parseFloat(document.getElementById('vc_b').value) || 0;    // cm
@@ -1361,8 +1370,10 @@ function calcVCim() {
 
   toast('Viga de cimentación calculada');
 }
+</script>
 <!-- SCRIPT:vigas_sismicas -->
 // js/vigas_sismicas.js
+<script>
 function calcVS() {
   // ── DATOS DE BARRAS (DEBE IR PRIMERO) ────
   const BAR_DATA = window.BAR_DATA || {
@@ -1529,8 +1540,10 @@ function calcAM() {
 
   toast('Viga de amarre calculada');
 }
+</script>
 <!-- SCRIPT:columnas -->
 // js/columnas.js
+<script>
 // Constantes de barras
 const BAR_DATA = {
   '3': { diam: 0.953, kgm: 0.560 },
@@ -1683,8 +1696,10 @@ function calcColCi() {
   if (res) res.classList.add('show');
   toast('Columna cilíndrica calculada');
 }
+</script>
 <!-- SCRIPT:pedestales -->
 // js/pedestales.js
+<script>
 function calcPed() {
   // Lectura de inputs
   const b = parseFloat(document.getElementById('pd_b').value) || 0;
@@ -1800,7 +1815,7 @@ function calcPed() {
 
   toast('Pedestales calculados');
 }
-
+</script>
 <!-- ========== SCRIPTS INCRUSTADOS ========== -->
 <script>
 // ========== NAVEGACIÓN Y UTILIDADES ==========
