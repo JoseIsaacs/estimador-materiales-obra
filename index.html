@@ -947,16 +947,859 @@ tr:last-child td{border-bottom:none}
 
 <div class="toast" id="toast">✅ OK</div>
 
-<!-- SCRIPTS EXTERNOS DE MÓDULOS -->
-<script src="js/concreto.js"></script>
-<script src="js/muros.js"></script>
-<script src="js/pisos.js"></script>
-<script src="js/zapatas.js"></script>
-<script src="js/vigas_cimentacion.js"></script>
-<script src="js/vigas_sismicas.js"></script>
-<script src="js/vigas_amarre.js"></script>
-<script src="js/columnas.js"></script>
-<script src="js/pedestales.js"></script>
+<!-- SCRIPTS EXTERNOS DE MÓDULOS (se incrustarán automáticamente en el despliegue) -->
+<!-- SCRIPT:concreto -->
+// js/concreto.js
+function calcConcreto() {
+  // Leer entradas
+  const area = parseFloat(document.getElementById('c_area').value);
+  const esp = parseFloat(document.getElementById('c_esp').value);
+  const fc = parseInt(document.getElementById('c_fc').value);
+
+  // Validar
+  if (isNaN(area) || area <= 0 || isNaN(esp) || esp <= 0) {
+    toast('Ingrese área y espesor válidos');
+    return;
+  }
+
+  // Volumen (m³)
+  const volumen = area * esp / 100;
+
+  // Dosificación según f'c
+  let sacosPorM3, arenaPorM3, gravaPorM3, aguaPorM3, dosif;
+  if (fc === 175) {
+    sacosPorM3 = 6.5;
+    arenaPorM3 = 0.55;
+    gravaPorM3 = 0.75;
+    aguaPorM3 = 180;
+    dosif = '1 : 3.0 : 3.8';
+  } else if (fc === 245) {
+    sacosPorM3 = 8.0;
+    arenaPorM3 = 0.50;
+    gravaPorM3 = 0.70;
+    aguaPorM3 = 190;
+    dosif = '1 : 2.2 : 3.0';
+  } else if (fc === 280) {
+    sacosPorM3 = 8.5;
+    arenaPorM3 = 0.47;
+    gravaPorM3 = 0.67;
+    aguaPorM3 = 195;
+    dosif = '1 : 2.0 : 2.8';
+  } else { // fc = 210 (por defecto)
+    sacosPorM3 = 7.0;
+    arenaPorM3 = 0.53;
+    gravaPorM3 = 0.72;
+    aguaPorM3 = 185;
+    dosif = '1 : 2.5 : 3.4';
+  }
+
+  const cemento = volumen * sacosPorM3;
+  const arena = volumen * arenaPorM3;
+  const grava = volumen * gravaPorM3;
+  const agua = volumen * aguaPorM3;
+
+  // Mostrar resultados
+  document.getElementById('cv').textContent = volumen.toFixed(2);
+  document.getElementById('cc').textContent = cemento.toFixed(1);
+  document.getElementById('ca').textContent = arena.toFixed(2);
+  document.getElementById('cg').textContent = grava.toFixed(2);
+  document.getElementById('cw').textContent = Math.round(agua);
+  document.getElementById('cdos').textContent = dosif;
+
+  // Mostrar panel de resultados
+  const res = document.getElementById('res-c');
+  if (res) res.classList.add('show');
+
+  toast('Concreto calculado');
+}
+<!-- SCRIPT:muros -->
+// js/muros.js
+function calcM() {
+  const area = parseFloat(document.getElementById('m_area').value);
+  const bloqueTipo = document.getElementById('m_bloque').value;
+
+  if (isNaN(area) || area <= 0) {
+    toast('Ingrese un área válida para muros');
+    return;
+  }
+
+  // Densidad de bloques según espesor (bloques/m²)
+  let rho;
+  if (bloqueTipo === '8') {
+    rho = 16.5;   // 8 cm - tabique
+  } else {
+    rho = 12.5;   // 12, 15, 20 cm - interior/exterior/estructural
+  }
+
+  const bloques = Math.ceil(area * rho * 1.05); // 5% desperdicio
+  const cemento = area * 0.15;  // sacos de 50 kg
+  const arena = area * 0.02;    // m³ de arena
+  const agua = area * 10;       // litros de agua
+
+  // Actualizar resultados en pantalla
+  document.getElementById('mb').textContent = bloques;
+  document.getElementById('mc').textContent = cemento.toFixed(1);
+  document.getElementById('ma').textContent = arena.toFixed(2);
+  document.getElementById('mw').textContent = Math.round(agua);
+
+  // Mostrar el bloque de resultados
+  const res = document.getElementById('res-m');
+  if (res) res.classList.add('show');
+
+  toast('Muros calculados');
+}
+<!-- SCRIPT:pisos -->
+// js/pisos.js
+function calcP() {
+  const area = parseFloat(document.getElementById('p_area').value);
+  const ladoSel = document.getElementById('p_lado').value;
+
+  if (isNaN(area) || area <= 0) {
+    toast('Ingrese un área válida para pisos');
+    return;
+  }
+
+  // Determinar lado de la baldosa en cm
+  let ladoCm;
+  if (ladoSel === 'c') {
+    ladoCm = parseFloat(document.getElementById('p_custom').value);
+    if (isNaN(ladoCm) || ladoCm <= 0) {
+      toast('Ingrese un tamaño de baldosa personalizado válido');
+      return;
+    }
+  } else {
+    ladoCm = parseFloat(ladoSel);
+  }
+
+  const areaBaldosaM2 = (ladoCm / 100) * (ladoCm / 100); // m² por baldosa
+  const baldosas = Math.ceil((area / areaBaldosaM2) * 1.10); // +10% desperdicio
+  const cajas = Math.ceil(baldosas / 10); // estimación cajas de 10 unidades
+  const pega = (area * 4.5).toFixed(1);   // kg de pega
+  const fragua = (area * 0.3).toFixed(1); // kg de fragua (aprox.)
+
+  // Mostrar resultados
+  document.getElementById('pb').textContent = baldosas;
+  document.getElementById('pcaj').textContent = cajas;
+  document.getElementById('ppega').textContent = pega;
+  document.getElementById('pfrag').textContent = fragua;
+
+  // Mostrar bloque de resultados
+  const res = document.getElementById('res-p');
+  if (res) res.classList.add('show');
+
+  toast('Pisos calculados');
+}
+<!-- SCRIPT:zapatas -->
+// js/zapatas.js
+function calcZap() {
+  // Lectura de inputs
+  const b = parseFloat(document.getElementById('z_b').value) || 0; // ancho cm
+  const l = parseFloat(document.getElementById('z_l').value) || 0; // largo cm
+  const h = parseFloat(document.getElementById('z_h').value) || 0; // altura cm
+  const n = parseInt(document.getElementById('z_n').value) || 0;   // número zapatas
+  const rec = parseFloat(document.getElementById('z_rec').value); // recubrimiento cm
+  const fc = parseFloat(document.getElementById('z_fc').value);   // f'c
+  const barra = document.getElementById('z_bd').value; // #3, #4, #5...
+  const sep = parseFloat(document.getElementById('z_sep').value); // separación cm
+
+  if (b <= 0 || l <= 0 || h <= 0 || n <= 0) {
+    toast('Complete todos los datos de geometría');
+    return;
+  }
+
+  // Diámetros y pesos según barra
+  const barData = {
+    '3': { diam: 0.953, kgm: 0.560 },
+    '4': { diam: 1.27,  kgm: 0.994 },
+    '5': { diam: 1.59,  kgm: 1.552 },
+    '6': { diam: 1.91,  kgm: 2.235 },
+    '7': { diam: 2.22,  kgm: 3.042 },
+    '8': { diam: 2.54,  kgm: 3.973 }
+  };
+  const bar = barData[barra];
+  if (!bar) { toast('Diámetro de barra no válido'); return; }
+
+  // Dimensiones útiles (cm)
+  const bu = b - 2 * rec;
+  const lu = l - 2 * rec;
+  if (bu <= 0 || lu <= 0) {
+    toast('Recubrimiento mayor que la dimensión de la zapata');
+    return;
+  }
+
+  // Número de barras en cada dirección
+  const nbX = Math.floor(bu / sep) + 1;
+  const nbY = Math.floor(lu / sep) + 1;
+
+  // Longitudes (m)
+  const lBarraX = lu / 100; // largo útil Y en metros
+  const lBarraY = bu / 100; // largo útil X en metros
+
+  // Metros lineales por zapata
+  const mX = nbX * lBarraX;
+  const mY = nbY * lBarraY;
+  const mTotalZapata = mX + mY;
+
+  // Peso por zapata (kg)
+  const kgZapata = mTotalZapata * bar.kgm;
+  // Total proyecto con 7% de desperdicio
+  const kgTotal = kgZapata * n * 1.07;
+  const qqTotal = kgTotal / 45.36;
+
+  // Concreto
+  const volZapata = (b / 100) * (l / 100) * (h / 100); // m³ por zapata
+  const volTotal = volZapata * n;
+  // Dosificación (sacos, arena, grava, agua) según fc (valores promedio)
+  let sacosPorM3, arenaPorM3, gravaPorM3, aguaPorM3;
+  if (fc === 175) {
+    sacosPorM3 = 6.5; arenaPorM3 = 0.55; gravaPorM3 = 0.75; aguaPorM3 = 180;
+  } else if (fc === 245) {
+    sacosPorM3 = 8.0; arenaPorM3 = 0.50; gravaPorM3 = 0.70; aguaPorM3 = 190;
+  } else { // fc 210 (default)
+    sacosPorM3 = 7.0; arenaPorM3 = 0.53; gravaPorM3 = 0.72; aguaPorM3 = 185;
+  }
+
+  const cemento = (volTotal * sacosPorM3).toFixed(1);
+  const arena = (volTotal * arenaPorM3).toFixed(2);
+  const grava = (volTotal * gravaPorM3).toFixed(2);
+  const agua = Math.round(volTotal * aguaPorM3);
+
+  // Mostrar resultados en el panel
+  const res = document.getElementById('res-z');
+  if (res) res.classList.add('show');
+
+  // Tabla de desarrollo
+  const tblWrap = document.getElementById('z_tbl_wrap');
+  if (tblWrap) {
+    tblWrap.innerHTML = `<table>
+      <thead><tr><th>Concepto</th><th>Valor</th><th>Unidad</th></tr></thead>
+      <tbody>
+        <tr><td>Ancho útil</td><td>${bu.toFixed(1)}</td><td>cm</td></tr>
+        <tr><td>Largo útil</td><td>${lu.toFixed(1)}</td><td>cm</td></tr>
+        <tr><td>Barras dir. X</td><td>${nbX}</td><td>#${barra} c/${sep} cm</td></tr>
+        <tr><td>Barras dir. Y</td><td>${nbY}</td><td>#${barra} c/${sep} cm</td></tr>
+        <tr><td>Long. barra X</td><td>${lBarraX.toFixed(2)}</td><td>m</td></tr>
+        <tr><td>Long. barra Y</td><td>${lBarraY.toFixed(2)}</td><td>m</td></tr>
+        <tr><td>Metros totales/zapata</td><td>${mTotalZapata.toFixed(2)}</td><td>m</td></tr>
+        <tr class="trow-tot"><td>Peso acero/zapata</td><td>${kgZapata.toFixed(2)}</td><td>kg</td></tr>
+        <tr class="trow-tot"><td>Peso acero total (${n} zapatas +7%)</td><td>${kgTotal.toFixed(2)}</td><td>kg</td></tr>
+        <tr class="trow-tot"><td>Quintales totales</td><td>${qqTotal.toFixed(2)}</td><td>qq</td></tr>
+      </tbody></table>`;
+  }
+
+  // Resumen de concreto
+  const zSum = document.getElementById('z_sum');
+  if (zSum) {
+    zSum.innerHTML = `
+      <div class="ri"><div class="v">${volTotal.toFixed(2)}</div><div class="l">CONCRETO</div><div class="u">m³</div></div>
+      <div class="ri"><div class="v">${cemento}</div><div class="l">CEMENTO</div><div class="u">sacos 50kg</div></div>
+      <div class="ri"><div class="v">${arena}</div><div class="l">ARENA</div><div class="u">m³</div></div>
+      <div class="ri"><div class="v">${grava}</div><div class="l">GRAVA</div><div class="u">m³</div></div>
+      <div class="ri"><div class="v">${agua}</div><div class="l">AGUA</div><div class="u">litros</div></div>`;
+  }
+
+  // Canvas (dibujo simple de parrilla)
+  const canvas = document.getElementById('zapCanvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width = canvas.clientWidth || 300;
+    const h = canvas.height = 190;
+    ctx.clearRect(0, 0, w, h);
+    // Fondo concreto
+    ctx.fillStyle = 'rgba(167,139,250,0.15)';
+    ctx.fillRect(20, 20, w-40, h-40);
+    // Dibujar líneas de barras
+    ctx.strokeStyle = '#fbbf24'; // amarillo para X
+    ctx.lineWidth = 2;
+    const sepXpx = (w-40) / (nbX+1);
+    for (let i=1; i<=nbX; i++) {
+      const x = 20 + i * sepXpx;
+      ctx.beginPath();
+      ctx.moveTo(x, 20);
+      ctx.lineTo(x, h-20);
+      ctx.stroke();
+    }
+    ctx.strokeStyle = '#00c9ff'; // azul para Y
+    const sepYpx = (h-40) / (nbY+1);
+    for (let i=1; i<=nbY; i++) {
+      const y = 20 + i * sepYpx;
+      ctx.beginPath();
+      ctx.moveTo(20, y);
+      ctx.lineTo(w-20, y);
+      ctx.stroke();
+    }
+  }
+
+  toast('Zapata calculada');
+}
+<!-- SCRIPT:vigas_cimentacion -->
+// js/vigas_cimentacion.js
+function calcVCim() {
+  // ── GEOMETRÍA ────────────────────────────
+  const b = parseFloat(document.getElementById('vc_b').value) || 0;    // cm
+  const h = parseFloat(document.getElementById('vc_h').value) || 0;    // cm
+  const L = parseFloat(document.getElementById('vc_L').value) || 0;    // m
+  const nVigas = parseInt(document.getElementById('vc_nv').value) || 1;
+  const rec = parseFloat(document.getElementById('vc_rec').value);     // cm
+  const fc = parseFloat(document.getElementById('vc_fc').value);       // kg/cm²
+
+  // ── REFUERZO LONGITUDINAL ───────────────
+  const ns = parseInt(document.getElementById('vc_ns').value) || 0;    // # barras superiores
+  const ni = parseInt(document.getElementById('vc_ni').value) || 0;    // # barras inferiores
+  const barraLong = document.getElementById('vc_bl').value;            // #4, #5, #6, #8
+  // ── ESTRIBOS ────────────────────────────
+  const estribo = document.getElementById('vc_be').value;              // #3 o #4
+  const sep = parseFloat(document.getElementById('vc_sep').value);     // cm
+  const gancho = parseInt(document.getElementById('vc_g').value);      // 4 o 6
+
+  if (!b || !h || !L) {
+    toast('Complete las dimensiones de la viga');
+    return;
+  }
+
+  // Datos de barras
+  const BAR_DATA = window.BAR_DATA || {
+    '3': { diam: 0.953, kgm: 0.560 },
+    '4': { diam: 1.27,  kgm: 0.994 },
+    '5': { diam: 1.59,  kgm: 1.552 },
+    '6': { diam: 1.91,  kgm: 2.235 },
+    '8': { diam: 2.54,  kgm: 3.973 }
+  };
+  const barL = BAR_DATA[barraLong];
+  const barE = BAR_DATA[estribo];
+  if (!barL || !barE) {
+    toast('Diámetro de barra no válido');
+    return;
+  }
+
+  // ── TRASLAPES ────────────────────────────
+  const largoComercial = 9.15;
+  const nTraslapes = L > largoComercial ? Math.ceil(L / largoComercial) - 1 : 0;
+  const traslape = 40 * barL.diam / 100;   // m
+  const Lbarra = L + nTraslapes * traslape; // m
+
+  // ── ESTRIBOS ─────────────────────────────
+  const bu = b - 2 * rec;
+  const hu = h - 2 * rec;
+  if (bu <= 0 || hu <= 0) {
+    toast('Recubrimiento demasiado grande');
+    return;
+  }
+  const colaEst = gancho * barE.diam;               // cm
+  const Lest = (2 * (bu + hu) / 100) + 2 * (colaEst / 100); // m
+  const Nest = Math.ceil(L * 100 / sep) + 1;
+
+  // ── PESOS ───────────────────────────────
+  const mLong = (ns + ni) * Lbarra * nVigas;
+  const mEst = Nest * Lest * nVigas;
+  const kgLong = mLong * barL.kgm;
+  const kgEst = mEst * barE.kgm;
+  const kgTotal = (kgLong + kgEst) * 1.07;           // +7%
+  const qqTotal = kgTotal / 45.36;
+
+  // ── CONCRETO ────────────────────────────
+  const volViga = (b / 100) * (h / 100) * L;        // m³ por viga
+  const volTotal = volViga * nVigas;
+  let sacosPorM3, arenaPorM3, gravaPorM3, aguaPorM3;
+  if (fc === 175) {
+    sacosPorM3 = 6.5; arenaPorM3 = 0.55; gravaPorM3 = 0.75; aguaPorM3 = 180;
+  } else if (fc === 245) {
+    sacosPorM3 = 8.0; arenaPorM3 = 0.50; gravaPorM3 = 0.70; aguaPorM3 = 190;
+  } else {
+    sacosPorM3 = 7.0; arenaPorM3 = 0.53; gravaPorM3 = 0.72; aguaPorM3 = 185;
+  }
+  const cemento = (volTotal * sacosPorM3).toFixed(1);
+  const arena = (volTotal * arenaPorM3).toFixed(2);
+  const grava = (volTotal * gravaPorM3).toFixed(2);
+  const agua = Math.round(volTotal * aguaPorM3);
+
+  // ── MOSTRAR RESULTADOS ──────────────────
+  const res = document.getElementById('res-vc');
+  if (res) res.classList.add('show');
+
+  // Tabla de desarrollo
+  const tblWrap = document.getElementById('vc_tbl_wrap');
+  if (tblWrap) {
+    tblWrap.innerHTML = `<table>
+      <thead><tr><th>Concepto</th><th>Valor</th><th>Unidad</th></tr></thead>
+      <tbody>
+        <tr><td>Sección útil (b×h)</td><td>${bu.toFixed(1)} × ${hu.toFixed(1)}</td><td>cm</td></tr>
+        <tr><td>Longitud barra long. (c/traslape)</td><td>${Lbarra.toFixed(2)}</td><td>m</td></tr>
+        <tr><td>Barras superiores</td><td>${ns} #${barraLong}</td><td></td></tr>
+        <tr><td>Barras inferiores</td><td>${ni} #${barraLong}</td><td></td></tr>
+        <tr><td>Longitud estribo</td><td>${Lest.toFixed(2)}</td><td>m</td></tr>
+        <tr><td>Número de estribos / viga</td><td>${Nest} #${estribo} @${sep}cm</td><td></td></tr>
+        <tr class="trow-tot"><td>Peso acero long. total</td><td>${kgLong.toFixed(2)}</td><td>kg</td></tr>
+        <tr class="trow-tot"><td>Peso acero est. total</td><td>${kgEst.toFixed(2)}</td><td>kg</td></tr>
+        <tr class="trow-tot"><td>Peso total +7%</td><td>${kgTotal.toFixed(2)}</td><td>kg</td></tr>
+        <tr class="trow-tot"><td>Quintales totales</td><td>${qqTotal.toFixed(2)}</td><td>qq</td></tr>
+      </tbody></table>`;
+  }
+
+  // Resumen concreto (con IDs ocultos para resumen.js)
+  const vcSum = document.getElementById('vc_sum');
+  if (vcSum) {
+    vcSum.innerHTML = `
+      <div class="ri"><div class="v">${volTotal.toFixed(2)}</div><div class="l">CONCRETO</div><div class="u">m³</div></div>
+      <div class="ri"><div class="v">${cemento}</div><div class="l">CEMENTO</div><div class="u">sacos 50kg</div></div>
+      <div class="ri"><div class="v">${arena}</div><div class="l">ARENA</div><div class="u">m³</div></div>
+      <div class="ri"><div class="v">${grava}</div><div class="l">GRAVA</div><div class="u">m³</div></div>
+      <div class="ri"><div class="v">${agua}</div><div class="l">AGUA</div><div class="u">litros</div></div>
+      <!-- Datos ocultos para el resumen general -->
+      <span id="vc_ke" style="display:none">${kgEst.toFixed(2)}</span>
+      <span id="vc_kl" style="display:none">${kgLong.toFixed(2)}</span>
+      <span id="vc_vol" style="display:none">${volTotal.toFixed(2)}</span>
+      <span id="vc_cem" style="display:none">${cemento}</span>`;
+  }
+
+  // Advertencias
+  const vcWn = document.getElementById('vc_wn');
+  if (vcWn) {
+    vcWn.style.display = 'block';
+    vcWn.innerHTML = `✅ Viga de cimentación ACI 318. Recubrimiento ${rec} cm. ${ns+ni} barras #${barraLong}, estribos #${estribo} @${sep}cm.`;
+  }
+
+  toast('Viga de cimentación calculada');
+}
+<!-- SCRIPT:vigas_sismicas -->
+// js/vigas_sismicas.js
+function calcVS() {
+  // ── DATOS DE BARRAS (DEBE IR PRIMERO) ────
+  const BAR_DATA = window.BAR_DATA || {
+    '3': { diam: 0.953, kgm: 0.560 },
+    '4': { diam: 1.27,  kgm: 0.994 },
+    '5': { diam: 1.59,  kgm: 1.552 },
+    '6': { diam: 1.91,  kgm: 2.235 },
+    '8': { diam: 2.54,  kgm: 3.973 }
+  };
+
+  // Geometría
+  const b = parseFloat(document.getElementById('vs_b').value) || 0;
+  const h = parseFloat(document.getElementById('vs_h').value) || 0;
+  const L = parseFloat(document.getElementById('vs_L').value) || 0;
+  const n = parseInt(document.getElementById('vs_n').value) || 0;
+  const rec = parseFloat(document.getElementById('vs_rec').value);
+  const fc = parseFloat(document.getElementById('vs_fc').value);
+
+  // Refuerzo
+  const barra = document.getElementById('vs_bl').value;
+  const estribo = document.getElementById('vs_be').value;
+  const ns = parseInt(document.getElementById('vs_ns').value) || 0;
+  const ni = parseInt(document.getElementById('vs_ni').value) || 0;
+  const gancho = parseInt(document.getElementById('vs_g').value);
+
+  if (!b || !h || !L || !n) { toast('Complete geometría y número de vigas'); return; }
+
+  const barL = BAR_DATA[barra];
+  const barE = BAR_DATA[estribo];
+  if (!barL || !barE) { toast('Diámetro no válido'); return; }
+
+  // Colas de gancho
+  const colaLon = (parseInt(barra) <= 5) ? 6 * barL.diam : 12 * barL.diam; // cm
+  const colaEst = gancho * barE.diam; // cm
+
+  // Peralte efectivo d = h - rec - diam_est/2 - diam_lon/2 (todo en cm)
+  const d = h - rec - barE.diam/2 - barL.diam/2;
+  if (d <= 0) { toast('Peralte efectivo no válido'); return; }
+
+  // Zona de confinamiento lo = 2h (en m)
+  const lo = 2 * h / 100; // m
+  // Separación zona confinada sConf = min(d/4, 6ϕ_lon, 15cm)
+  const sConf = Math.min(d/4, 6 * barL.diam, 15);
+  // Separación zona central sCen = min(d/2, 30cm)
+  const sCen = Math.min(d/2, 30);
+
+  // Longitud de una barra longitudinal
+  const longComercial = 9.15; // m
+  const nTraslapes = L > longComercial ? Math.ceil(L / longComercial) - 1 : 0;
+  const traslape = 40 * barL.diam / 100; // 40ϕ en m
+  const Lbarra = L + nTraslapes * traslape + colaLon / 100; // m
+
+  // Longitud de estribo
+  const bu = b - 2*rec;
+  const hu = h - 2*rec;
+  const Lest = (2*(bu + hu)/100) + 2*(colaEst/100); // m
+
+  // Número de estribos
+  const NestExtremo = Math.ceil(lo * 100 / sConf) * 2;
+  const NestCentro = Math.ceil((L - 2*lo) * 100 / sCen);
+  const Nest = NestExtremo + NestCentro;
+
+  // Metros totales
+  const mLong = (ns + ni) * Lbarra * n;
+  const mEst = Nest * Lest * n;
+  const kgLong = mLong * barL.kgm;
+  const kgEst = mEst * barE.kgm;
+  const kgTotal = (kgLong + kgEst) * 1.07;
+  const qqTotal = kgTotal / 45.36;
+
+  // Concreto
+  const vol = (b/100) * (h/100) * L * n;
+  const cemento = (vol * 7).toFixed(1);
+  const arena = (vol * 0.53).toFixed(2);
+  const grava = (vol * 0.72).toFixed(2);
+  const agua = Math.round(vol * 185);
+
+  // Mostrar resultados
+  document.getElementById('vs_d').textContent = (d/100).toFixed(3);
+  document.getElementById('vs_lo').textContent = lo.toFixed(2);
+  document.getElementById('vs_sc').textContent = sConf.toFixed(1);
+  document.getElementById('vs_ne').textContent = Nest;
+  document.getElementById('vs_vol').textContent = vol.toFixed(2);
+  document.getElementById('vs_cem').textContent = cemento;
+  document.getElementById('vs_ke').textContent = kgEst.toFixed(2);
+  document.getElementById('vs_kl').textContent = kgLong.toFixed(2);
+  document.getElementById('vs_qq').textContent = qqTotal.toFixed(2);
+
+  const res = document.getElementById('res-vs');
+  if (res) res.classList.add('show');
+
+  // Advertencias
+  const vsWn = document.getElementById('vs_wn');
+  if (vsWn) {
+    vsWn.style.display = 'block';
+    vsWn.innerHTML = `✅ Viga sísmica ACI 318-19 §18.6. d=${(d/100).toFixed(3)}m, lo=${lo.toFixed(2)}m, sConf=${sConf.toFixed(1)}cm, sCen=${sCen.toFixed(1)}cm.`;
+  }
+
+  toast('Viga sísmica calculada');
+}
+<!-- SCRIPT:vigas_amarre -->
+// js/vigas_amarre.js
+function calcAM() {
+  // Geometría
+  const b = parseFloat(document.getElementById('am_b').value) || 0;
+  const h = parseFloat(document.getElementById('am_h').value) || 0;
+  const L = parseFloat(document.getElementById('am_L').value) || 0;
+  const fc = parseFloat(document.getElementById('am_fc').value);
+
+  // Refuerzo
+  const nb = parseInt(document.getElementById('am_nb').value) || 4;
+  const barra = document.getElementById('am_bl').value;
+  const sep = parseFloat(document.getElementById('am_sep').value);
+  const rec = parseFloat(document.getElementById('am_rec').value);
+
+  if (!b || !h || !L) { toast('Complete dimensiones de la viga'); return; }
+
+  const BAR_DATA = window.BAR_DATA || {
+    '3': { diam: 0.953, kgm: 0.560 },
+    '4': { diam: 1.27,  kgm: 0.994 },
+    '5': { diam: 1.59,  kgm: 1.552 }
+  };
+  const barL = BAR_DATA[barra] || { diam: 1.27, kgm: 0.994 };
+  const barE = BAR_DATA['3'] || { diam: 0.953, kgm: 0.560 };
+
+  // Traslape
+  const longComercial = 9.15;
+  const nTraslapes = L > longComercial ? Math.ceil(L / longComercial) - 1 : 0;
+  const traslape = 40 * barL.diam / 100;
+  const Lbarra = L + nTraslapes * traslape;
+
+  // Estribos
+  const bu = b - 2*rec, hu = h - 2*rec;
+  const Lest = (2*(bu + hu)/100) + 2*(6 * barE.diam / 100);
+  const Nest = Math.ceil(L * 100 / sep) + 1;
+
+  // Pesos
+  const mLong = nb * Lbarra, mEst = Nest * Lest;
+  const kgLong = mLong * barL.kgm, kgEst = mEst * barE.kgm;
+  const kgTotal = (kgLong + kgEst) * 1.07, qqTotal = kgTotal / 45.36;
+
+  // Concreto
+  const vol = (b/100) * (h/100) * L;
+  const cemento = (vol * 7).toFixed(1), arena = (vol * 0.53).toFixed(2);
+  const grava = (vol * 0.72).toFixed(2), agua = Math.round(vol * 185);
+
+  // Mostrar
+  document.getElementById('am_vol').textContent = vol.toFixed(2);
+  document.getElementById('am_cem').textContent = cemento;
+  document.getElementById('am_lb').textContent = Lbarra.toFixed(2);
+  document.getElementById('am_ne').textContent = Nest;
+  document.getElementById('am_kl').textContent = kgLong.toFixed(2);
+  document.getElementById('am_ke').textContent = kgEst.toFixed(2);
+  document.getElementById('am_qq').textContent = qqTotal.toFixed(2);
+
+  const res = document.getElementById('res-am');
+  if (res) res.classList.add('show');
+
+  const amWn = document.getElementById('am_wn');
+  if (amWn) {
+    amWn.style.display = 'block';
+    amWn.innerHTML = `✅ Viga de amarre REP/SPIA. ${nb} barras #${barra}, estribos #3@${sep}cm.`;
+  }
+
+  toast('Viga de amarre calculada');
+}
+<!-- SCRIPT:columnas -->
+// js/columnas.js
+// Constantes de barras
+const BAR_DATA = {
+  '3': { diam: 0.953, kgm: 0.560 },
+  '4': { diam: 1.27,  kgm: 0.994 },
+  '5': { diam: 1.59,  kgm: 1.552 },
+  '6': { diam: 1.91,  kgm: 2.235 },
+  '8': { diam: 2.54,  kgm: 3.973 }
+};
+
+function calcColR() {
+  const b = parseFloat(document.getElementById('cr_b').value) || 0;
+  const h = parseFloat(document.getElementById('cr_h').value) || 0;
+  const L = parseFloat(document.getElementById('cr_L').value) || 0;
+  const n = parseInt(document.getElementById('cr_n').value) || 0;
+  const rec = parseFloat(document.getElementById('cr_rec').value);
+  const fc = parseFloat(document.getElementById('cr_fc').value);
+  const nb = parseInt(document.getElementById('cr_nb').value) || 0;
+  const barra = document.getElementById('cr_bl').value;
+  const estribo = document.getElementById('cr_be').value;
+  const gancho = parseInt(document.getElementById('cr_g').value);
+
+  if (!b || !h || !L || !n) { toast('Complete geometría y número de columnas'); return; }
+  const barL = BAR_DATA[barra];
+  const barE = BAR_DATA[estribo];
+  if (!barL || !barE) { toast('Diámetro no válido'); return; }
+
+  const colaLon = (parseInt(barra) <= 5) ? 6 * barL.diam : 12 * barL.diam; // cm
+  const colaEst = gancho * barE.diam; // cm
+  const bu = b - 2 * rec;
+  const hu = h - 2 * rec;
+  if (bu <= 0 || hu <= 0) { toast('Recubrimiento excede sección'); return; }
+
+  const Lbarra = L + colaLon / 100; // m
+  const Lest = (2 * (bu + hu) / 100) + 2 * (colaEst / 100); // m
+  const dimMayor = Math.max(b, h);
+  const lo = Math.max(L / 6, dimMayor, 45) / 100; // zona confinamiento en m
+  const sConf = Math.min((Math.min(bu, hu) / 4), 6 * barL.diam, 15); // cm
+  const sCen = Math.min(Math.min(bu, hu) / 2, 30); // cm
+  const Nest = Math.ceil(lo * 100 / sConf) * 2 + Math.ceil((L - 2 * lo) * 100 / sCen);
+
+  const mLong = nb * Lbarra * n;
+  const mEst = Nest * Lest * n;
+  const kgLong = mLong * barL.kgm;
+  const kgEst = mEst * barE.kgm;
+  const kgTotal = (kgLong + kgEst) * 1.07;
+  const qqTotal = kgTotal / 45.36;
+
+  const vol = (b/100) * (h/100) * L * n;
+  const cemento = (vol * 7).toFixed(1);
+  const arena = (vol * 0.53).toFixed(2);
+  const grava = (vol * 0.72).toFixed(2);
+  const agua = Math.round(vol * 185);
+
+  document.getElementById('cr_vol').textContent = vol.toFixed(2);
+  document.getElementById('cr_cem').textContent = cemento;
+  document.getElementById('cr_wu').textContent = bu.toFixed(1) + '×' + hu.toFixed(1);
+  document.getElementById('cr_le').textContent = Lest.toFixed(2);
+  document.getElementById('cr_sc').textContent = sConf.toFixed(1);
+  document.getElementById('cr_xt').textContent = Math.max(0, nb - 4);
+  document.getElementById('cr_ke').textContent = kgEst.toFixed(2);
+  document.getElementById('cr_kl').textContent = kgLong.toFixed(2);
+  document.getElementById('cr_qq').textContent = qqTotal.toFixed(2);
+
+  const res = document.getElementById('res-cr');
+  if (res) res.classList.add('show');
+  toast('Columna cuadrada/rectangular calculada');
+}
+
+function calcColTL() {
+  const wa = parseFloat(document.getElementById('tl_wa').value) || 0;
+  const ha = parseFloat(document.getElementById('tl_ha').value) || 0;
+  const wf = parseFloat(document.getElementById('tl_wf').value) || 0;
+  const hf = parseFloat(document.getElementById('tl_hf').value) || 0;
+  const L = parseFloat(document.getElementById('tl_L').value) || 0;
+  const n = parseInt(document.getElementById('tl_n').value) || 0;
+  const rec = parseFloat(document.getElementById('tl_rec').value);
+  const na = parseInt(document.getElementById('tl_na').value) || 0;
+  const nf = parseInt(document.getElementById('tl_nf').value) || 0;
+  const barra = document.getElementById('tl_bl').value;
+  const estribo = document.getElementById('tl_be').value;
+
+  if (!wa || !ha || !wf || !hf || !L || !n) { toast('Complete todos los campos'); return; }
+  const barL = BAR_DATA[barra];
+  const barE = BAR_DATA[estribo];
+  if (!barL || !barE) { toast('Diámetro no válido'); return; }
+
+  const colaEst = 6 * barE.diam; // asumimos gancho 6ϕ sísmico
+  const wua = wa - 2*rec, hua = ha - 2*rec;
+  const wuf = wf - 2*rec, huf = hf - 2*rec;
+  const LestAlma = (2*(wua+hua)/100) + 2*(colaEst/100);
+  const LestAla = (2*(wuf+huf)/100) + 2*(colaEst/100);
+  const Nest = Math.ceil(L*100 / 15) + 1; // separación fija 15 cm simplificada
+
+  const mLong = ((na + nf) * L) * n; // sin cola por simplicidad
+  const mEst = Nest * (LestAlma + LestAla) * n;
+  const kgLong = mLong * barL.kgm;
+  const kgEst = mEst * barE.kgm;
+  const kgTotal = (kgLong + kgEst) * 1.07;
+  const qqTotal = kgTotal / 45.36;
+
+  const vol = ((wa*ha + wf*hf)/10000) * L * n;
+  document.getElementById('tl_vol').textContent = vol.toFixed(2);
+  document.getElementById('tl_cem').textContent = (vol*7).toFixed(1);
+  document.getElementById('tl_la').textContent = LestAlma.toFixed(2);
+  document.getElementById('tl_lf').textContent = LestAla.toFixed(2);
+  document.getElementById('tl_ke').textContent = kgEst.toFixed(2);
+  document.getElementById('tl_kl').textContent = kgLong.toFixed(2);
+  document.getElementById('tl_qq').textContent = qqTotal.toFixed(2);
+
+  const res = document.getElementById('res-tl');
+  if (res) res.classList.add('show');
+  toast('Columna T/L calculada');
+}
+
+function calcColCi() {
+  const D = parseFloat(document.getElementById('ci_d').value) || 0;
+  const L = parseFloat(document.getElementById('ci_L').value) || 0;
+  const n = parseInt(document.getElementById('ci_n').value) || 0;
+  const rec = parseFloat(document.getElementById('ci_rec').value);
+  const paso = parseFloat(document.getElementById('ci_paso').value) || 0;
+  const nb = parseInt(document.getElementById('ci_nb').value) || 0;
+  const barra = document.getElementById('ci_bl').value;
+  const espiral = document.getElementById('ci_be').value;
+
+  if (!D || !L || !n) { toast('Complete dimensiones'); return; }
+  const barL = BAR_DATA[barra];
+  const barE = BAR_DATA[espiral];
+  if (!barL || !barE) { toast('Diámetro no válido'); return; }
+
+  const Du = D - 2*rec;
+  const perimVuelta = Math.PI * Du / 100; // m
+  const Nv = Math.ceil((L*100 - rec) / paso);
+  const Lesp = Nv * perimVuelta;
+  const kgEsp = Lesp * barE.kgm * n;
+  const mLong = nb * L * n;
+  const kgLong = mLong * barL.kgm;
+  const kgTotal = (kgLong + kgEsp) * 1.07;
+  const qqTotal = kgTotal / 45.36;
+
+  const vol = (Math.PI * (D/200)**2) * L * n;
+  document.getElementById('ci_vol').textContent = vol.toFixed(2);
+  document.getElementById('ci_cem').textContent = (vol*7).toFixed(1);
+  document.getElementById('ci_nv').textContent = Nv;
+  document.getElementById('ci_lt').textContent = Lesp.toFixed(2);
+  document.getElementById('ci_ke').textContent = kgEsp.toFixed(2);
+  document.getElementById('ci_kl').textContent = kgLong.toFixed(2);
+  document.getElementById('ci_qq').textContent = qqTotal.toFixed(2);
+
+  const res = document.getElementById('res-ci');
+  if (res) res.classList.add('show');
+  toast('Columna cilíndrica calculada');
+}
+<!-- SCRIPT:pedestales -->
+// js/pedestales.js
+function calcPed() {
+  // Lectura de inputs
+  const b = parseFloat(document.getElementById('pd_b').value) || 0;
+  const h = parseFloat(document.getElementById('pd_h').value) || 0;
+  const H = parseFloat(document.getElementById('pd_H').value) || 0; // altura en m
+  const n = parseInt(document.getElementById('pd_n').value) || 0;
+  const rec = parseFloat(document.getElementById('pd_rec').value);
+  const fc = parseFloat(document.getElementById('pd_fc').value);
+  const nb = parseInt(document.getElementById('pd_nb').value) || 0;
+  const barra = document.getElementById('pd_bl').value; // #4, #5, #6, #7, #8
+  const estribo = document.getElementById('pd_be').value; // #3, #4
+  const sep = parseFloat(document.getElementById('pd_sep').value); // cm
+  const gancho = parseInt(document.getElementById('pd_g').value); // 4, 6
+
+  if (b <= 0 || h <= 0 || H <= 0 || n <= 0) {
+    toast('Complete dimensiones y número de pedestales');
+    return;
+  }
+
+  // Datos de barras
+  const barData = {
+    '3': { diam: 0.953, kgm: 0.560 },
+    '4': { diam: 1.27,  kgm: 0.994 },
+    '5': { diam: 1.59,  kgm: 1.552 },
+    '6': { diam: 1.91,  kgm: 2.235 },
+    '7': { diam: 2.22,  kgm: 3.042 },
+    '8': { diam: 2.54,  kgm: 3.973 }
+  };
+  const barLon = barData[barra];
+  const barEst = barData[estribo];
+  if (!barLon || !barEst) { toast('Diámetro no válido'); return; }
+
+  // Cola de gancho para barra longitudinal (90°)
+  const colaLon = (parseInt(barra) <= 5) ? 6 * barLon.diam : 12 * barLon.diam; // cm
+  // Cola de estribo
+  const colaEst = gancho * barEst.diam; // cm (gancho: 4 o 6 veces ϕ)
+
+  // Dimensiones útiles (cm)
+  const bu = b - 2 * rec;
+  const hu = h - 2 * rec;
+  if (bu <= 0 || hu <= 0) {
+    toast('Recubrimiento mayor que la sección del pedestal');
+    return;
+  }
+
+  // Longitud de una barra longitudinal (m) = altura + gancho (en m)
+  const Lbarra = H + colaLon / 100; // m
+
+  // Longitud de un estribo (m) = perímetro útil + 2 colas
+  const Lest = (2 * (bu + hu) / 100) + 2 * (colaEst / 100); // m
+
+  // Número de estribos = (H*100 / sep) + 1 (redondeo arriba)
+  const Nest = Math.ceil((H * 100) / sep) + 1;
+
+  // Metros totales
+  const mLong = nb * Lbarra * n;
+  const mEst = Nest * Lest * n;
+
+  // Pesos (kg)
+  const kgLong = mLong * barLon.kgm;
+  const kgEst = mEst * barEst.kgm;
+  const kgTotal = (kgLong + kgEst) * 1.07; // +7% desperdicio
+  const qqTotal = kgTotal / 45.36;
+
+  // Concreto
+  const volPedestal = (b / 100) * (h / 100) * H; // m³
+  const volTotal = volPedestal * n;
+  // Dosificación simplificada (fc 210)
+  const cemento = (volTotal * 7).toFixed(1); // sacos
+  const arena = (volTotal * 0.53).toFixed(2);
+  const grava = (volTotal * 0.72).toFixed(2);
+  const agua = Math.round(volTotal * 185);
+
+  // Mostrar resultados
+  const res = document.getElementById('res-pd');
+  if (res) res.classList.add('show');
+
+  // Tabla de desarrollo
+  const tblWrap = document.getElementById('pd_tbl_wrap');
+  if (tblWrap) {
+    tblWrap.innerHTML = `<table>
+      <thead><tr><th>Concepto</th><th>Valor</th><th>Unidad</th></tr></thead>
+      <tbody>
+        <tr><td>Sección útil (b×h)</td><td>${bu.toFixed(1)} × ${hu.toFixed(1)}</td><td>cm</td></tr>
+        <tr><td>Long. barra long. (c/g)</td><td>${Lbarra.toFixed(2)}</td><td>m</td></tr>
+        <tr><td>N° barras long.</td><td>${nb}</td><td>#${barra}</td></tr>
+        <tr><td>Long. estribo</td><td>${Lest.toFixed(2)}</td><td>m</td></tr>
+        <tr><td>N° estribos/pedestal</td><td>${Nest}</td><td>#${estribo} @${sep}cm</td></tr>
+        <tr class="trow-tot"><td>Peso acero long. total</td><td>${kgLong.toFixed(2)}</td><td>kg</td></tr>
+        <tr class="trow-tot"><td>Peso acero est. total</td><td>${kgEst.toFixed(2)}</td><td>kg</td></tr>
+        <tr class="trow-tot"><td>Peso total +7%</td><td>${kgTotal.toFixed(2)}</td><td>kg</td></tr>
+        <tr class="trow-tot"><td>Quintales totales</td><td>${qqTotal.toFixed(2)}</td><td>qq</td></tr>
+      </tbody></table>`;
+  }
+
+  // Resumen concreto
+  const pdSum = document.getElementById('pd_sum');
+  if (pdSum) {
+    pdSum.innerHTML = `
+      <div class="ri"><div class="v">${volTotal.toFixed(2)}</div><div class="l">CONCRETO</div><div class="u">m³</div></div>
+      <div class="ri"><div class="v">${cemento}</div><div class="l">CEMENTO</div><div class="u">sacos 50kg</div></div>
+      <div class="ri"><div class="v">${arena}</div><div class="l">ARENA</div><div class="u">m³</div></div>
+      <div class="ri"><div class="v">${grava}</div><div class="l">GRAVA</div><div class="u">m³</div></div>
+      <div class="ri"><div class="v">${agua}</div><div class="l">AGUA</div><div class="u">litros</div></div>`;
+  }
+
+  // Advertencias
+  const pdWn = document.getElementById('pd_wn');
+  if (pdWn) {
+    pdWn.style.display = 'block';
+    pdWn.innerHTML = '✅ Pedestal calculado según ACI 318. Recubrimiento ' + rec + ' cm. Gancho ' + gancho + 'ϕ.';
+  }
+
+  toast('Pedestales calculados');
+}
 
 <!-- ========== SCRIPTS INCRUSTADOS ========== -->
 <script>
