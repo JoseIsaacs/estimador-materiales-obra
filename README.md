@@ -7,14 +7,6 @@
 
 Sistema profesional de estimación de materiales para obras civiles basado en normativas panameñas (REP/SPIA, COPANIT) y estándares internacionales (ACI 318-19).
 
-# StructuraPro
-
-⭐ **Si esta herramienta te ahorra tiempo, considera [patrocinarla](https://github.com/sponsors/joseisaacs)** ⭐
-
----
-
-Descripción de StructuraPro...
-
 ## 🚀 Capacidades del Proyecto
 
 - **Cálculo de Concreto:** Volumen, cemento, arena, grava y agua (ACI 318)
@@ -157,3 +149,11 @@ Para dudas o reportar problemas:
 ---
 
 **StructuraPro v3.4** - Sistema profesional de estimación de materiales para obras civiles
+
+# StructuraPro
+
+⭐ **Si esta herramienta te ahorra tiempo, considera [patrocinarla](https://github.com/sponsors/joseisaacs)** ⭐
+
+---
+
+Descripción de StructuraPro...
