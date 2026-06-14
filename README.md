@@ -86,17 +86,20 @@ pip install -r requirements.txt
 
 ## 💜 Apoya StructuraPro
 
-Si StructuraPro te ahorra tiempo y dinero en tus proyectos, considera patrocinar:
+StructuraPro es un proyecto de código abierto mantenido con dedicación. Si esta herramienta te ahorra tiempo en tus proyectos, **considera patrocinarlo**.
 
-- **[GitHub Sponsors](https://github.com/sponsors/joseisaacs)** — Acceso inmediato
-- **[Open Collective](https://opencollective.com/structurapro)** — Para equipos
-- **[PayPal](https://paypal.com/...)** — Donación puntual
+### Niveles de Patrocinio
 
-### ¿Por qué patrocinar?
-✅ Soporte prioritario  
-✅ Acceso a features nuevas primero  
-✅ Votación en roadmap  
-✅ Mención en documentación oficial
+| Nivel | Aporte | Beneficios |
+|-------|--------|-----------|
+| **Scout** | $5/mes | Mención en README + rol especial en comunidad |
+| **Structural Partner** | $25/mes | Soporte prioritario por email + votación en features |
+| **Platinum Engineer** | $100/mes | Acceso a beta + reunión trimestral + reportes personalizados |
+| **Enterprise** | $500+/mes | Licencia comercial + integración personalizada |
+
+**[Patrocina en GitHub Sponsors →](https://github.com/sponsors/joseisaacs)**
+
+*Ver [SPONSORS.md](./SPONSORS.md) para conocer a nuestros patrocinadores.*
 
 ## 📚 Documentación
 
@@ -151,9 +154,3 @@ Para dudas o reportar problemas:
 **StructuraPro v3.4** - Sistema profesional de estimación de materiales para obras civiles
 
 # StructuraPro
-
-⭐ **Si esta herramienta te ahorra tiempo, considera [patrocinarla](https://github.com/sponsors/joseisaacs)** ⭐
-
----
-
-Descripción de StructuraPro...
