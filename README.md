@@ -84,6 +84,20 @@ source venv/bin/activate  # En Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+## 💜 Apoya StructuraPro
+
+Si StructuraPro te ahorra tiempo y dinero en tus proyectos, considera patrocinar:
+
+- **[GitHub Sponsors](https://github.com/sponsors/joseisaacs)** — Acceso inmediato
+- **[Open Collective](https://opencollective.com/structurapro)** — Para equipos
+- **[PayPal](https://paypal.com/...)** — Donación puntual
+
+### ¿Por qué patrocinar?
+✅ Soporte prioritario  
+✅ Acceso a features nuevas primero  
+✅ Votación en roadmap  
+✅ Mención en documentación oficial
+
 ## 📚 Documentación
 
 - [Guía de Usuario](docs/GUIA_USUARIO.md)
