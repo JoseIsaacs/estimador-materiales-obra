@@ -1406,8 +1406,10 @@ function calcVS() {
   
   const barra = document.getElementById('vs_bl').value;
   const estribo = document.getElementById('vs_be').value;
-  const ns = parseInt(document.getElementById('vs_ns').value) || 0;
-  const ni = parseInt(document.getElementById('vs_ni').value) || 0;
+  
+  // Valores por defecto si los campos están vacíos
+  const ns = parseInt(document.getElementById('vs_ns').value) || 2;
+  const ni = parseInt(document.getElementById('vs_ni').value) || 2;
   const gancho = parseInt(document.getElementById('vs_g').value);
 
   if (!b || !h || !L || !n) { toast('Complete geometría y número de vigas'); return; }
@@ -1416,11 +1418,9 @@ function calcVS() {
   const barE = BAR_DATA[estribo];
   if (!barL || !barE) { toast('Diámetro no válido'); return; }
 
-  // Colas de gancho según ACI 318
   const colaLon = (parseInt(barra) <= 5) ? 6 * barL.diam : 12 * barL.diam; // cm
   const colaEst = gancho * barE.diam; // cm
 
-  // Peralte efectivo d = h - rec - diam_est/2 - diam_lon/2
   const d = h - rec - barE.diam/2 - barL.diam/2;
   if (d <= 0) { toast('Peralte efectivo no válido'); return; }
 
@@ -1429,18 +1429,16 @@ function calcVS() {
   // ==========================================
   
   // Zona de confinamiento lo (ACI 318-25 §18.6.4.4)
-  // lo = max(2h, L/4, 45cm) -> usamos la más restrictiva
-  const lo = Math.max(2 * h, L * 100 / 4, 45) / 100; // en metros
+  // lo = max(2h, L/4) pero limitado a no pasar de la mitad de la viga
+  const lo = Math.min(Math.max(2 * h, L * 100 / 4) / 100, L / 2); // en metros
   
-  // Separación en zona confinada (ACI 318-25 §18.6.4.4)
-  // s_conf = min(d/4, 6*db_lon, 15cm)
+  // Separación en zona confinada
   const sConf = Math.min(d/4, 6 * barL.diam, 15);
   
   // Separación en zona central
-  // s_cen = min(d/2, 30cm)
   const sCen = Math.min(d/2, 30);
 
-  // Longitud de una barra longitudinal (con traslapes si L>9.15m)
+  // Longitud de una barra longitudinal
   const longComercial = 9.15; 
   const nTraslapes = L > longComercial ? Math.ceil(L / longComercial) - 1 : 0;
   const traslape = 40 * barL.diam / 100; 
@@ -1452,7 +1450,7 @@ function calcVS() {
   const Lest = (2*(bu + hu)/100) + 2*(colaEst/100);
 
   // Número de estribos
-  const NestExtremo = Math.ceil(lo * 100 / sConf) * 2; // en ambos extremos
+  const NestExtremo = Math.ceil(lo * 100 / sConf) * 2;
   const NestCentro = Math.ceil((L - 2*lo) * 100 / sCen);
   const Nest = NestExtremo + NestCentro;
 
@@ -1465,15 +1463,11 @@ function calcVS() {
   const qqTotal = kgTotal / 45.36;
 
   // ==========================================
-  // VERIFICACIÓN DE CORTANTE (ACI 318-25 §18.6)
+  // VERIFICACIÓN DE CORTANTE
   // ==========================================
-  // Capacidad de cortante del concreto Vc (ACI 318-25 §18.6.3.1)
-  // Para pórticos especiales, Vc = 0.17 * λ * √(f'c) * bw * d (en MPa) 
-  // Como fc está en kg/cm², usamos la conversión: Vc = 2 * √(fc) * bw * d (kg)
   const Vc_kg = 2 * Math.sqrt(fc) * bu * d;
   const Vc_ton = Vc_kg / 1000;
 
-  // Concreto
   const vol = (b/100) * (h/100) * L * n;
   const cemento = (vol * 7).toFixed(1);
   const arena = (vol * 0.53).toFixed(2);
@@ -1494,7 +1488,6 @@ function calcVS() {
   const res = document.getElementById('res-vs');
   if (res) res.classList.add('show');
   
-  // Advertencias con los valores de ACI 318-25
   const vsWn = document.getElementById('vs_wn');
   if (vsWn) {
     vsWn.style.display = 'block';
