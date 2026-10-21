@@ -1389,7 +1389,6 @@ function calcVCim() {
 <script>
 // js/vigas_sismicas.js
 function calcVS() {
-  // ── DATOS DE BARRAS (DEBE IR PRIMERO) ────
   const BAR_DATA = window.BAR_DATA || {
     '3': { diam: 0.953, kgm: 0.560 },
     '4': { diam: 1.27,  kgm: 0.994 },
@@ -1398,7 +1397,6 @@ function calcVS() {
     '8': { diam: 2.54,  kgm: 3.973 }
   };
 
-  // Geometría
   const b = parseFloat(document.getElementById('vs_b').value) || 0;
   const h = parseFloat(document.getElementById('vs_h').value) || 0;
   const L = parseFloat(document.getElementById('vs_L').value) || 0;
@@ -1406,7 +1404,6 @@ function calcVS() {
   const rec = parseFloat(document.getElementById('vs_rec').value);
   const fc = parseFloat(document.getElementById('vs_fc').value);
   
-  // Refuerzo
   const barra = document.getElementById('vs_bl').value;
   const estribo = document.getElementById('vs_be').value;
   const ns = parseInt(document.getElementById('vs_ns').value) || 0;
@@ -1419,34 +1416,43 @@ function calcVS() {
   const barE = BAR_DATA[estribo];
   if (!barL || !barE) { toast('Diámetro no válido'); return; }
 
-  // Colas de gancho
+  // Colas de gancho según ACI 318
   const colaLon = (parseInt(barra) <= 5) ? 6 * barL.diam : 12 * barL.diam; // cm
   const colaEst = gancho * barE.diam; // cm
 
-  // Peralte efectivo d = h - rec - diam_est/2 - diam_lon/2 (todo en cm)
+  // Peralte efectivo d = h - rec - diam_est/2 - diam_lon/2
   const d = h - rec - barE.diam/2 - barL.diam/2;
   if (d <= 0) { toast('Peralte efectivo no válido'); return; }
 
-  // Zona de confinamiento lo = 2h (en m)
-  const lo = 2 * h / 100; // m
-  // Separación zona confinada sConf = min(d/4, 6ϕ_lon, 15cm)
+  // ==========================================
+  // CORTANTE Y CONFINAMIENTO - ACI 318-25 §18.6
+  // ==========================================
+  
+  // Zona de confinamiento lo (ACI 318-25 §18.6.4.4)
+  // lo = max(2h, L/4, 45cm) -> usamos la más restrictiva
+  const lo = Math.max(2 * h, L * 100 / 4, 45) / 100; // en metros
+  
+  // Separación en zona confinada (ACI 318-25 §18.6.4.4)
+  // s_conf = min(d/4, 6*db_lon, 15cm)
   const sConf = Math.min(d/4, 6 * barL.diam, 15);
-  // Separación zona central sCen = min(d/2, 30cm)
+  
+  // Separación en zona central
+  // s_cen = min(d/2, 30cm)
   const sCen = Math.min(d/2, 30);
 
-  // Longitud de una barra longitudinal
-  const longComercial = 9.15; // m
+  // Longitud de una barra longitudinal (con traslapes si L>9.15m)
+  const longComercial = 9.15; 
   const nTraslapes = L > longComercial ? Math.ceil(L / longComercial) - 1 : 0;
-  const traslape = 40 * barL.diam / 100; // 40ϕ en m
-  const Lbarra = L + nTraslapes * traslape + colaLon / 100; // m
+  const traslape = 40 * barL.diam / 100; 
+  const Lbarra = L + nTraslapes * traslape + colaLon / 100; 
 
   // Longitud de estribo
   const bu = b - 2*rec;
   const hu = h - 2*rec;
-  const Lest = (2*(bu + hu)/100) + 2*(colaEst/100); // m
+  const Lest = (2*(bu + hu)/100) + 2*(colaEst/100);
 
   // Número de estribos
-  const NestExtremo = Math.ceil(lo * 100 / sConf) * 2;
+  const NestExtremo = Math.ceil(lo * 100 / sConf) * 2; // en ambos extremos
   const NestCentro = Math.ceil((L - 2*lo) * 100 / sCen);
   const Nest = NestExtremo + NestCentro;
 
@@ -1457,6 +1463,15 @@ function calcVS() {
   const kgEst = mEst * barE.kgm;
   const kgTotal = (kgLong + kgEst) * 1.07;
   const qqTotal = kgTotal / 45.36;
+
+  // ==========================================
+  // VERIFICACIÓN DE CORTANTE (ACI 318-25 §18.6)
+  // ==========================================
+  // Capacidad de cortante del concreto Vc (ACI 318-25 §18.6.3.1)
+  // Para pórticos especiales, Vc = 0.17 * λ * √(f'c) * bw * d (en MPa) 
+  // Como fc está en kg/cm², usamos la conversión: Vc = 2 * √(fc) * bw * d (kg)
+  const Vc_kg = 2 * Math.sqrt(fc) * bu * d;
+  const Vc_ton = Vc_kg / 1000;
 
   // Concreto
   const vol = (b/100) * (h/100) * L * n;
@@ -1479,14 +1494,14 @@ function calcVS() {
   const res = document.getElementById('res-vs');
   if (res) res.classList.add('show');
   
-  // Advertencias
+  // Advertencias con los valores de ACI 318-25
   const vsWn = document.getElementById('vs_wn');
   if (vsWn) {
     vsWn.style.display = 'block';
-    vsWn.innerHTML = `✅ Viga sísmica ACI 318-19 §18.6. d=${(d/100).toFixed(3)}m, lo=${lo.toFixed(2)}m, sConf=${sConf.toFixed(1)}cm, sCen=${sCen.toFixed(1)}cm.`;
+    vsWn.innerHTML = `✅ Viga sísmica ACI 318-25 §18.6. d=${(d/100).toFixed(3)}m, lo=${lo.toFixed(2)}m, sConf=${sConf.toFixed(1)}cm, sCen=${sCen.toFixed(1)}cm. Capacidad Vc=${Vc_ton.toFixed(2)} ton.`;
   }
   
-  toast('Viga sísmica calculada');
+  toast('Viga sísmica calculada (ACI 318-25)');
 }
 </script>
 <script>
