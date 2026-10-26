@@ -1644,7 +1644,7 @@ function calcColR() {
 
   const res = document.getElementById('res-cr');
   if (res) res.classList.add('show');
-  toast('Columna cuadrada/rectangular calculada (ACI 318-25)');
+  toast('Columna cuadrada/rectangular calculada');
 }
 
 function calcColTL() {
@@ -1706,31 +1706,40 @@ function calcColCi() {
   const barra = document.getElementById('ci_bl').value;
   const espiral = document.getElementById('ci_be').value;
 
-  if (!D || !L || !n) { toast('Complete dimensiones'); return; }
+  if (!D || !L || !n || !paso) { toast('Complete dimensiones y paso'); return; }
+  
+  if (D <= 2 * rec) {
+    toast('El diámetro debe ser mayor al doble del recubrimiento');
+    return;
+  }
+
   const barL = BAR_DATA_COL[barra];
   const barE = BAR_DATA_COL[espiral];
   if (!barL || !barE) { toast('Diámetro no válido'); return; }
 
-  const Du = D - 2*rec;
-  const perimVuelta = Math.PI * Du / 100; // m
-  const Nv = Math.ceil((L*100 - rec) / paso);
-  const Lesp = Nv * perimVuelta;
+  const Du = D - 2 * rec;
+  const perimVuelta = (Math.PI * Du) / 100; // Perímetro en metros
+  
+  // Número de vueltas de la espiral = altura total (en cm) / paso
+  const Nv = Math.ceil((L * 100) / paso);
+  const Lesp = Nv * perimVuelta; // Longitud total de la espiral en metros
+  
   const kgEsp = Lesp * barE.kgm * n;
   const mLong = nb * L * n;
   const kgLong = mLong * barL.kgm;
   const kgTotal = (kgLong + kgEsp) * 1.07;
   const qqTotal = kgTotal / 45.36;
 
-  const vol = (Math.PI * (D/200)**2) * L * n;
+  const vol = (Math.PI * (D / 200) ** 2) * L * n;
+  
   document.getElementById('ci_vol').textContent = vol.toFixed(2);
-  document.getElementById('ci_cem').textContent = (vol*7).toFixed(1);
+  document.getElementById('ci_cem').textContent = (vol * 7).toFixed(1);
   document.getElementById('ci_nv').textContent = Nv;
   document.getElementById('ci_lt').textContent = Lesp.toFixed(2);
   document.getElementById('ci_ke').textContent = kgEsp.toFixed(2);
   document.getElementById('ci_kl').textContent = kgLong.toFixed(2);
   document.getElementById('ci_qq').textContent = qqTotal.toFixed(2);
 
-  const res = document.getElementById('ci-wn'); // Ojo, verifica tu HTML si es ci_wn o ci-wn
   const resPanel = document.getElementById('res-ci');
   if (resPanel) resPanel.classList.add('show');
   toast('Columna cilíndrica calculada');
