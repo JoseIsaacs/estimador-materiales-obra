@@ -21,19 +21,6 @@ Sistema profesional de estimación de materiales para obras civiles basado en no
 - **Acero de Refuerzo:** Planilla consolidada con quintales
 - **Escaleras:** Losa inclinada con refuerzo longitudinal y transversal
 
-Módulo Descripción Norma
-🏗️ Concreto Volumen y dosificación ACI 318-25
-🧱 Muros Bloques y mortero REP/SPIA
-🔷 Pisos Baldosas y pega COPANIT
-⬛ Zapatas Parrilla de refuerzo A/D ACI 318-25
-🔶 V. Cimentación Vigas de amarre ACI 318-25
-🔩 Pedestales Acero y ganchos ACI 318-25
-🏛️ Columnas Cuad/Rect/Cilíndrica ACI 318-25
-〰️ V. Sísmica Pórtico especial ACI 318-25
-🔗 Amarre Soleras perimetrales REP/SPIA
-⚙️ Acero Planilla consolidada ACI 318-25
-🪜 Escalera Losa inclinada ACI 318-25
-
 ## 📜 Notas de Vigencia Normativa y Actualizaciones
 
 StructuraPro se mantiene alineado con los estándares internacionales y locales más recientes para garantizar la precisión de sus estimaciones.
