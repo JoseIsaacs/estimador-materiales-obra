@@ -21,8 +21,16 @@ Sistema profesional de estimación de materiales para obras civiles basado en no
 - **Acero de Refuerzo:** Planilla consolidada con quintales
 - **Escaleras:** Losa inclinada con refuerzo longitudinal y transversal
 
-# Solo necesitas un navegador moderno
-# Abre: index.html en tu navegador
+# Clonar repositorio
+git clone https://github.com/JoseIsaacs/estimador-materiales-obra.git
+cd estimador-materiales-obra
+
+# Crear entorno virtual (recomendado)
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
+
+# Instalar dependencias (futuro)
+pip install -r requirements.txt
 
 ## 📜 Notas de Vigencia Normativa y Actualizaciones
 
