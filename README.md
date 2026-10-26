@@ -21,6 +21,9 @@ Sistema profesional de estimación de materiales para obras civiles basado en no
 - **Acero de Refuerzo:** Planilla consolidada con quintales
 - **Escaleras:** Losa inclinada con refuerzo longitudinal y transversal
 
+# Solo necesitas un navegador moderno
+# Abre: index.html en tu navegador
+
 ## 📜 Notas de Vigencia Normativa y Actualizaciones
 
 StructuraPro se mantiene alineado con los estándares internacionales y locales más recientes para garantizar la precisión de sus estimaciones.
